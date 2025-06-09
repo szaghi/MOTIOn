@@ -1,0 +1,15 @@
+[submodule "src/third_party/PENF"]
+	path = src/third_party/PENF
+	url = https://github.com/szaghi/PENF
+[submodule "src/third_party/StringiFor"]
+	path = src/third_party/StringiFor
+	url = https://github.com/szaghi/StringiFor
+[submodule "src/third_party/FoXy"]
+	path = src/third_party/FoXy
+	url = https://github.com/Fortran-FOSS-Programmers/FoXy
+[submodule "src/third_party/BeFoR64"]
+	path = src/third_party/BeFoR64
+	url = https://github.com/szaghi/BeFoR64
+[submodule "src/third_party/FACE"]
+	path = src/third_party/FACE
+	url = https://github.com/szaghi/FACE
