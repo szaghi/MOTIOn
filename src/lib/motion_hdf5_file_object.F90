@@ -16,10 +16,12 @@ character(6), parameter :: HDF5_DATASPACE_TYPE_SIMPLE = 'simple'
 
 type :: hdf5_file_object
    !< HDF5 file object class.
-   type(string)   :: filename    !< File name.
-   integer(HID_T) :: hdf5        !< HDF5 file identifier (logical unit).
-   integer(HID_T) :: dspace_id   !< HDF5 dataspace identifier.
-   integer(I4P)   :: error=0_I4P !< IO Error status.
+   type(string)   :: filename           !< File name.
+   integer(HID_T) :: hdf5=0_HID_T       !< HDF5 file identifier (logical unit).
+   integer(HID_T) :: dspace_id=0_HID_T  !< HDF5 dataspace identifier.
+   integer(I4P)   :: procs_number=1_I4P !< Number of MPI processes.
+   integer(I4P)   :: myrank=0_I4P       !< MPI ID process.
+   integer(I4P)   :: error=0_I4P        !< IO Error status.
    contains
       ! file methods
       procedure, pass(self) :: close_file !< Close HDF5 file.
@@ -49,9 +51,19 @@ contains
 
    subroutine open_file(self, filename)
    !< Open HDF5 file.
-   class(hdf5_file_object), intent(inout) :: self     !< File handler.
-   character(*),            intent(in)    :: filename !< File name.
+   class(hdf5_file_object), intent(inout) :: self               !< File handler.
+   character(*),            intent(in)    :: filename           !< File name.
+   logical                                :: is_mpi_initialized !< MPI env status.
 
+   ! reset file handler
+   select type(self)
+   type is(hdf5_file_object)
+      self = hdf5_file_object()
+   endselect
+   call MPI_INITIALIZED(is_mpi_initialized, self%error)
+   if (.not.is_mpi_initialized) call MPI_INIT(self%error)
+   call MPI_COMM_SIZE(MPI_COMM_WORLD, self%procs_number, self%error)
+   call MPI_COMM_RANK(MPI_COMM_WORLD, self%myrank, self%error)
    self%filename = trim(adjustl(filename))
    ! open fortran interface
    call h5open_f(self%error)

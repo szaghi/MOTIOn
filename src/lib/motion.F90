@@ -64,6 +64,7 @@ public :: xdmf_file_object,                   &
           XDMF_GEOMETRY_TYPE_ODXY,            &
           XDMF_GRID_TYPE_UNIFORM,             &
           XDMF_GRID_TYPE_COLLECTION,          &
+          XDMF_GRID_TYPE_COLLECTION_ASYNC,    &
           XDMF_GRID_TYPE_TREE,                &
           XDMF_GRID_TYPE_SUBSET,              &
           XDMF_GRID_COLLECTION_TYPE_SPATIAL,  &

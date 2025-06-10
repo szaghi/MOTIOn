@@ -5,6 +5,7 @@ module motion_xdmf_file_object
 use foxy
 use penf
 use stringifor
+use mpi
 
 implicit none
 private
@@ -63,6 +64,7 @@ public :: XDMF_GEOMETRY_TYPE_ODXYZ
 public :: XDMF_GEOMETRY_TYPE_ODXY
 public :: XDMF_GRID_TYPE_UNIFORM
 public :: XDMF_GRID_TYPE_COLLECTION
+public :: XDMF_GRID_TYPE_COLLECTION_ASYNC
 public :: XDMF_GRID_TYPE_TREE
 public :: XDMF_GRID_TYPE_SUBSET
 public :: XDMF_GRID_COLLECTION_TYPE_SPATIAL
@@ -151,6 +153,7 @@ character(13), parameter :: XDMF_GEOMETRY_TYPE_ODXYZ           = 'ORIGIN_DXDYDZ'
 character(11), parameter :: XDMF_GEOMETRY_TYPE_ODXY            = 'ORIGIN_DXDY'     !< XDMF geometry type origin-dxy.
 character(7),  parameter :: XDMF_GRID_TYPE_UNIFORM             = 'Uniform'         !< XDMF grid type uniform.
 character(10), parameter :: XDMF_GRID_TYPE_COLLECTION          = 'Collection'      !< XDMF grid type collection.
+character(15), parameter :: XDMF_GRID_TYPE_COLLECTION_ASYNC    = 'CollectionAsync' !< XDMF grid type collection.
 character(4),  parameter :: XDMF_GRID_TYPE_TREE                = 'Tree'            !< XDMF grid type tree.
 character(6),  parameter :: XDMF_GRID_TYPE_SUBSET              = 'Subset'          !< XDMF grid type subset.
 character(7),  parameter :: XDMF_GRID_COLLECTION_TYPE_SPATIAL  = 'Spatial'         !< XDMF grid collection type spatial.
@@ -189,13 +192,15 @@ character(1), parameter :: NL = new_line('a') !< New line (end record) character
 
 type :: xdmf_file_object
    !< XDMF file object class.
-   type(string)  :: filename         !< File name.
-   integer(I4P)  :: indent=0_I4P     !< Indent count.
-   integer(I4P)  :: xml=0_I4P        !< XML Logical unit.
-   integer(I4P)  :: error=0_I4P      !< IO Error status.
-   type(xml_tag) :: tag              !< XML tags handler.
-   logical       :: is_async=.false. !< Asyncronous saving.
-   type(string)  :: async_tags       !< Asyncronous tags data.
+   type(string)  :: filename           !< File name.
+   integer(I4P)  :: indent=0_I4P       !< Indent count.
+   integer(I4P)  :: xml=0_I4P          !< XML Logical unit.
+   integer(I4P)  :: error=0_I4P        !< Error status.
+   type(xml_tag) :: tag                !< XML tags handler.
+   integer(I4P)  :: procs_number=1_I4P !< Number of MPI processes.
+   integer(I4P)  :: myrank=0_I4P       !< MPI ID process.
+   logical       :: is_async=.false.   !< Asyncronous saving.
+   type(string)  :: async_tags         !< Asyncronous tags data.
    contains
       ! public methods
       ! file methods
@@ -232,6 +237,8 @@ type :: xdmf_file_object
       procedure, pass(self) :: write_self_closing_tag !< Write self closing tag.
       procedure, pass(self) :: write_start_tag        !< Write start tag.
       procedure, pass(self) :: write_tag              !< Write tag.
+      ! MPI methods
+      procedure, pass(self) :: gather_async_tags !< Gather async tags.
 endtype xdmf_file_object
 
 contains
@@ -246,24 +253,32 @@ contains
    endif
    endsubroutine close_file
 
-   subroutine open_file(self, filename, is_async)
+   subroutine open_file(self, filename)
    !< Open XDMF file.
-   class(xdmf_file_object), intent(inout)        :: self     !< File handler.
-   character(*),            intent(in)           :: filename !< File name.
-   logical,                 intent(in), optional :: is_async !< Asyncronous saving.
+   class(xdmf_file_object), intent(inout) :: self               !< File handler.
+   character(*),            intent(in)    :: filename           !< File name.
+   logical                                :: is_mpi_initialized !< MPI env status.
 
-   self%is_async = .false. ; if (present(is_async)) self%is_async = is_async
+   ! reset file handler
+   select type(self)
+   type is(xdmf_file_object)
+      self = xdmf_file_object()
+   endselect
+   self%is_async = .false. ;
    self%async_tags = ''
    self%filename = trim(adjustl(filename))
-   if (.not.self%is_async) then
-      open(newunit=self%xml,           &
-           file=self%filename%chars(), &
-           form='UNFORMATTED',         &
-           access='STREAM',            &
-           action='WRITE',             &
-           status='REPLACE',           &
-           iostat=self%error)
-   endif
+   call MPI_INITIALIZED(is_mpi_initialized, self%error)
+   if (.not.is_mpi_initialized) call MPI_INIT(self%error)
+   call MPI_COMM_SIZE(MPI_COMM_WORLD, self%procs_number, self%error)
+   call MPI_COMM_RANK(MPI_COMM_WORLD, self%myrank, self%error)
+   if (self%myrank/=0_I4P) self%is_async = .true.
+   if (.not.self%is_async) open(newunit=self%xml,           &
+                                file=self%filename%chars(), &
+                                form='UNFORMATTED',         &
+                                access='STREAM',            &
+                                action='WRITE',             &
+                                status='REPLACE',           &
+                                iostat=self%error)
    call self%write_header_tag
    endsubroutine open_file
 
@@ -478,10 +493,22 @@ contains
    endsubroutine open_geometry_tag
 
    ! grid tag
-   subroutine close_grid_tag(self)
+   subroutine close_grid_tag(self, grid_type)
    !< Close `Grid` tag.
-   class(xdmf_file_object), intent(inout) :: self !< File handler.
+   class(xdmf_file_object), intent(inout)        :: self       !< File handler.
+   character(*),            intent(in), optional :: grid_type  !< Grid type.
+   character(:), allocatable                     :: grid_type_ !< Grid type, local var.
 
+   grid_type_ = '' ; if (present(grid_type)) grid_type_ = trim(adjustl(grid_type))
+   if (grid_type_==XDMF_GRID_TYPE_COLLECTION_ASYNC) then
+      if (self%is_async) then
+         ! close asyncrounous collection of async MPI process, update indent
+         self%indent = self%indent - 2
+      endif
+      ! close asyncrounous collection of master MPI process, gather async tags before closing
+      call self%gather_async_tags
+      if (self%myrank==0_I4P) call self%write_async_tags(async_tags=self%async_tags)
+   endif
    call self%write_end_tag(name='Grid')
    endsubroutine close_grid_tag
 
@@ -500,10 +527,22 @@ contains
    character(*),            intent(in), optional :: grid_type            !< Grid type.
    character(*),            intent(in), optional :: grid_collection_type !< Grid collection type.
    character(*),            intent(in), optional :: grid_section         !< Grid section.
+   character(:), allocatable                     :: grid_type_           !< Grid type, local var.
    character(:), allocatable                     :: attr                 !< Attributes list.
 
+   grid_type_ = '' ; if (present(grid_type)) grid_type_ = trim(adjustl(grid_type))
+   if (grid_type_==XDMF_GRID_TYPE_COLLECTION_ASYNC) then
+      if (self%is_async) then
+         ! asyncrounous collection of async MPI process, just update indent
+         self%indent = self%indent + 2
+         return
+      else
+         ! asyncrounous collection of master MPI process, convert grid type to standard collection
+         grid_type_ = XDMF_GRID_TYPE_COLLECTION
+      endif
+   endif
    attr = '' ; if (present(grid_name           )) attr =        'Name="'          //trim(adjustl(grid_name           ))//'"'
-               if (present(grid_type           )) attr = attr//' GridType="'      //trim(adjustl(grid_type           ))//'"'
+               if (present(grid_type           )) attr = attr//' GridType="'      //trim(adjustl(grid_type_          ))//'"'
                if (present(grid_collection_type)) attr = attr//' CollectionType="'//trim(adjustl(grid_collection_type))//'"'
                if (present(grid_section        )) attr = attr//' Section="'       //trim(adjustl(grid_section        ))//'"'
    call self%write_start_tag(name='Grid', attributes=attr)
@@ -666,4 +705,45 @@ contains
       self%async_tags = self%async_tags//self%tag%stringify(is_indented=.true., is_content_indented=.true.)//NL
    endif
    endsubroutine write_tag
+
+   ! MPI methods
+   subroutine gather_async_tags(self)
+   !< Gather async tags.
+   !< @NOTE master process (myrank==0) gather the asyncronous tags of other MPI procs and save them
+   !< into its own async_tags string.
+   class(xdmf_file_object), intent(inout) :: self               !< File handler.
+   integer(I4P)                           :: my_async_tags_len  !< Length of my async tags.
+   integer(I4P)                           :: all_async_tags_len !< Length of all async tags, total lenght.
+   integer(I4P), allocatable              :: recvcounts(:)      !< Size of chars from other processes.
+   integer(I4P), allocatable              :: offset(:)          !< Offset in receive buffer.
+   character(:), allocatable              :: recvbuf            !< Receive buffer.
+   integer(I4P)                           :: i                  !< Counter.
+
+   if (self%procs_number==1) return ! no multi MPI procs, nothing to gather
+
+   call MPI_BARRIER(MPI_COMM_WORLD, self%error) ! all MPI procs must close their XDMF async tags
+
+   ! gather all async tags lengths
+   my_async_tags_len = self%async_tags%len()
+   if (self%myrank == 0_I4P) then
+      allocate(recvcounts(self%procs_number))
+      allocate(offset(self%procs_number))
+   endif
+   call MPI_GATHER(my_async_tags_len, 1_I4P, MPI_INTEGER, recvcounts, 1_I4P, MPI_INTEGER, 0_I4P, MPI_COMM_WORLD, self%error)
+   ! compute offset and total lenght of receive buffer
+   if (self%myrank == 0_I4P) then
+      offset(1) = 0_I4P
+      all_async_tags_len = recvcounts(1)
+      do i = 2, self%procs_number
+         offset(i) = offset(i-1) + recvcounts(i-1)
+         all_async_tags_len = all_async_tags_len + recvcounts(i)
+      enddo
+      allocate(character(len=all_async_tags_len) :: recvbuf)
+   endif
+   ! gather async tags
+   call MPI_GATHERV(self%async_tags%chars(), my_async_tags_len, MPI_CHARACTER, &
+                    recvbuf, recvcounts, offset, MPI_CHARACTER, &
+                    0_I4P, MPI_COMM_WORLD, self%error)
+   if (self%myrank==0_I4P) self%async_tags = recvbuf
+   endsubroutine gather_async_tags
 endmodule motion_xdmf_file_object

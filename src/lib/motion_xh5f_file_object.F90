@@ -22,25 +22,23 @@ character(11), parameter :: XH5F_BLOCK_CURVILINEAR       = 'curvilinear'
 
 type :: xh5f_file_object
    !< XDMF/HDF5 file object class.
-   type(hdf5_file_object) :: hdf5                  !< HDF5 file handler.
-   type(xdmf_file_object) :: xdmf                  !< XDMF file handler.
-   logical                :: is_multiblocks=.true. !< Sentinel for multiblocks file.
-   integer(I4P)           :: procs_number=1_I4P    !< Number of MPI processes.
-   integer(I4P)           :: myrank=0_I4P          !< MPI ID process.
-   type(string)           :: async_tags            !< XDMF tags of other processes to save asyncrously.
-   integer(I4P)           :: error                 !< Error status.
+   type(hdf5_file_object) :: hdf5               !< HDF5 file handler.
+   type(xdmf_file_object) :: xdmf               !< XDMF file handler.
+   integer(I4P)           :: procs_number=1_I4P !< Number of MPI processes.
+   integer(I4P)           :: myrank=0_I4P       !< MPI ID process.
+   integer(I4P)           :: error=0_I4P        !< Error status.
    contains
       ! file methods
       procedure, pass(self) :: close_file !< Close XH5F file.
       procedure, pass(self) :: open_file  !< Open XH5F file.
       ! data methods
       procedure, pass(self) :: close_block             !< Close block.
+      procedure, pass(self) :: close_grid              !< Close grid.
+      procedure, pass(self) :: open_grid               !< Open grid.
       procedure, pass(self) :: open_block              !< Open block.
       generic               :: save_block_field =>      &
                                save_block_field_3D_R8P, &
                                save_block_field_0D_R8P !< Save field in block.
-      ! MPI methods
-      procedure, pass(self) :: gather_async_tags !< Gather async tags.
       ! private methods
       procedure, pass(self), private :: save_block_field_3D_R8P !< Save field in block, kind R8P, rank 3D.
       procedure, pass(self), private :: save_block_field_0D_R8P !< Save field in block, kind R8P, rank 0D.
@@ -53,42 +51,31 @@ contains
    class(xh5f_file_object), intent(inout) :: self !< File handler.
 
    call self%hdf5%close_file
-   if (self%procs_number>1_I4P) then
-      ! write async tags of other processes than master one
-      call self%gather_async_tags
-      if (self%myrank==0_I4P) call self%xdmf%write_async_tags(async_tags=self%async_tags)
-   endif
-   if (self%is_multiblocks) call self%xdmf%close_grid_tag ! close collection of blocks
    call self%xdmf%close_domain_tag
    call self%xdmf%close_file
    endsubroutine close_file
 
-   subroutine open_file(self, filename_hdf5, filename_xdmf, is_multiblocks, blocks_group_name, time)
+   subroutine open_file(self, filename_hdf5, filename_xdmf)
    !< Open XH5F file.
    !< @NOTE MPI init must be invoked before this routine.
-   class(xh5f_file_object), intent(inout)        :: self               !< File handler.
-   character(*),            intent(in)           :: filename_hdf5      !< File name of HDF5 file.
-   character(*),            intent(in)           :: filename_xdmf      !< File name of XDMF file.
-   logical,                 intent(in), optional :: is_multiblocks     !< Sentinel for multiblocks file.
-   character(*),            intent(in), optional :: blocks_group_name  !< Name of blocks group.
-   real(R8P),               intent(in), optional :: time               !< Current time.
-   character(:), allocatable                     :: blocks_group_name_ !< Name of blocks group, local var.
+   class(xh5f_file_object), intent(inout) :: self               !< File handler.
+   character(*),            intent(in)    :: filename_hdf5      !< File name of HDF5 file.
+   character(*),            intent(in)    :: filename_xdmf      !< File name of XDMF file.
+   character(:), allocatable              :: blocks_group_name_ !< Name of blocks group, local var.
+   logical                                :: is_mpi_initialized !< MPI env status.
 
-   blocks_group_name_ = 'blocks' ; if (present(blocks_group_name)) blocks_group_name_ = trim(adjustl(blocks_group_name))
+   ! reset file handler
+   select type(self)
+   type is(xh5f_file_object)
+      self = xh5f_file_object()
+   endselect
+   call MPI_INITIALIZED(is_mpi_initialized, self%error)
+   if (.not.is_mpi_initialized) call MPI_INIT(self%error)
    call MPI_COMM_SIZE(MPI_COMM_WORLD, self%procs_number, self%error)
    call MPI_COMM_RANK(MPI_COMM_WORLD, self%myrank, self%error)
-   if (present(is_multiblocks)) self%is_multiblocks = is_multiblocks
    call self%hdf5%open_file(filename=filename_hdf5)
-   if (self%myrank>0_I4P) then
-      call self%xdmf%open_file(filename=filename_xdmf, is_async=.true.)
-   else
-      call self%xdmf%open_file(filename=filename_xdmf, is_async=.false.)
-   endif
+   call self%xdmf%open_file(filename=filename_xdmf)
    call self%xdmf%open_domain_tag
-   if (self%is_multiblocks.and.self%myrank==0_I4P) then
-      call self%xdmf%open_grid_tag(grid_name=blocks_group_name_, grid_type='Collection') ! open collection of blocks
-      if (present(time)) call self%xdmf%write_time_tag(time_value=trim(str(time)))
-   endif
    endsubroutine open_file
 
    ! data methods
@@ -99,6 +86,26 @@ contains
    call self%hdf5%close_dspace
    call self%xdmf%close_grid_tag
    endsubroutine close_block
+
+   subroutine close_grid(self, grid_type)
+   !< Close grid.
+   class(xh5f_file_object), intent(inout)        :: self      !< File handler.
+   character(*),            intent(in), optional :: grid_type !< Grid type.
+
+   call self%xdmf%close_grid_tag(grid_type=grid_type)
+   endsubroutine close_grid
+
+   subroutine open_grid(self, grid_name, grid_type, grid_collection_type, grid_section)
+   !< Open grid.
+   class(xh5f_file_object), intent(inout)        :: self                 !< File handler.
+   character(*),            intent(in), optional :: grid_name            !< Grid name.
+   character(*),            intent(in), optional :: grid_type            !< Grid type.
+   character(*),            intent(in), optional :: grid_collection_type !< Grid collection type.
+   character(*),            intent(in), optional :: grid_section         !< Grid section.
+
+   call self%xdmf%open_grid_tag(grid_name=grid_name, grid_type=grid_type, &
+                                grid_collection_type=grid_collection_type, grid_section=grid_section)
+   endsubroutine open_grid
 
    subroutine open_block(self, block_type, block_name, nijk, emin, dxyz, time)
    !< Open block.
@@ -145,45 +152,6 @@ contains
       stop
    endselect
    endsubroutine open_block
-
-   ! MPI methods
-   subroutine gather_async_tags(self)
-   !< Gather async tags.
-   class(xh5f_file_object), intent(inout) :: self               !< File handler.
-   integer(I4P)                           :: my_async_tags_len  !< Length of my async tags.
-   integer(I4P)                           :: all_async_tags_len !< Length of all async tags, total lenght.
-   integer(I4P), allocatable              :: recvcounts(:)      !< Size of chars from other processes.
-   integer(I4P), allocatable              :: offset(:)          !< Offset in receive buffer.
-   character(:), allocatable              :: recvbuf            !< Receive buffer.
-   integer(I4P)                           :: i                  !< Counter.
-
-   if (self%procs_number==1) return
-
-   call MPI_BARRIER(MPI_COMM_WORLD, self%error)
-
-   ! gather all async tags lengths
-   my_async_tags_len = self%xdmf%async_tags%len()
-   if (self%myrank == 0_I4P) then
-      allocate(recvcounts(self%procs_number))
-      allocate(offset(self%procs_number))
-   endif
-   call MPI_GATHER(my_async_tags_len, 1_I4P, MPI_INTEGER, recvcounts, 1_I4P, MPI_INTEGER, 0_I4P, MPI_COMM_WORLD, self%error)
-   ! compute offset and total lenght of receive buffer
-   if (self%myrank == 0_I4P) then
-      offset(1) = 0_I4P
-      all_async_tags_len = recvcounts(1)
-      do i = 2, self%procs_number
-         offset(i) = offset(i-1) + recvcounts(i-1)
-         all_async_tags_len = all_async_tags_len + recvcounts(i)
-      enddo
-      allocate(character(len=all_async_tags_len) :: recvbuf)
-   endif
-   ! gather async tags
-   call MPI_GATHERV(self%xdmf%async_tags%chars(), my_async_tags_len, MPI_CHARACTER, &
-                    recvbuf, recvcounts, offset, MPI_CHARACTER, &
-                    0_I4P, MPI_COMM_WORLD, self%error)
-   if (self%myrank==0_I4P) self%async_tags = recvbuf
-   endsubroutine gather_async_tags
 
    ! private methods
    subroutine save_block_field_3D_R8P(self, xdmf_field_name, nijk, field, field_center, field_format, hdf5_field_name)
