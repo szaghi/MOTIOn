@@ -59,8 +59,9 @@ Currently MOTIOn has the following features:
       + [x] Cartesian uniform grids;
       + [ ] Cartesian grids;
       + [ ] Curvilinear grids;
-      + [x] Scalar 3D fields;
       + [x] Scalar 0D (grid centered) fields;
+      + [x] Scalar 3D fields;
+      + [x] Vector 3D fields;
       + [ ] Tensor 3D fields;
       + [ ] Matrix 3D fields;
    + [ ] Input:
@@ -101,31 +102,31 @@ of the motion class `xh5f_file_object` by something like the following:
 ```fortran
 call xh5f%open_file(filename_hdf5='simple-mpi_'//trim(strz(myrank,2))//'.h5', &
                     filename_xdmf='simple-mpi_procs_'//trim(strz(domain%procs_number,2))//'.xdmf')
-call xh5f%open_grid(grid_name='blocks', grid_type=XDMF_GRID_TYPE_COLLECTION_ASYNC)
-call xh5f%open_grid(grid_name='mpi_'//trim(strz(myrank,2)), grid_type=XDMF_GRID_TYPE_COLLECTION)
+call xh5f%open_grid(grid_name='blocks', grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
+call xh5f%open_grid(grid_name='mpi_'//trim(strz(myrank,2)), grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION)
 do b=1, domain%nb_proc
-   call xh5f%open_block(block_type = XH5F_BLOCK_CARTESIAN_UNIFORM,        &
-                        block_name = 'block_'//trim(strz(mynb(1)-1+b,2)), & ! global block numeration
-                        nijk       = nijk,                                &
-                        emin       = domain%emin(:,b),                    &
-                        dxyz       = domain%dxyz,                         &
+   call xh5f%open_block(block_type = XH5F_PARAMETERS%XH5F_BLOCK_CARTESIAN_UNIFORM, &
+                        block_name = 'block_'//trim(strz(mynb(1)-1+b,2)),          & ! global block numeration
+                        nijk       = nijk,                                         &
+                        emin       = domain%emin(:,b),                             &
+                        dxyz       = domain%dxyz,                                  &
                         time       = domain%time)
-   call xh5f%save_block_field(xdmf_field_name = 'Time',                &
-                              field           = domain%time,           &
-                              field_center    = XDMF_ATTR_CENTER_GRID, &
-                              field_format    = XDMF_DATAITEM_NUMBER_FORMAT_XML)
+   call xh5f%save_block_field(xdmf_field_name = 'Time',                                &
+                              field           = domain%time,                           &
+                              field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_GRID, &
+                              field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
    do v=1, domain%nv
-      call xh5f%save_block_field(xdmf_field_name = field_name(v)%chars(),                   &
-                                 nijk            = nijk,                                    &
-                                 field           = field(v,1:nijk(1),1:nijk(2),1:nijk(3),b),&
-                                 field_center    = XDMF_ATTR_CENTER_CELL,                   &
-                                 field_format    = XDMF_DATAITEM_NUMBER_FORMAT_HDF,         &
+      call xh5f%save_block_field(xdmf_field_name = field_name(v)%chars(),                           &
+                                 nijk            = nijk,                                            &
+                                 field           = field(v,1:nijk(1),1:nijk(2),1:nijk(3),b),        &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,           &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF, &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//field_name(v)%chars())
    enddo
    call xh5f%close_block
 enddo
 call xh5f%close_grid
-call xh5f%close_grid(grid_type=XDMF_GRID_TYPE_COLLECTION_ASYNC)
+call xh5f%close_grid(grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
 call xh5f%close_file
 ```
 

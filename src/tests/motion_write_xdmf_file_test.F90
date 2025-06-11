@@ -4,6 +4,7 @@ module motion_test_domain_object
 !< MOTIOn test: prototype of domain to be saved.
 use penf
 use stringifor
+use hdf5
 use mpi
 
 implicit none
@@ -20,7 +21,7 @@ type :: domain_object
    integer(I4P)              :: mynb(2)=[0_I4P,0_I4P]          !< Number of blocks of current process [start-b,end-b].
    integer(I4P)              :: nv=0_I4P                       !< Number of fields variables.
    integer(I4P)              :: gc=0_I4P                       !< Ghost cells number.
-   integer(I8P)              :: nijk(3)=[0_I4P,0_I4P,0_I4P]    !< Blocks dimensions.
+   integer(HSIZE_T)          :: nijk(3)=[0_I4P,0_I4P,0_I4P]    !< Blocks dimensions.
    real(R8P)                 :: dxyz(3)=[0._R8P,0._R8P,0._R8P] !< Blocks space steps.
    real(R8P)                 :: time=0._R8P                    !< Time of domain solution.
    real(R8P),    allocatable :: emin(:,:)                      !< Blocks minimum extents [3,nb].
@@ -38,7 +39,7 @@ contains
    integer(I4P),         intent(in)    :: nb             !< Number of blocks.
    integer(I4P),         intent(in)    :: nv             !< Number of fields variables.
    integer(I4P),         intent(in)    :: gc             !< Ghost cells number.
-   integer(I8P),         intent(in)    :: nijk(3)        !< Blocks dimensions.
+   integer(HSIZE_T),     intent(in)    :: nijk(3)        !< Blocks dimensions.
    real(R8P),            intent(in)    :: dxyz(3)        !< Blocks space steps.
    character(*),         intent(in)    :: field_name(nv) !< Fields names.
    real(R8P),            intent(in)    :: time           !< Time of domain solution.
@@ -90,6 +91,7 @@ program motion_write_xdmf_file_test
 use motion
 use motion_test_domain_object
 use penf
+use hdf5
 use mpi
 
 implicit none
@@ -98,11 +100,12 @@ type(domain_object) :: a_domain       !< A domain to play with.
 logical             :: test_passed(1) !< List of passed tests.
 
 call a_domain%initialize(nb=6_I4P,                                               &
-                         nv=3_I4P,                                               &
+                         nv=6_I4P,                                               &
                          gc=2_I4P,                                               &
-                         nijk=[16_I8P,16_I8P,16_I8P],                            &
+                         nijk=[16_HSIZE_T,16_HSIZE_T,16_HSIZE_T],                &
                          dxyz=[1._R8P,1._R8P,1._R8P],                            &
-                         field_name=['pressure   ','temperature','density    '], &
+                         field_name=['pressure   ','temperature','density    ',  &
+                                     'velocity_x ','velocity_y ','velocity_z '], &
                          time=0.56_R8P)
 
 call write_hdf5_xdmf(basename='motion_write_xdmf_file_test',      domain=a_domain)
@@ -129,54 +132,54 @@ contains
    call hdf5%open_file(filename=filename_hdf5)
    call xdmf%open_file(filename=filename_xdmf)
    call xdmf%open_domain_tag
-   call xdmf%open_grid_tag(grid_name='blocks', grid_type=XDMF_GRID_TYPE_COLLECTION_ASYNC)
-   call xdmf%open_grid_tag(grid_name='mpi_'//trim(strz(myrank,2)), grid_type=XDMF_GRID_TYPE_COLLECTION)
+   call xdmf%open_grid_tag(grid_name='blocks', grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
+   call xdmf%open_grid_tag(grid_name='mpi_'//trim(strz(myrank,2)), grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION)
    do b=1, domain%nb_proc
-      call hdf5%open_dspace(dataspace_type=HDF5_DATASPACE_TYPE_SIMPLE, nijk=nijk)
+      call hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nijk)
       call xdmf%open_grid_tag(grid_name='block_'//trim(strz(mynb(1)-1+b,2)))
-      call xdmf%open_geometry_tag(geometry_type=XDMF_GEOMETRY_TYPE_ODXYZ)
+      call xdmf%open_geometry_tag(geometry_type=XDMF_PARAMETERS%XDMF_GEOMETRY_TYPE_ODXYZ)
       call xdmf%write_time_tag(time_value=trim(str(domain%time)))
       call xdmf%write_dataitem_tag(content          = trim(str([emin(3,b),emin(2,b),emin(1,b)],separator=' ')), &
                                    item_dimensions  = '3',                                                      &
-                                   number_type      = XDMF_DATAITEM_NUMBER_TYPE_FLOAT,                          &
-                                   number_precision = XDMF_DATAITEM_NUMBER_PRECISION_8,                         &
-                                   number_format    = XDMF_DATAITEM_NUMBER_FORMAT_XML)
+                                   number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,          &
+                                   number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,         &
+                                   number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
       call xdmf%write_dataitem_tag(content          = trim(str([dxyz(3),dxyz(2),dxyz(1)],separator=' ')), &
                                    item_dimensions  = '3',                                                &
-                                   number_type      = XDMF_DATAITEM_NUMBER_TYPE_FLOAT,                    &
-                                   number_precision = XDMF_DATAITEM_NUMBER_PRECISION_8,                   &
-                                   number_format    = XDMF_DATAITEM_NUMBER_FORMAT_XML)
+                                   number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,    &
+                                   number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,   &
+                                   number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
       call xdmf%close_geometry_tag
-      call xdmf%write_topology_tag(topology_type=XDMF_TOPOLOGY_TYPE_3DCORECTMESH, &
+      call xdmf%write_topology_tag(topology_type=XDMF_PARAMETERS%XDMF_TOPOLOGY_TYPE_3DCORECTMESH, &
                                    topology_dimensions=trim(str([nijk(3),nijk(2),nijk(1)],separator=' ')))
-      call xdmf%open_attribute_tag(attribute_name   = 'Time',                &
-                                   attribute_center = XDMF_ATTR_CENTER_GRID, &
-                                   attribute_type   = XDMF_ATTR_TYPE_SCALAR)
-      call xdmf%write_dataitem_tag(content          = trim(str(domain%time)),          &
-                                   item_dimensions  = '1',                             &
-                                   number_type      = XDMF_DATAITEM_NUMBER_TYPE_FLOAT, &
-                                   number_precision = XDMF_DATAITEM_NUMBER_PRECISION_8,&
-                                   number_format    = XDMF_DATAITEM_NUMBER_FORMAT_XML)
+      call xdmf%open_attribute_tag(attribute_name   = 'Time',                                &
+                                   attribute_center = XDMF_PARAMETERS%XDMF_ATTR_CENTER_GRID, &
+                                   attribute_type   = XDMF_PARAMETERS%XDMF_ATTR_TYPE_SCALAR)
+      call xdmf%write_dataitem_tag(content          = trim(str(domain%time)),                          &
+                                   item_dimensions  = '1',                                             &
+                                   number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT, &
+                                   number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,&
+                                   number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
       call xdmf%close_attribute_tag
       do v=1, domain%nv
          call hdf5%save_dataset(dset_name='block_'//trim(strz(mynb(1)-1+b,2))//'-'//field_name(v)%chars(), &
-                                nijk=nijk, dset=field(v,1:nijk(1),1:nijk(2),1:nijk(3),b))
-         call xdmf%open_attribute_tag(attribute_name   = trim(adjustl(field_name(v)%chars())), &
-                                      attribute_center = XDMF_ATTR_CENTER_CELL,                &
-                                      attribute_type   = XDMF_ATTR_TYPE_SCALAR)
+                                nd=nijk, dset=field(v,1:nijk(1),1:nijk(2),1:nijk(3),b))
+         call xdmf%open_attribute_tag(attribute_name   = trim(adjustl(field_name(v)%chars())),  &
+                                      attribute_center = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL, &
+                                      attribute_type   = XDMF_PARAMETERS%XDMF_ATTR_TYPE_SCALAR)
          call xdmf%write_dataitem_tag(content          = hdf5%filename//':'//'block_'//trim(strz(mynb(1)-1+b,2))// &
                                                          '-'//field_name(v)%chars(),                               &
                                       item_dimensions  = trim(str([nijk(3),nijk(2),nijk(1)],separator=' ')),       &
-                                      number_type      = XDMF_DATAITEM_NUMBER_TYPE_FLOAT,                          &
-                                      number_precision = XDMF_DATAITEM_NUMBER_PRECISION_8,                         &
-                                      number_format    = XDMF_DATAITEM_NUMBER_FORMAT_HDF)
+                                      number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,          &
+                                      number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,         &
+                                      number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
          call xdmf%close_attribute_tag
       enddo
       call hdf5%close_dspace
       call xdmf%close_grid_tag
    enddo
    call xdmf%close_grid_tag
-   call xdmf%close_grid_tag(grid_type=XDMF_GRID_TYPE_COLLECTION_ASYNC)
+   call xdmf%close_grid_tag(grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
    call hdf5%close_file
    call xdmf%close_domain_tag
    call xdmf%close_file
@@ -196,31 +199,37 @@ contains
    filename_hdf5 = trim(adjustl(basename))//'-mpi_'//trim(strz(myrank,2))//'.h5'
    filename_xdmf = trim(adjustl(basename))//'-mpi_procs_'//trim(strz(domain%procs_number,2))//'.xdmf'
    call xh5f%open_file(filename_hdf5=filename_hdf5, filename_xdmf=filename_xdmf)
-   call xh5f%open_grid(grid_name='blocks', grid_type=XDMF_GRID_TYPE_COLLECTION_ASYNC)
-   call xh5f%open_grid(grid_name='mpi_'//trim(strz(myrank,2)), grid_type=XDMF_GRID_TYPE_COLLECTION)
+   call xh5f%open_grid(grid_name='blocks', grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
+   call xh5f%open_grid(grid_name='mpi_'//trim(strz(myrank,2)), grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION)
    do b=1, domain%nb_proc
-      call xh5f%open_block(block_type = XH5F_BLOCK_CARTESIAN_UNIFORM,        &
-                           block_name = 'block_'//trim(strz(mynb(1)-1+b,2)), & ! global block numeration
-                           nijk       = nijk,                                &
-                           emin       = domain%emin(:,b),                    &
-                           dxyz       = domain%dxyz,                         &
+      call xh5f%open_block(block_type = XH5F_PARAMETERS%XH5F_BLOCK_CARTESIAN_UNIFORM, &
+                           block_name = 'block_'//trim(strz(mynb(1)-1+b,2)),          & ! global block numeration
+                           nijk       = nijk,                                         &
+                           emin       = domain%emin(:,b),                             &
+                           dxyz       = domain%dxyz,                                  &
                            time       = domain%time)
-      call xh5f%save_block_field(xdmf_field_name = 'Time',                &
-                                 field           = domain%time,           &
-                                 field_center    = XDMF_ATTR_CENTER_GRID, &
-                                 field_format    = XDMF_DATAITEM_NUMBER_FORMAT_XML)
+      call xh5f%save_block_field(xdmf_field_name = 'Time',                                &
+                                 field           = domain%time,                           &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_GRID, &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
       do v=1, domain%nv
-         call xh5f%save_block_field(xdmf_field_name = field_name(v)%chars(),                   &
-                                    nijk            = nijk,                                    &
-                                    field           = field(v,1:nijk(1),1:nijk(2),1:nijk(3),b),&
-                                    field_center    = XDMF_ATTR_CENTER_CELL,                   &
-                                    field_format    = XDMF_DATAITEM_NUMBER_FORMAT_HDF,         &
+         call xh5f%save_block_field(xdmf_field_name = field_name(v)%chars(),                                   &
+                                    nd              = nijk,                                                    &
+                                    field           = field(v,1:nijk(1),1:nijk(2),1:nijk(3),b),                &
+                                    field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                   &
+                                    field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,         &
                                     hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//field_name(v)%chars())
       enddo
+      call xh5f%save_block_field(xdmf_field_name = 'velocity',                                              &
+                                 nd              = [3_HSIZE_T,nijk(1),nijk(2),nijk(3)],                     &
+                                 field           = field(4:6,1:nijk(1),1:nijk(2),1:nijk(3),b),              &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                   &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,         &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'velocity')
       call xh5f%close_block
    enddo
    call xh5f%close_grid
-   call xh5f%close_grid(grid_type=XDMF_GRID_TYPE_COLLECTION_ASYNC)
+   call xh5f%close_grid(grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
    call xh5f%close_file
    endassociate
    endsubroutine write_xh5f

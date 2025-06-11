@@ -10,185 +10,102 @@ use mpi
 implicit none
 private
 public :: xdmf_file_object
-public :: XDMF_ATTR_CENTER_NODE
-public :: XDMF_ATTR_CENTER_EDGE
-public :: XDMF_ATTR_CENTER_FACE
-public :: XDMF_ATTR_CENTER_CELL
-public :: XDMF_ATTR_CENTER_GRID
-public :: XDMF_ATTR_CENTER_OTHER
-public :: XDMF_ATTR_TYPE_SCALAR
-public :: XDMF_ATTR_TYPE_VECTOR
-public :: XDMF_ATTR_TYPE_TENSOR
-public :: XDMF_ATTR_TYPE_TENSOR6
-public :: XDMF_ATTR_TYPE_MATRIX
-public :: XDMF_ATTR_TYPE_GLOBALID
-public :: XDMF_ATTR_ELEM_FAMILY_CG
-public :: XDMF_ATTR_ELEM_FAMILY_DG
-public :: XDMF_ATTR_ELEM_FAMILY_Q
-public :: XDMF_ATTR_ELEM_FAMILY_DQ
-public :: XDMF_ATTR_ELEM_FAMILY_RT
-public :: XDMF_ATTR_ELEM_CELL_INTERVAL
-public :: XDMF_ATTR_ELEM_CELL_TRIANGLE
-public :: XDMF_ATTR_ELEM_CELL_TETRAHEDRON
-public :: XDMF_ATTR_ELEM_CELL_QUADRILATERAL
-public :: XDMF_ATTR_ELEM_CELL_HEXAHEDRON
-public :: XDMF_DATAITEM_ITEMTYPE_UNIFORM
-public :: XDMF_DATAITEM_ITEMTYPE_COLLECTION
-public :: XDMF_DATAITEM_ITEMTYPE_TREE
-public :: XDMF_DATAITEM_ITEMTYPE_HYPERSLAB
-public :: XDMF_DATAITEM_ITEMTYPE_COORDINATES
-public :: XDMF_DATAITEM_ITEMTYPE_FUNCTION
-public :: XDMF_DATAITEM_NUMBER_FORMAT_HDF
-public :: XDMF_DATAITEM_NUMBER_FORMAT_XML
-public :: XDMF_DATAITEM_NUMBER_FORMAT_BINARY
-public :: XDMF_DATAITEM_NUMBER_TYPE_FLOAT
-public :: XDMF_DATAITEM_NUMBER_TYPE_INT
-public :: XDMF_DATAITEM_NUMBER_TYPE_UINT
-public :: XDMF_DATAITEM_NUMBER_TYPE_CHAR
-public :: XDMF_DATAITEM_NUMBER_TYPE_UCHAR
-public :: XDMF_DATAITEM_NUMBER_PRECISION_1
-public :: XDMF_DATAITEM_NUMBER_PRECISION_2
-public :: XDMF_DATAITEM_NUMBER_PRECISION_4
-public :: XDMF_DATAITEM_NUMBER_PRECISION_8
-public :: XDMF_DATAITEM_ENDIAN_NATIVE
-public :: XDMF_DATAITEM_ENDIAN_BIG
-public :: XDMF_DATAITEM_ENDIAN_LITTLE
-public :: XDMF_DATAITEM_COMPRESSION_RAW
-public :: XDMF_DATAITEM_COMPRESSION_ZLIB
-public :: XDMF_DATAITEM_COMPRESSION_BZIP2
-public :: XDMF_GEOMETRY_TYPE_XYZ
-public :: XDMF_GEOMETRY_TYPE_XY
-public :: XDMF_GEOMETRY_TYPE_X_Y_Z
-public :: XDMF_GEOMETRY_TYPE_VXVYVZ
-public :: XDMF_GEOMETRY_TYPE_ODXYZ
-public :: XDMF_GEOMETRY_TYPE_ODXY
-public :: XDMF_GRID_TYPE_UNIFORM
-public :: XDMF_GRID_TYPE_COLLECTION
-public :: XDMF_GRID_TYPE_COLLECTION_ASYNC
-public :: XDMF_GRID_TYPE_TREE
-public :: XDMF_GRID_TYPE_SUBSET
-public :: XDMF_GRID_COLLECTION_TYPE_SPATIAL
-public :: XDMF_GRID_COLLECTION_TYPE_TEMPORAL
-public :: XDMF_GRID_SECTION_DATAITEM
-public :: XDMF_GRID_SECTION_ALL
-public :: XDMF_TIME_TYPE_SINGLE
-public :: XDMF_TIME_TYPE_HYPERSLAB
-public :: XDMF_TIME_TYPE_LIST
-public :: XDMF_TIME_TYPE_RANGE
-public :: XDMF_TOPOLOGY_TYPE_3DSMESH
-public :: XDMF_TOPOLOGY_TYPE_3DRECTMESH
-public :: XDMF_TOPOLOGY_TYPE_3DCORECTMESH
-public :: XDMF_TOPOLOGY_TYPE_2DSMESH
-public :: XDMF_TOPOLOGY_TYPE_2DRECTMESH
-public :: XDMF_TOPOLOGY_TYPE_2DCORECTMESH
-public :: XDMF_TOPOLOGY_TYPE_POLYVERTEX
-public :: XDMF_TOPOLOGY_TYPE_POLYLINE
-public :: XDMF_TOPOLOGY_TYPE_POLYGON
-public :: XDMF_TOPOLOGY_TYPE_TRIANGLE
-public :: XDMF_TOPOLOGY_TYPE_QUADRILATERAL
-public :: XDMF_TOPOLOGY_TYPE_TETRAHEDRON
-public :: XDMF_TOPOLOGY_TYPE_PYRAMID
-public :: XDMF_TOPOLOGY_TYPE_WEDGE
-public :: XDMF_TOPOLOGY_TYPE_HEXAHEDRON
-public :: XDMF_TOPOLOGY_TYPE_EDGE_3
-public :: XDMF_TOPOLOGY_TYPE_TRIANGLE_6
-public :: XDMF_TOPOLOGY_TYPE_QUADRILATERAL_8
-public :: XDMF_TOPOLOGY_TYPE_TETRAHEDRON_10
-public :: XDMF_TOPOLOGY_TYPE_PYRAMID_13
-public :: XDMF_TOPOLOGY_TYPE_WEDGE_15
-public :: XDMF_TOPOLOGY_TYPE_HEXAHEDRON_20
-public :: XDMF_TOPOLOGY_TYPE_MIXED
-
-character(4),  parameter :: XDMF_ATTR_CENTER_NODE              = 'Node'            !< XDMF attribute node  centered.
-character(4),  parameter :: XDMF_ATTR_CENTER_EDGE              = 'Edge'            !< XDMF attribute edge  centered.
-character(4),  parameter :: XDMF_ATTR_CENTER_FACE              = 'Face'            !< XDMF attribute face  centered.
-character(4),  parameter :: XDMF_ATTR_CENTER_CELL              = 'Cell'            !< XDMF attribute cell  centered.
-character(4),  parameter :: XDMF_ATTR_CENTER_GRID              = 'Grid'            !< XDMF attribute grid  centered.
-character(5),  parameter :: XDMF_ATTR_CENTER_OTHER             = 'Other'           !< XDMF attribute other centered.
-character(6),  parameter :: XDMF_ATTR_TYPE_SCALAR              = 'Scalar'          !< XDMF attribute type scalar.
-character(6),  parameter :: XDMF_ATTR_TYPE_VECTOR              = 'Vector'          !< XDMF attribute type vector.
-character(6),  parameter :: XDMF_ATTR_TYPE_TENSOR              = 'Tensor'          !< XDMF attribute type tensor.
-character(7),  parameter :: XDMF_ATTR_TYPE_TENSOR6             = 'Tensor6'         !< XDMF attribute type tensor6.
-character(6),  parameter :: XDMF_ATTR_TYPE_MATRIX              = 'Matrix'          !< XDMF attribute type matrix.
-character(8),  parameter :: XDMF_ATTR_TYPE_GLOBALID            = 'GlobalID'        !< XDMF attribute type global ID.
-character(2),  parameter :: XDMF_ATTR_ELEM_FAMILY_CG           = 'CG'              !< XDMF attribute element family CG.
-character(2),  parameter :: XDMF_ATTR_ELEM_FAMILY_DG           = 'DG'              !< XDMF attribute element family DG.
-character(1),  parameter :: XDMF_ATTR_ELEM_FAMILY_Q            = 'Q'               !< XDMF attribute element family Q.
-character(2),  parameter :: XDMF_ATTR_ELEM_FAMILY_DQ           = 'DQ'              !< XDMF attribute element family DQ.
-character(2),  parameter :: XDMF_ATTR_ELEM_FAMILY_RT           = 'RT'              !< XDMF attribute element family RT.
-character(8),  parameter :: XDMF_ATTR_ELEM_CELL_INTERVAL       = 'interval'        !< XDMF attribute element cell interval.
-character(8),  parameter :: XDMF_ATTR_ELEM_CELL_TRIANGLE       = 'triangle'        !< XDMF attribute element cell triangle.
-character(11), parameter :: XDMF_ATTR_ELEM_CELL_TETRAHEDRON    = 'tetrahedron'     !< XDMF attribute element cell tetrahedron.
-character(13), parameter :: XDMF_ATTR_ELEM_CELL_QUADRILATERAL  = 'quadrilateral'   !< XDMF attribute element cell quadrilateral.
-character(10), parameter :: XDMF_ATTR_ELEM_CELL_HEXAHEDRON     = 'hexahedron'      !< XDMF attribute element cell hexahedron.
-character(7),  parameter :: XDMF_DATAITEM_ITEMTYPE_UNIFORM     = 'Uniform'         !< XDMF dataitem item type Uniform
-character(10), parameter :: XDMF_DATAITEM_ITEMTYPE_COLLECTION  = 'Collection'      !< XDMF dataitem item type collection
-character(4),  parameter :: XDMF_DATAITEM_ITEMTYPE_TREE        = 'tree'            !< XDMF dataitem item type tree
-character(9),  parameter :: XDMF_DATAITEM_ITEMTYPE_HYPERSLAB   = 'HyperSlab'       !< XDMF dataitem item type hyperSlab
-character(11), parameter :: XDMF_DATAITEM_ITEMTYPE_COORDINATES = 'coordinates'     !< XDMF dataitem item type coordinates
-character(8),  parameter :: XDMF_DATAITEM_ITEMTYPE_FUNCTION    = 'Function'        !< XDMF dataitem item type function
-character(3),  parameter :: XDMF_DATAITEM_NUMBER_FORMAT_HDF    = 'HDF'             !< XDMF dataitem number format HDF.
-character(3),  parameter :: XDMF_DATAITEM_NUMBER_FORMAT_XML    = 'XML'             !< XDMF dataitem number format XML.
-character(6),  parameter :: XDMF_DATAITEM_NUMBER_FORMAT_BINARY = 'Binary'          !< XDMF dataitem number format Binary.
-character(5),  parameter :: XDMF_DATAITEM_NUMBER_TYPE_FLOAT    = 'Float'           !< XDMF dataitem number type float.
-character(3),  parameter :: XDMF_DATAITEM_NUMBER_TYPE_INT      = 'Int'             !< XDMF dataitem number type int.
-character(4),  parameter :: XDMF_DATAITEM_NUMBER_TYPE_UINT     = 'UInt'            !< XDMF dataitem number type uInt.
-character(4),  parameter :: XDMF_DATAITEM_NUMBER_TYPE_CHAR     = 'Char'            !< XDMF dataitem number type char.
-character(5),  parameter :: XDMF_DATAITEM_NUMBER_TYPE_UCHAR    = 'UChar'           !< XDMF dataitem number type uChar.
-character(1),  parameter :: XDMF_DATAITEM_NUMBER_PRECISION_1   = '1'               !< XDMF dataitem number precision 1.
-character(1),  parameter :: XDMF_DATAITEM_NUMBER_PRECISION_2   = '2'               !< XDMF dataitem number precision 2.
-character(1),  parameter :: XDMF_DATAITEM_NUMBER_PRECISION_4   = '4'               !< XDMF dataitem number precision 4.
-character(1),  parameter :: XDMF_DATAITEM_NUMBER_PRECISION_8   = '8'               !< XDMF dataitem number precision 8.
-character(6),  parameter :: XDMF_DATAITEM_ENDIAN_NATIVE        = 'Native'          !< XDMF dataitem number endian native.
-character(3),  parameter :: XDMF_DATAITEM_ENDIAN_BIG           = 'Big'             !< XDMF dataitem number endian big.
-character(6),  parameter :: XDMF_DATAITEM_ENDIAN_LITTLE        = 'Little'          !< XDMF dataitem number endian little.
-character(3),  parameter :: XDMF_DATAITEM_COMPRESSION_RAW      = 'Raw'             !< XDMF dataitem number compression raw.
-character(4),  parameter :: XDMF_DATAITEM_COMPRESSION_ZLIB     = 'Zlib'            !< XDMF dataitem number compression zlib.
-character(5),  parameter :: XDMF_DATAITEM_COMPRESSION_BZIP2    = 'BZip2'           !< XDMF dataitem number compression bzip2.
-character(3),  parameter :: XDMF_GEOMETRY_TYPE_XYZ             = 'XYZ'             !< XDMF geometry type xyz (interlaced values).
-character(2),  parameter :: XDMF_GEOMETRY_TYPE_XY              = 'XY'              !< XDMF geometry type xy.
-character(5),  parameter :: XDMF_GEOMETRY_TYPE_X_Y_Z           = 'X_Y_Z'           !< XDMF geometry type xyz (separated values).
-character(5),  parameter :: XDMF_GEOMETRY_TYPE_VXVYVZ          = 'VXVYVZ'          !< XDMF geometry type xyz (3 arrays).
-character(13), parameter :: XDMF_GEOMETRY_TYPE_ODXYZ           = 'ORIGIN_DXDYDZ'   !< XDMF geometry type origin-dxyz.
-character(11), parameter :: XDMF_GEOMETRY_TYPE_ODXY            = 'ORIGIN_DXDY'     !< XDMF geometry type origin-dxy.
-character(7),  parameter :: XDMF_GRID_TYPE_UNIFORM             = 'Uniform'         !< XDMF grid type uniform.
-character(10), parameter :: XDMF_GRID_TYPE_COLLECTION          = 'Collection'      !< XDMF grid type collection.
-character(15), parameter :: XDMF_GRID_TYPE_COLLECTION_ASYNC    = 'CollectionAsync' !< XDMF grid type collection.
-character(4),  parameter :: XDMF_GRID_TYPE_TREE                = 'Tree'            !< XDMF grid type tree.
-character(6),  parameter :: XDMF_GRID_TYPE_SUBSET              = 'Subset'          !< XDMF grid type subset.
-character(7),  parameter :: XDMF_GRID_COLLECTION_TYPE_SPATIAL  = 'Spatial'         !< XDMF grid collection type spatial.
-character(8),  parameter :: XDMF_GRID_COLLECTION_TYPE_TEMPORAL = 'Temporal'        !< XDMF grid collection type spatial.
-character(8),  parameter :: XDMF_GRID_SECTION_DATAITEM         = 'DataItem'        !< XDMF grid section dataitem.
-character(3),  parameter :: XDMF_GRID_SECTION_ALL              = 'All'             !< XDMF grid section all.
-character(6),  parameter :: XDMF_TIME_TYPE_SINGLE              = 'Single'          !< XDMF time type single.
-character(9),  parameter :: XDMF_TIME_TYPE_HYPERSLAB           = 'HyperSlab'       !< XDMF time type hyperslab.
-character(4),  parameter :: XDMF_TIME_TYPE_LIST                = 'List'            !< XDMF time type list.
-character(5),  parameter :: XDMF_TIME_TYPE_RANGE               = 'Range'           !< XDMF time type range.
-character(7),  parameter :: XDMF_TOPOLOGY_TYPE_3DSMESH         = '3DSMesh'         !< XDMF topology type curvilinear mesh, 3D.
-character(10), parameter :: XDMF_TOPOLOGY_TYPE_3DRECTMESH      = '3DRectMesh'      !< XDMF topology type cartesian mesh, 3D.
-character(12), parameter :: XDMF_TOPOLOGY_TYPE_3DCORECTMESH    = '3DCoRectMesh'    !< XDMF topology type cartesian uniform mesh, 3D.
-character(7),  parameter :: XDMF_TOPOLOGY_TYPE_2DSMESH         = '2DSMesh'         !< XDMF topology type curvilinear mesh, 2D.
-character(10), parameter :: XDMF_TOPOLOGY_TYPE_2DRECTMESH      = '2DRectMesh'      !< XDMF topology type cartesian mesh, 2D.
-character(12), parameter :: XDMF_TOPOLOGY_TYPE_2DCORECTMESH    = '2DCoRectMesh'    !< XDMF topology type cartesian uniform mesh, 2D.
-character(10), parameter :: XDMF_TOPOLOGY_TYPE_POLYVERTEX      = 'Polyvertex'      !< XDMF topology type polyvertex.
-character(8),  parameter :: XDMF_TOPOLOGY_TYPE_POLYLINE        = 'Polyline'        !< XDMF topology type polyline.
-character(7),  parameter :: XDMF_TOPOLOGY_TYPE_POLYGON         = 'Polygon'         !< XDMF topology type polygon.
-character(8),  parameter :: XDMF_TOPOLOGY_TYPE_TRIANGLE        = 'Triangle'        !< XDMF topology type triangle.
-character(13), parameter :: XDMF_TOPOLOGY_TYPE_QUADRILATERAL   = 'Quadrilateral'   !< XDMF topology type quadrilateral.
-character(11), parameter :: XDMF_TOPOLOGY_TYPE_TETRAHEDRON     = 'Tetrahedron'     !< XDMF topology type tetrahedron.
-character(7),  parameter :: XDMF_TOPOLOGY_TYPE_PYRAMID         = 'Pyramid'         !< XDMF topology type pyramid.
-character(5),  parameter :: XDMF_TOPOLOGY_TYPE_WEDGE           = 'Wedge'           !< XDMF topology type wedge.
-character(10), parameter :: XDMF_TOPOLOGY_TYPE_HEXAHEDRON      = 'Hexahedron'      !< XDMF topology type hexahedron.
-character(6),  parameter :: XDMF_TOPOLOGY_TYPE_EDGE_3          = 'Edge_3'          !< XDMF topology type edge_3.
-character(10), parameter :: XDMF_TOPOLOGY_TYPE_TRIANGLE_6      = 'Triangle_6'      !< XDMF topology type triangle_6.
-character(15), parameter :: XDMF_TOPOLOGY_TYPE_QUADRILATERAL_8 = 'Quadrilateral_8' !< XDMF topology type quadrilateral_8.
-character(14), parameter :: XDMF_TOPOLOGY_TYPE_TETRAHEDRON_10  = 'Tetrahedron_10'  !< XDMF topology type tetrahedron_10.
-character(10), parameter :: XDMF_TOPOLOGY_TYPE_PYRAMID_13      = 'Pyramid_13'      !< XDMF topology type pyramid_13.
-character(8),  parameter :: XDMF_TOPOLOGY_TYPE_WEDGE_15        = 'Wedge_15'        !< XDMF topology type wedge_15.
-character(13), parameter :: XDMF_TOPOLOGY_TYPE_HEXAHEDRON_20   = 'Hexahedron_20'   !< XDMF topology type hexahedron_20.
-character(5),  parameter :: XDMF_TOPOLOGY_TYPE_MIXED           = 'Mixed'           !< XDMF topology type mixed.
+public :: XDMF_PARAMETERS
 
 character(1), parameter :: NL = new_line('a') !< New line (end record) character.
+
+type :: xdmf_parameters_object
+   !< Global named constants (paramters) class (container) of XDMF syntax.
+   character(4)  :: XDMF_ATTR_CENTER_NODE              = 'Node'            !< XDMF attribute node  centered.
+   character(4)  :: XDMF_ATTR_CENTER_EDGE              = 'Edge'            !< XDMF attribute edge  centered.
+   character(4)  :: XDMF_ATTR_CENTER_FACE              = 'Face'            !< XDMF attribute face  centered.
+   character(4)  :: XDMF_ATTR_CENTER_CELL              = 'Cell'            !< XDMF attribute cell  centered.
+   character(4)  :: XDMF_ATTR_CENTER_GRID              = 'Grid'            !< XDMF attribute grid  centered.
+   character(5)  :: XDMF_ATTR_CENTER_OTHER             = 'Other'           !< XDMF attribute other centered.
+   character(6)  :: XDMF_ATTR_TYPE_SCALAR              = 'Scalar'          !< XDMF attribute type scalar.
+   character(6)  :: XDMF_ATTR_TYPE_VECTOR              = 'Vector'          !< XDMF attribute type vector.
+   character(6)  :: XDMF_ATTR_TYPE_TENSOR              = 'Tensor'          !< XDMF attribute type tensor.
+   character(7)  :: XDMF_ATTR_TYPE_TENSOR6             = 'Tensor6'         !< XDMF attribute type tensor6.
+   character(6)  :: XDMF_ATTR_TYPE_MATRIX              = 'Matrix'          !< XDMF attribute type matrix.
+   character(8)  :: XDMF_ATTR_TYPE_GLOBALID            = 'GlobalID'        !< XDMF attribute type global ID.
+   character(2)  :: XDMF_ATTR_ELEM_FAMILY_CG           = 'CG'              !< XDMF attribute element family CG.
+   character(2)  :: XDMF_ATTR_ELEM_FAMILY_DG           = 'DG'              !< XDMF attribute element family DG.
+   character(1)  :: XDMF_ATTR_ELEM_FAMILY_Q            = 'Q'               !< XDMF attribute element family Q.
+   character(2)  :: XDMF_ATTR_ELEM_FAMILY_DQ           = 'DQ'              !< XDMF attribute element family DQ.
+   character(2)  :: XDMF_ATTR_ELEM_FAMILY_RT           = 'RT'              !< XDMF attribute element family RT.
+   character(8)  :: XDMF_ATTR_ELEM_CELL_INTERVAL       = 'interval'        !< XDMF attribute element cell interval.
+   character(8)  :: XDMF_ATTR_ELEM_CELL_TRIANGLE       = 'triangle'        !< XDMF attribute element cell triangle.
+   character(11) :: XDMF_ATTR_ELEM_CELL_TETRAHEDRON    = 'tetrahedron'     !< XDMF attribute element cell tetrahedron.
+   character(13) :: XDMF_ATTR_ELEM_CELL_QUADRILATERAL  = 'quadrilateral'   !< XDMF attribute element cell quadrilateral.
+   character(10) :: XDMF_ATTR_ELEM_CELL_HEXAHEDRON     = 'hexahedron'      !< XDMF attribute element cell hexahedron.
+   character(7)  :: XDMF_DATAITEM_ITEMTYPE_UNIFORM     = 'Uniform'         !< XDMF dataitem item type Uniform
+   character(10) :: XDMF_DATAITEM_ITEMTYPE_COLLECTION  = 'Collection'      !< XDMF dataitem item type collection
+   character(4)  :: XDMF_DATAITEM_ITEMTYPE_TREE        = 'tree'            !< XDMF dataitem item type tree
+   character(9)  :: XDMF_DATAITEM_ITEMTYPE_HYPERSLAB   = 'HyperSlab'       !< XDMF dataitem item type hyperSlab
+   character(11) :: XDMF_DATAITEM_ITEMTYPE_COORDINATES = 'coordinates'     !< XDMF dataitem item type coordinates
+   character(8)  :: XDMF_DATAITEM_ITEMTYPE_FUNCTION    = 'Function'        !< XDMF dataitem item type function
+   character(3)  :: XDMF_DATAITEM_NUMBER_FORMAT_HDF    = 'HDF'             !< XDMF dataitem number format HDF.
+   character(3)  :: XDMF_DATAITEM_NUMBER_FORMAT_XML    = 'XML'             !< XDMF dataitem number format XML.
+   character(6)  :: XDMF_DATAITEM_NUMBER_FORMAT_BINARY = 'Binary'          !< XDMF dataitem number format Binary.
+   character(5)  :: XDMF_DATAITEM_NUMBER_TYPE_FLOAT    = 'Float'           !< XDMF dataitem number type float.
+   character(3)  :: XDMF_DATAITEM_NUMBER_TYPE_INT      = 'Int'             !< XDMF dataitem number type int.
+   character(4)  :: XDMF_DATAITEM_NUMBER_TYPE_UINT     = 'UInt'            !< XDMF dataitem number type uInt.
+   character(4)  :: XDMF_DATAITEM_NUMBER_TYPE_CHAR     = 'Char'            !< XDMF dataitem number type char.
+   character(5)  :: XDMF_DATAITEM_NUMBER_TYPE_UCHAR    = 'UChar'           !< XDMF dataitem number type uChar.
+   character(1)  :: XDMF_DATAITEM_NUMBER_PRECISION_1   = '1'               !< XDMF dataitem number precision 1.
+   character(1)  :: XDMF_DATAITEM_NUMBER_PRECISION_2   = '2'               !< XDMF dataitem number precision 2.
+   character(1)  :: XDMF_DATAITEM_NUMBER_PRECISION_4   = '4'               !< XDMF dataitem number precision 4.
+   character(1)  :: XDMF_DATAITEM_NUMBER_PRECISION_8   = '8'               !< XDMF dataitem number precision 8.
+   character(6)  :: XDMF_DATAITEM_ENDIAN_NATIVE        = 'Native'          !< XDMF dataitem number endian native.
+   character(3)  :: XDMF_DATAITEM_ENDIAN_BIG           = 'Big'             !< XDMF dataitem number endian big.
+   character(6)  :: XDMF_DATAITEM_ENDIAN_LITTLE        = 'Little'          !< XDMF dataitem number endian little.
+   character(3)  :: XDMF_DATAITEM_COMPRESSION_RAW      = 'Raw'             !< XDMF dataitem number compression raw.
+   character(4)  :: XDMF_DATAITEM_COMPRESSION_ZLIB     = 'Zlib'            !< XDMF dataitem number compression zlib.
+   character(5)  :: XDMF_DATAITEM_COMPRESSION_BZIP2    = 'BZip2'           !< XDMF dataitem number compression bzip2.
+   character(3)  :: XDMF_GEOMETRY_TYPE_XYZ             = 'XYZ'             !< XDMF geometry type xyz (interlaced values).
+   character(2)  :: XDMF_GEOMETRY_TYPE_XY              = 'XY'              !< XDMF geometry type xy.
+   character(5)  :: XDMF_GEOMETRY_TYPE_X_Y_Z           = 'X_Y_Z'           !< XDMF geometry type xyz (separated values).
+   character(5)  :: XDMF_GEOMETRY_TYPE_VXVYVZ          = 'VXVYVZ'          !< XDMF geometry type xyz (3 arrays).
+   character(13) :: XDMF_GEOMETRY_TYPE_ODXYZ           = 'ORIGIN_DXDYDZ'   !< XDMF geometry type origin-dxyz.
+   character(11) :: XDMF_GEOMETRY_TYPE_ODXY            = 'ORIGIN_DXDY'     !< XDMF geometry type origin-dxy.
+   character(7)  :: XDMF_GRID_TYPE_UNIFORM             = 'Uniform'         !< XDMF grid type uniform.
+   character(10) :: XDMF_GRID_TYPE_COLLECTION          = 'Collection'      !< XDMF grid type collection.
+   character(15) :: XDMF_GRID_TYPE_COLLECTION_ASYNC    = 'CollectionAsync' !< XDMF grid type collection.
+   character(4)  :: XDMF_GRID_TYPE_TREE                = 'Tree'            !< XDMF grid type tree.
+   character(6)  :: XDMF_GRID_TYPE_SUBSET              = 'Subset'          !< XDMF grid type subset.
+   character(7)  :: XDMF_GRID_COLLECTION_TYPE_SPATIAL  = 'Spatial'         !< XDMF grid collection type spatial.
+   character(8)  :: XDMF_GRID_COLLECTION_TYPE_TEMPORAL = 'Temporal'        !< XDMF grid collection type spatial.
+   character(8)  :: XDMF_GRID_SECTION_DATAITEM         = 'DataItem'        !< XDMF grid section dataitem.
+   character(3)  :: XDMF_GRID_SECTION_ALL              = 'All'             !< XDMF grid section all.
+   character(6)  :: XDMF_TIME_TYPE_SINGLE              = 'Single'          !< XDMF time type single.
+   character(9)  :: XDMF_TIME_TYPE_HYPERSLAB           = 'HyperSlab'       !< XDMF time type hyperslab.
+   character(4)  :: XDMF_TIME_TYPE_LIST                = 'List'            !< XDMF time type list.
+   character(5)  :: XDMF_TIME_TYPE_RANGE               = 'Range'           !< XDMF time type range.
+   character(7)  :: XDMF_TOPOLOGY_TYPE_3DSMESH         = '3DSMesh'         !< XDMF topology type curvilinear mesh, 3D.
+   character(10) :: XDMF_TOPOLOGY_TYPE_3DRECTMESH      = '3DRectMesh'      !< XDMF topology type cartesian mesh, 3D.
+   character(12) :: XDMF_TOPOLOGY_TYPE_3DCORECTMESH    = '3DCoRectMesh'    !< XDMF topology type cart uniform mesh, 3D.
+   character(7)  :: XDMF_TOPOLOGY_TYPE_2DSMESH         = '2DSMesh'         !< XDMF topology type curvilinear mesh, 2D.
+   character(10) :: XDMF_TOPOLOGY_TYPE_2DRECTMESH      = '2DRectMesh'      !< XDMF topology type cartesian mesh, 2D.
+   character(12) :: XDMF_TOPOLOGY_TYPE_2DCORECTMESH    = '2DCoRectMesh'    !< XDMF topology type cart uniform mesh, 2D.
+   character(10) :: XDMF_TOPOLOGY_TYPE_POLYVERTEX      = 'Polyvertex'      !< XDMF topology type polyvertex.
+   character(8)  :: XDMF_TOPOLOGY_TYPE_POLYLINE        = 'Polyline'        !< XDMF topology type polyline.
+   character(7)  :: XDMF_TOPOLOGY_TYPE_POLYGON         = 'Polygon'         !< XDMF topology type polygon.
+   character(8)  :: XDMF_TOPOLOGY_TYPE_TRIANGLE        = 'Triangle'        !< XDMF topology type triangle.
+   character(13) :: XDMF_TOPOLOGY_TYPE_QUADRILATERAL   = 'Quadrilateral'   !< XDMF topology type quadrilateral.
+   character(11) :: XDMF_TOPOLOGY_TYPE_TETRAHEDRON     = 'Tetrahedron'     !< XDMF topology type tetrahedron.
+   character(7)  :: XDMF_TOPOLOGY_TYPE_PYRAMID         = 'Pyramid'         !< XDMF topology type pyramid.
+   character(5)  :: XDMF_TOPOLOGY_TYPE_WEDGE           = 'Wedge'           !< XDMF topology type wedge.
+   character(10) :: XDMF_TOPOLOGY_TYPE_HEXAHEDRON      = 'Hexahedron'      !< XDMF topology type hexahedron.
+   character(6)  :: XDMF_TOPOLOGY_TYPE_EDGE_3          = 'Edge_3'          !< XDMF topology type edge_3.
+   character(10) :: XDMF_TOPOLOGY_TYPE_TRIANGLE_6      = 'Triangle_6'      !< XDMF topology type triangle_6.
+   character(15) :: XDMF_TOPOLOGY_TYPE_QUADRILATERAL_8 = 'Quadrilateral_8' !< XDMF topology type quadrilateral_8.
+   character(14) :: XDMF_TOPOLOGY_TYPE_TETRAHEDRON_10  = 'Tetrahedron_10'  !< XDMF topology type tetrahedron_10.
+   character(10) :: XDMF_TOPOLOGY_TYPE_PYRAMID_13      = 'Pyramid_13'      !< XDMF topology type pyramid_13.
+   character(8)  :: XDMF_TOPOLOGY_TYPE_WEDGE_15        = 'Wedge_15'        !< XDMF topology type wedge_15.
+   character(13) :: XDMF_TOPOLOGY_TYPE_HEXAHEDRON_20   = 'Hexahedron_20'   !< XDMF topology type hexahedron_20.
+   character(5)  :: XDMF_TOPOLOGY_TYPE_MIXED           = 'Mixed'           !< XDMF topology type mixed.
+endtype xdmf_parameters_object
+type(xdmf_parameters_object), parameter :: XDMF_PARAMETERS=xdmf_parameters_object() !< List of XDMF named constants.
 
 type :: xdmf_file_object
    !< XDMF file object class.
@@ -486,10 +403,10 @@ contains
    !< ```
    class(xdmf_file_object), intent(inout)        :: self           !< File handler.
    character(*),            intent(in), optional :: geometry_type  !< Geometry type.
-   character(:), allocatable                     :: geometry_type_ !< Geometry type, local var.
+   character(:), allocatable                     :: attr           !< Attributes list.
 
-   geometry_type_ = XDMF_GEOMETRY_TYPE_XYZ ; if (present(geometry_type)) geometry_type_ = trim(adjustl(geometry_type))
-   call self%write_start_tag(name='Geometry', attributes='Type="'//geometry_type_//'"')
+   attr = '' ; if (present(geometry_type)) attr = 'Type="'//trim(adjustl(geometry_type))//'"'
+   call self%write_start_tag(name='Geometry', attributes=attr)
    endsubroutine open_geometry_tag
 
    ! grid tag
@@ -500,7 +417,7 @@ contains
    character(:), allocatable                     :: grid_type_ !< Grid type, local var.
 
    grid_type_ = '' ; if (present(grid_type)) grid_type_ = trim(adjustl(grid_type))
-   if (grid_type_==XDMF_GRID_TYPE_COLLECTION_ASYNC) then
+   if (grid_type_==XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC) then
       if (self%is_async) then
          ! close asyncrounous collection of async MPI process, update indent
          self%indent = self%indent - 2
@@ -531,14 +448,14 @@ contains
    character(:), allocatable                     :: attr                 !< Attributes list.
 
    grid_type_ = '' ; if (present(grid_type)) grid_type_ = trim(adjustl(grid_type))
-   if (grid_type_==XDMF_GRID_TYPE_COLLECTION_ASYNC) then
+   if (grid_type_==XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC) then
       if (self%is_async) then
          ! asyncrounous collection of async MPI process, just update indent
          self%indent = self%indent + 2
          return
       else
          ! asyncrounous collection of master MPI process, convert grid type to standard collection
-         grid_type_ = XDMF_GRID_TYPE_COLLECTION
+         grid_type_ = XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION
       endif
    endif
    attr = '' ; if (present(grid_name           )) attr =        'Name="'          //trim(adjustl(grid_name           ))//'"'
@@ -589,8 +506,8 @@ contains
    character(*),            intent(in), optional :: time_number_format    !< Time number format.
    character(:), allocatable                     :: time_type_            !< Time type, local var.
 
-   time_type_ = XDMF_TIME_TYPE_SINGLE ; if (present(time_type)) time_type_ = trim(adjustl(time_type))
-   if (time_type_==XDMF_TIME_TYPE_SINGLE) then
+   time_type_ = XDMF_PARAMETERS%XDMF_TIME_TYPE_SINGLE ; if (present(time_type)) time_type_ = trim(adjustl(time_type))
+   if (time_type_==XDMF_PARAMETERS%XDMF_TIME_TYPE_SINGLE) then
       call self%write_self_closing_tag(name='Time', attributes='Value="'//trim(adjustl(time_value))//'"')
    else
       call self%write_start_tag(name='Time', attributes='TimeType="'//time_type_//'"')
