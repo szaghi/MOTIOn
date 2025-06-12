@@ -57,13 +57,14 @@ Currently MOTIOn has the following features:
 + [ ] HDF5/XDMF:
    + [ ] Output:
       + [x] Cartesian uniform grids;
-      + [ ] Cartesian grids;
-      + [ ] Curvilinear grids;
+      + [x] Cartesian grids;
+      + [x] Curvilinear grids;
       + [x] Scalar 0D (grid centered) fields;
       + [x] Scalar 3D fields;
       + [x] Vector 3D fields;
-      + [ ] Tensor 3D fields;
-      + [ ] Matrix 3D fields;
+      + [x] Tensor 3D fields;
+      + [x] Tensor6 3D fields;
+      + [x] Matrix 3D fields;
    + [ ] Input:
 
 To be completed.

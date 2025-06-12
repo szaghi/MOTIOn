@@ -36,11 +36,13 @@ type :: hdf5_file_object
       generic               :: save_dataset =>      &
                                save_dataset_4D_R8P, &
                                save_dataset_3D_R8P, &
+                               save_dataset_1D_R8P, &
                                save_dataset_0D_R8P !< Save dataset in dataspace.
       ! private methods
       procedure, pass(self), private :: save_dataset_4D_R8P !< Save dataset in dataspace, kind R8P, rank 4D.
       procedure, pass(self), private :: save_dataset_3D_R8P !< Save dataset in dataspace, kind R8P, rank 3D.
-      procedure, pass(self), private :: save_dataset_0D_R8P !< Save dataset in dataspace, kind R8P, rank 1D.
+      procedure, pass(self), private :: save_dataset_1D_R8P !< Save dataset in dataspace, kind R8P, rank 1D.
+      procedure, pass(self), private :: save_dataset_0D_R8P !< Save dataset in dataspace, kind R8P, rank 0D.
 endtype hdf5_file_object
 
 contains
@@ -124,6 +126,19 @@ contains
    call h5dwrite_f(dset_id, H5T_NATIVE_DOUBLE, dset, nd, self%error)
    call h5dclose_f(dset_id, self%error)
    endsubroutine save_dataset_3D_R8P
+
+   subroutine save_dataset_1D_R8P(self, dset_name, nd, dset)
+   !< Save dataset in dataspace, kind R8P, rank 1D.
+   class(hdf5_file_object), intent(inout) :: self      !< File handler.
+   character(*),            intent(in)    :: dset_name !< Dataset name.
+   integer(HSIZE_T),        intent(in)    :: nd        !< Dataspace datasets dimensions.
+   real(R8P),               intent(in)    :: dset(:)   !< Dataset to be saved.
+   integer(HID_T)                         :: dset_id   !< Dataset identifier.
+
+   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_NATIVE_DOUBLE, self%dspace_id, dset_id, self%error)
+   call h5dwrite_f(dset_id, H5T_NATIVE_DOUBLE, dset, [nd], self%error)
+   call h5dclose_f(dset_id, self%error)
+   endsubroutine save_dataset_1D_R8P
 
    subroutine save_dataset_0D_R8P(self, dset_name, dset)
    !< Save dataset in dataspace, kind R8P, rank 0D.

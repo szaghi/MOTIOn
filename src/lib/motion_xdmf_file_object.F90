@@ -65,7 +65,7 @@ type :: xdmf_parameters_object
    character(3)  :: XDMF_GEOMETRY_TYPE_XYZ             = 'XYZ'             !< XDMF geometry type xyz (interlaced values).
    character(2)  :: XDMF_GEOMETRY_TYPE_XY              = 'XY'              !< XDMF geometry type xy.
    character(5)  :: XDMF_GEOMETRY_TYPE_X_Y_Z           = 'X_Y_Z'           !< XDMF geometry type xyz (separated values).
-   character(5)  :: XDMF_GEOMETRY_TYPE_VXVYVZ          = 'VXVYVZ'          !< XDMF geometry type xyz (3 arrays).
+   character(6)  :: XDMF_GEOMETRY_TYPE_VXVYVZ          = 'VXVYVZ'          !< XDMF geometry type xyz (3 arrays).
    character(13) :: XDMF_GEOMETRY_TYPE_ODXYZ           = 'ORIGIN_DXDYDZ'   !< XDMF geometry type origin-dxyz.
    character(11) :: XDMF_GEOMETRY_TYPE_ODXY            = 'ORIGIN_DXDY'     !< XDMF geometry type origin-dxy.
    character(7)  :: XDMF_GRID_TYPE_UNIFORM             = 'Uniform'         !< XDMF grid type uniform.

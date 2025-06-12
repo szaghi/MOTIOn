@@ -88,7 +88,6 @@ contains
    !< Close block.
    class(xh5f_file_object), intent(inout) :: self !< File handler.
 
-   ! call self%hdf5%close_dspace
    call self%xdmf%close_grid_tag
    endsubroutine close_block
 
@@ -112,48 +111,111 @@ contains
                                 grid_collection_type=grid_collection_type, grid_section=grid_section)
    endsubroutine open_grid
 
-   subroutine open_block(self, block_type, block_name, nijk, emin, dxyz, time)
+   subroutine open_block(self, block_type, block_name, nijk, emin, dxyz, x, y, z, nodes, time)
    !< Open block.
-   class(xh5f_file_object), intent(inout)        :: self        !< File handler.
-   character(*),            intent(in)           :: block_type  !< Block type.
-   character(*),            intent(in), optional :: block_name  !< Block name.
-   integer(HSIZE_T),        intent(in), optional :: nijk(3)     !< Dataspace datasets dimensions.
-   real(R8P),               intent(in), optional :: emin(3)     !< Block minimum extents.
-   real(R8P),               intent(in), optional :: dxyz(3)     !< Block space steps.
-   real(R8P),               intent(in), optional :: time        !< Current time.
-   type(string)                                  :: block_name_ !< Block name, local var.
+   class(xh5f_file_object), intent(inout)        :: self           !< File handler.
+   character(*),            intent(in)           :: block_type     !< Block type.
+   character(*),            intent(in), optional :: block_name     !< Block name.
+   integer(HSIZE_T),        intent(in), optional :: nijk(3)        !< Cells number.
+   real(R8P),               intent(in), optional :: emin(3)        !< Block minimum extents.
+   real(R8P),               intent(in), optional :: dxyz(3)        !< Space steps for cartesian unform grid.
+   real(R8P),               intent(in), optional :: x(:),y(:),z(:) !< Nodes coordinates for cartesian grid [1:nijk(ijk)+1].
+   real(R8P),               intent(in), optional :: nodes(:,:,:,:) !< Nodes coordinates for curvilinear grid [3,nijk+1].
+   real(R8P),               intent(in), optional :: time           !< Current time.
+   integer(HSIZE_T), allocatable                 :: nd(:)          !< Dataspece dimensions.
+   type(string)                                  :: block_name_    !< Block name, local var.
 
    block_name_ = block_name_%tempname(prefix='block-') ; if (present(block_name)) block_name_ = trim(adjustl(block_name))
    select case(trim(adjustl(block_type)))
    case(XH5F_PARAMETERS%XH5F_BLOCK_CARTESIAN)
-   case(XH5F_PARAMETERS%XH5F_BLOCK_CARTESIAN_UNIFORM)
-      if ((.not.present(nijk)).or.(.not.present(emin)).or.(.not.present(dxyz))) then
-         write(stderr, '(A)') 'error: opening XH5F block of type "'//XH5F_PARAMETERS%XH5F_BLOCK_CARTESIAN_UNIFORM//&
-                              '" needs "nijk", "emin", "dxyz" dummy arguments'
+      if ((.not.present(nijk)).or.(.not.present(x)).or.(.not.present(y)).or.(.not.present(z))) then
+         write(stderr, '(A)') 'error: opening XH5F block of type "'//trim(adjustl(block_type))//&
+                              '" needs "nijk", "x", "y", "z" dummy arguments'
+         call MPI_FINALIZE(self%error)
          stop
       endif
-      ! call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nijk)
+      call self%xdmf%open_grid_tag(grid_name=block_name_%chars())
+      call self%xdmf%open_geometry_tag(geometry_type=XDMF_PARAMETERS%XDMF_GEOMETRY_TYPE_VXVYVZ)
+      if (present(time)) call self%xdmf%write_time_tag(time_value=trim(str(time)))
+      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[nijk(1)+1])
+      call self%hdf5%save_dataset(dset_name=block_name_%chars()//'-x', nd=nijk(1)+1, dset=x)
+      call self%hdf5%close_dspace
+      call self%xdmf%write_dataitem_tag(content          = self%hdf5%filename//':'//block_name_%chars()//'-x', &
+                                        item_dimensions  = trim(adjustl(str(nijk(1)+1))),                      &
+                                        number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,    &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,   &
+                                        number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
+      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[nijk(2)+1])
+      call self%hdf5%save_dataset(dset_name=block_name_%chars()//'-y', nd=nijk(2)+1, dset=y)
+      call self%hdf5%close_dspace
+      call self%xdmf%write_dataitem_tag(content          = self%hdf5%filename//':'//block_name_%chars()//'-y', &
+                                        item_dimensions  = trim(adjustl(str(nijk(2)+1))),                      &
+                                        number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,    &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,   &
+                                        number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
+      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[nijk(3)+1])
+      call self%hdf5%save_dataset(dset_name=block_name_%chars()//'-z', nd=nijk(3)+1, dset=z)
+      call self%hdf5%close_dspace
+      call self%xdmf%write_dataitem_tag(content          = self%hdf5%filename//':'//block_name_%chars()//'-z', &
+                                        item_dimensions  = trim(adjustl(str(nijk(3)+1))),                      &
+                                        number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,    &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,   &
+                                        number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
+      call self%xdmf%close_geometry_tag
+      call self%xdmf%write_topology_tag(topology_type=XDMF_PARAMETERS%XDMF_TOPOLOGY_TYPE_3DRECTMESH, &
+                                        topology_dimensions=trim(str([nijk(3)+1,nijk(2)+1,nijk(1)+1],separator=' ')))
+   case(XH5F_PARAMETERS%XH5F_BLOCK_CARTESIAN_UNIFORM)
+      if ((.not.present(nijk)).or.(.not.present(emin)).or.(.not.present(dxyz))) then
+         write(stderr, '(A)') 'error: opening XH5F block of type "'//trim(adjustl(block_type))//&
+                              '" needs "nijk", "emin", "dxyz" dummy arguments'
+         call MPI_FINALIZE(self%error)
+         stop
+      endif
+      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[3_HSIZE_T])
+      call self%hdf5%save_dataset(dset_name=block_name_%chars()//'-origin', nd=3_HSIZE_T, dset=[emin(3),emin(2),emin(1)])
+      call self%hdf5%save_dataset(dset_name=block_name_%chars()//'-dxdydz', nd=3_HSIZE_T, dset=[dxyz(3),dxyz(2),dxyz(1)])
+      call self%hdf5%close_dspace
       call self%xdmf%open_grid_tag(grid_name=block_name_%chars())
       call self%xdmf%open_geometry_tag(geometry_type=XDMF_PARAMETERS%XDMF_GEOMETRY_TYPE_ODXYZ)
       if (present(time)) call self%xdmf%write_time_tag(time_value=trim(str(time)))
-      call self%xdmf%write_dataitem_tag(content          = trim(str([emin(3),emin(2),emin(1)],separator=' ')), &
-                                        item_dimensions  = '3',                                                &
-                                        number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,   &
-                                        number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      call self%xdmf%write_dataitem_tag(content          = trim(str([dxyz(3),dxyz(2),dxyz(1)],separator=' ')), &
-                                        item_dimensions  = '3',                                                &
-                                        number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,   &
-                                        number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
+      call self%xdmf%write_dataitem_tag(content          = self%hdf5%filename//':'//block_name_%chars()//'-origin', &
+                                        item_dimensions  = '3',                                                     &
+                                        number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,         &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,        &
+                                        number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
+      call self%xdmf%write_dataitem_tag(content          = self%hdf5%filename//':'//block_name_%chars()//'-dxdydz', &
+                                        item_dimensions  = '3',                                                     &
+                                        number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,         &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,        &
+                                        number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
       call self%xdmf%close_geometry_tag
       call self%xdmf%write_topology_tag(topology_type=XDMF_PARAMETERS%XDMF_TOPOLOGY_TYPE_3DCORECTMESH, &
                                         topology_dimensions=trim(str([nijk(3),nijk(2),nijk(1)],separator=' ')))
    case(XH5F_PARAMETERS%XH5F_BLOCK_CURVILINEAR)
-      write(stderr, '(A)') 'error: block of type "'//trim(adjustl(block_type))//'" is not yet supported'
-      stop
+      if ((.not.present(nijk)).or.(.not.present(nodes))) then
+         write(stderr, '(A)') 'error: opening XH5F block of type "'//trim(adjustl(block_type))//&
+                              '" needs "nijk", "nodes" dummy arguments'
+         call MPI_FINALIZE(self%error)
+         stop
+      endif
+      nd = [3_HSIZE_T,nijk(1)+1,nijk(2)+1,nijk(3)+1]
+      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
+      call self%hdf5%save_dataset(dset_name=block_name_%chars()//'-nodes', nd=nd, dset=nodes)
+      call self%hdf5%close_dspace
+      call self%xdmf%open_grid_tag(grid_name=block_name_%chars())
+      call self%xdmf%open_geometry_tag(geometry_type=XDMF_PARAMETERS%XDMF_GEOMETRY_TYPE_XYZ)
+      if (present(time)) call self%xdmf%write_time_tag(time_value=trim(str(time)))
+      call self%xdmf%write_dataitem_tag(content          = self%hdf5%filename//':'//block_name_%chars()//'-nodes',      &
+                                        item_dimensions  = trim(adjustl(str([nd(4),nd(3),nd(2),nd(1)],separator=' '))), &
+                                        number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,             &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8,            &
+                                        number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
+      call self%xdmf%close_geometry_tag
+      call self%xdmf%write_topology_tag(topology_type=XDMF_PARAMETERS%XDMF_TOPOLOGY_TYPE_3DSMESH, &
+                                        topology_dimensions=trim(str([nd(4),nd(3),nd(2)],separator=' ')))
    case default
       write(stderr, '(A)') 'error: block of type "'//trim(adjustl(block_type))//'" is unknown'
+      call MPI_FINALIZE(self%error)
       stop
    endselect
    endsubroutine open_block
@@ -182,6 +244,8 @@ contains
    if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
    if     (nd(1)<=3) then
       attribute_type = XDMF_PARAMETERS%XDMF_ATTR_TYPE_VECTOR
+   elseif (nd(1)==6) then
+      attribute_type = XDMF_PARAMETERS%XDMF_ATTR_TYPE_TENSOR6
    elseif (nd(1)<=9) then
       attribute_type = XDMF_PARAMETERS%XDMF_ATTR_TYPE_TENSOR
    else
@@ -197,9 +261,11 @@ contains
       dataitem_content = trim(str(reshape(field,[nd(1)*nd(2)*nd(3)*nd(4)]),separator=' '))
    case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_BINARY)
       write(stderr, '(A)') 'error: field format "'//trim(adjustl(field_format_))//'" is not yet supported'
+      call MPI_FINALIZE(self%error)
       stop
    case default
       write(stderr, '(A)') 'error: field format "'//trim(adjustl(field_format_))//'" is unknown'
+      call MPI_FINALIZE(self%error)
       stop
    endselect
    call self%xdmf%open_attribute_tag(attribute_name   = trim(adjustl(xdmf_field_name)), &
@@ -243,9 +309,11 @@ contains
       dataitem_content = trim(str(reshape(field,[nd(1)*nd(2)*nd(3)]),separator=' '))
    case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_BINARY)
       write(stderr, '(A)') 'error: field format "'//trim(adjustl(field_format_))//'" is not yet supported'
+      call MPI_FINALIZE(self%error)
       stop
    case default
       write(stderr, '(A)') 'error: field format "'//trim(adjustl(field_format_))//'" is unknown'
+      call MPI_FINALIZE(self%error)
       stop
    endselect
    call self%xdmf%open_attribute_tag(attribute_name   = trim(adjustl(xdmf_field_name)), &
@@ -288,9 +356,11 @@ contains
       dataitem_content = trim(str(field))
    case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_BINARY)
       write(stderr, '(A)') 'error: field format "'//trim(adjustl(field_format_))//'" is not yet supported'
+      call MPI_FINALIZE(self%error)
       stop
    case default
       write(stderr, '(A)') 'error: field format "'//trim(adjustl(field_format_))//'" is unknown'
+      call MPI_FINALIZE(self%error)
       stop
    endselect
    call self%xdmf%open_attribute_tag(attribute_name   = trim(adjustl(xdmf_field_name)), &
