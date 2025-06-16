@@ -25,6 +25,7 @@ A KISS, modular library for handling IO in HPC scenario for modern Fortran proje
 - [Copyrights](#copyrights)
 - [Documentation](#documentation)
 	- [A Taste of MOTIOn](#a-taste-of-motion)
+	- [API Documentation](#api-documentation)
 
 #### Issues
 
@@ -38,7 +39,7 @@ A KISS, modular library for handling IO in HPC scenario for modern Fortran proje
 
 ## What is MOTIOn?
 
-MOTIOn, aka Modular (HPC) Optimized Toolkit (for) IO (in fortran)n, is a modular library for handling Input/Output operations
+MOTIOn, aka Modular (HPC) Optimized Toolkit (for) IO (in Fortran)n, is a modular library for handling Input/Output operations
 in HPC scenario for modern Fortran projects. MOTIOn aims to provide a simple, agnostic API to easy handle IO files tailored
 to large, parallel applications where MPI is usually used. In particular, the main goal is to let final user deal with only
 a very reduced set of operations while MOTIOn deals, in background, with the complexity of generating efficient, parallel IO,
@@ -52,22 +53,80 @@ Go to [Top](#top)
 
 ## Main features
 
-Currently MOTIOn has the following features:
+MOTIOn has the following features:
 
-+ [ ] HDF5/XDMF:
-   + [ ] Output:
-      + [x] Cartesian uniform grids;
-      + [x] Cartesian grids;
-      + [x] Curvilinear grids;
++ [ ] **high level API XH5F**:
+   + [ ] Input:
+      * missing all;
+      + [x] Topology:
+         + [x] Structured:
+            + [x] Cartesian uniform grids;
+            + [x] Cartesian grids;
+            + [x] Curvilinear grids;
+         + [ ] Unstructured:
+   + [ ] Data Fields (all fortran real/integer kinds):
       + [x] Scalar 0D (grid centered) fields;
       + [x] Scalar 3D fields;
       + [x] Vector 3D fields;
       + [x] Tensor 3D fields;
       + [x] Tensor6 3D fields;
       + [x] Matrix 3D fields;
+         + [ ] field centering:
+            + [ ] Node;
+            + [ ] Edge;
+            + [ ] Face;
+            + [x] Cell;
+            + [x] Grid;
+            + [ ] Other;
++ [ ] **low level API HDF5/XDMF**:
    + [ ] Input:
-
-To be completed.
+      * missing all;
+   + [ ] Output:
+      + [ ] Grid:
+         + [x] Uniform;
+         + [x] Collection;
+         + [ ] Tree;
+            * missing tests;
+         + [ ] SubSet;
+            * missing tests;
+      + [x] Topology:
+         + [x] Structured:
+            + [ ] 2DSMesh - curvilinear;
+               * missing tests;
+            + [ ] 2DRectMesh - axis are perpendicular (cartesian grids in high level API);
+               * missing tests;
+            + [ ] 2DCoRectMesh - axis are perpendicular and spacing is constant (cartesian uniform grids in high level API);
+               * missing tests;
+            + [x] 3DSMesh - curvilinear, 3D;
+            + [x] 3DRectMesh - axis are perpendicular, 3D (cartesian grids in high level API);
+            + [x] 3DCoRectMesh - axis are perpendicular and spacing is constant, 3D (cartesian uniform grids in high level API);
+         + [ ] Unstructured:
+            + [ ] Linear (`Polyvertex, Polyline`, ecc...);
+               * missing tests;
+            + [ ] Quadratic (`Edge_3, Tri_6`, ecc...);
+               * missing tests;
+            + [ ] Arbitrary;
+               * missing tests;
+      + [ ] Attribute fields (all fortran real/integer kinds):
+         + [x] Scalar 0D (grid centered) fields;
+         + [x] Scalar 3D fields;
+         + [x] Vector 3D fields;
+         + [x] Tensor 3D fields;
+         + [x] Tensor6 3D fields;
+         + [x] Matrix 3D fields;
+         + [ ] field centering:
+            + [ ] Node;
+               * missing tests;
+            + [ ] Edge;
+               * missing tests;
+            + [ ] Face;
+               * missing tests;
+            + [x] Cell;
+            + [x] Grid;
+            + [ ] Other;
+               * missing tests;
+         + [ ] Finite elements:
+      + [x] Time element;
 
 Go to [Top](#top)
 
@@ -153,6 +212,28 @@ The above example also shows some MOTIOn features:
   end user;
 + the `xh5f_file_object` class provides an high level API with a simple, reduced set of methods, e.g. to save a scalar 0D field and
   a 3D one the same `save_block_field` method is used, without the necessity to use specialized API.
+
+Go to [Top](#top)
+
+### Getting Started
+
+To be completed.
+
+#### Install MOTIOn
+
+To be completed.
+
+##### Download MOTIOn
+
+To be completed.
+
+##### Compile MOTIOn
+
+To be completed.
+
+Go to [Top](#top)
+
+### API Documentation
 
 To be completed.
 

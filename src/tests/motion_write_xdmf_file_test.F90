@@ -34,7 +34,10 @@ type :: domain_object
    real(R8P),    allocatable :: nodes(:,:,:,:,:)                        !< Nodes coordinates for curvilinear grid [3,0:nijk,nb].
    real(R8P),    allocatable :: field(:,:,:,:,:)                        !< Fields [1:nv,1-gc:ni+gc,1-gc:nj+gc,1-gc:nk+gc,1:nb].
    real(R4P),    allocatable :: field_R4P(:,:,:,:,:)                    !< Fields [1:nv,1-gc:ni+gc,1-gc:nj+gc,1-gc:nk+gc,1:nb], R4P.
+   integer(I8P), allocatable :: field_I8P(:,:,:,:,:)                    !< Fields [1:nv,1-gc:ni+gc,1-gc:nj+gc,1-gc:nk+gc,1:nb], I8P.
    integer(I4P), allocatable :: field_I4P(:,:,:,:,:)                    !< Fields [1:nv,1-gc:ni+gc,1-gc:nj+gc,1-gc:nk+gc,1:nb], I4P.
+   integer(I2P), allocatable :: field_I2P(:,:,:,:,:)                    !< Fields [1:nv,1-gc:ni+gc,1-gc:nj+gc,1-gc:nk+gc,1:nb], I2P.
+   integer(I1P), allocatable :: field_I1P(:,:,:,:,:)                    !< Fields [1:nv,1-gc:ni+gc,1-gc:nj+gc,1-gc:nk+gc,1:nb], I1P.
    type(string), allocatable :: field_name(:)                           !< Fields names [1:nv].
    integer(I4P)              :: error=0_I4P                             !< Error status.
    contains
@@ -190,7 +193,22 @@ contains
                                                                                          1-gc:nijk(2)+gc, &
                                                                                          1-gc:nijk(3)+gc, &
                                                                                          1:self%nb_proc))
+   if (allocated(self%field_I8P )) deallocate(self%field_I8P ) ; allocate(self%field_I8P(1:nv,            &
+                                                                                         1-gc:nijk(1)+gc, &
+                                                                                         1-gc:nijk(2)+gc, &
+                                                                                         1-gc:nijk(3)+gc, &
+                                                                                         1:self%nb_proc))
    if (allocated(self%field_I4P )) deallocate(self%field_I4P ) ; allocate(self%field_I4P(1:nv,            &
+                                                                                         1-gc:nijk(1)+gc, &
+                                                                                         1-gc:nijk(2)+gc, &
+                                                                                         1-gc:nijk(3)+gc, &
+                                                                                         1:self%nb_proc))
+   if (allocated(self%field_I2P )) deallocate(self%field_I2P ) ; allocate(self%field_I2P(1:nv,            &
+                                                                                         1-gc:nijk(1)+gc, &
+                                                                                         1-gc:nijk(2)+gc, &
+                                                                                         1-gc:nijk(3)+gc, &
+                                                                                         1:self%nb_proc))
+   if (allocated(self%field_I1P )) deallocate(self%field_I1P ) ; allocate(self%field_I1P(1:nv,            &
                                                                                          1-gc:nijk(1)+gc, &
                                                                                          1-gc:nijk(2)+gc, &
                                                                                          1-gc:nijk(3)+gc, &
@@ -202,7 +220,10 @@ contains
                do v=1, nv
                   self%field(    v,i,j,k,b) = (v + i + j + k + b) * 1._R8P
                   self%field_R4P(v,i,j,k,b) = (v + i + j + k + b) * 1._R4P
+                  self%field_I8P(v,i,j,k,b) = (v + i + j + k + b)
                   self%field_I4P(v,i,j,k,b) = (v + i + j + k + b)
+                  self%field_I2P(v,i,j,k,b) = (i + j + k)
+                  self%field_I1P(v,i,j,k,b) = (i)
                enddo
             enddo
          enddo
@@ -436,12 +457,30 @@ contains
                                     field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,               &
                                     field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,     &
                                     hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//field_name(v)%chars()//'-R4P')
+         call xh5f%save_block_field(xdmf_field_name = field_name(v)%chars()//'-I8P',                       &
+                                    nd              = [nijk(1),nijk(2),nijk(3)],                           &
+                                    field           = domain%field_I8P(v,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                    field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,               &
+                                    field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,     &
+                                    hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//field_name(v)%chars()//'-I8P')
          call xh5f%save_block_field(xdmf_field_name = field_name(v)%chars()//'-I4P',                       &
                                     nd              = [nijk(1),nijk(2),nijk(3)],                           &
                                     field           = domain%field_I4P(v,1:nijk(1),1:nijk(2),1:nijk(3),b), &
                                     field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,               &
                                     field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,     &
                                     hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//field_name(v)%chars()//'-I4P')
+         call xh5f%save_block_field(xdmf_field_name = field_name(v)%chars()//'-I2P',                       &
+                                    nd              = [nijk(1),nijk(2),nijk(3)],                           &
+                                    field           = domain%field_I2P(v,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                    field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,               &
+                                    field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,     &
+                                    hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//field_name(v)%chars()//'-I2P')
+         call xh5f%save_block_field(xdmf_field_name = field_name(v)%chars()//'-I1P',                       &
+                                    nd              = [nijk(1),nijk(2),nijk(3)],                           &
+                                    field           = domain%field_I1P(v,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                    field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,               &
+                                    field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,     &
+                                    hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//field_name(v)%chars()//'-I1P')
       enddo
       ! vector field
       call xh5f%save_block_field(xdmf_field_name = 'velocity',                                         &
@@ -456,12 +495,30 @@ contains
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
                                  field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'velocity-R4P')
+      call xh5f%save_block_field(xdmf_field_name = 'velocity-I8P',                                                &
+                                 nd              = [3_HSIZE_T,nijk(1),nijk(2),nijk(3)],                           &
+                                 field           = domain%field_I8P(nvs+1:nvs+3,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'velocity-I8P')
       call xh5f%save_block_field(xdmf_field_name = 'velocity-I4P',                                                &
                                  nd              = [3_HSIZE_T,nijk(1),nijk(2),nijk(3)],                           &
                                  field           = domain%field_I4P(nvs+1:nvs+3,1:nijk(1),1:nijk(2),1:nijk(3),b), &
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
                                  field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'velocity-I4P')
+      call xh5f%save_block_field(xdmf_field_name = 'velocity-I2P',                                                &
+                                 nd              = [3_HSIZE_T,nijk(1),nijk(2),nijk(3)],                           &
+                                 field           = domain%field_I2P(nvs+1:nvs+3,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'velocity-I2P')
+      call xh5f%save_block_field(xdmf_field_name = 'velocity-I1P',                                                &
+                                 nd              = [3_HSIZE_T,nijk(1),nijk(2),nijk(3)],                           &
+                                 field           = domain%field_I1P(nvs+1:nvs+3,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'velocity-I1P')
       ! tensor6 field
       call xh5f%save_block_field(xdmf_field_name = 'stress6',                                          &
                                  nd              = [6_HSIZE_T,nijk(1),nijk(2),nijk(3)],                &
@@ -475,12 +532,30 @@ contains
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
                                  field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress6-R4P')
+      call xh5f%save_block_field(xdmf_field_name = 'stress6-I8P',                                                 &
+                                 nd              = [6_HSIZE_T,nijk(1),nijk(2),nijk(3)],                           &
+                                 field           = domain%field_I8P(nvs+4:nvs+9,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress6-I8P')
       call xh5f%save_block_field(xdmf_field_name = 'stress6-I4P',                                                 &
                                  nd              = [6_HSIZE_T,nijk(1),nijk(2),nijk(3)],                           &
                                  field           = domain%field_I4P(nvs+4:nvs+9,1:nijk(1),1:nijk(2),1:nijk(3),b), &
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
                                  field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress6-I4P')
+      call xh5f%save_block_field(xdmf_field_name = 'stress6-I2P',                                                 &
+                                 nd              = [6_HSIZE_T,nijk(1),nijk(2),nijk(3)],                           &
+                                 field           = domain%field_I2P(nvs+4:nvs+9,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress6-I2P')
+      call xh5f%save_block_field(xdmf_field_name = 'stress6-I1P',                                                 &
+                                 nd              = [6_HSIZE_T,nijk(1),nijk(2),nijk(3)],                           &
+                                 field           = domain%field_I1P(nvs+4:nvs+9,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                         &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,               &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress6-I1P')
       ! tensor field
       call xh5f%save_block_field(xdmf_field_name = 'stress',                                             &
                                  nd              = [9_HSIZE_T,nijk(1),nijk(2),nijk(3)],                  &
@@ -494,12 +569,30 @@ contains
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                           &
                                  field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,                 &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress-R4P')
+      call xh5f%save_block_field(xdmf_field_name = 'stress-I8P',                                                    &
+                                 nd              = [9_HSIZE_T,nijk(1),nijk(2),nijk(3)],                             &
+                                 field           = domain%field_I8P(nvs+10:nvs+18,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                           &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,                 &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress-I8P')
       call xh5f%save_block_field(xdmf_field_name = 'stress-I4P',                                                    &
                                  nd              = [9_HSIZE_T,nijk(1),nijk(2),nijk(3)],                             &
                                  field           = domain%field_I4P(nvs+10:nvs+18,1:nijk(1),1:nijk(2),1:nijk(3),b), &
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                           &
                                  field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,                 &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress-I4P')
+      call xh5f%save_block_field(xdmf_field_name = 'stress-I2P',                                                    &
+                                 nd              = [9_HSIZE_T,nijk(1),nijk(2),nijk(3)],                             &
+                                 field           = domain%field_I2P(nvs+10:nvs+18,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                           &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,                 &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress-I2P')
+      call xh5f%save_block_field(xdmf_field_name = 'stress-I1P',                                                    &
+                                 nd              = [9_HSIZE_T,nijk(1),nijk(2),nijk(3)],                             &
+                                 field           = domain%field_I1P(nvs+10:nvs+18,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                           &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,                 &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'stress-I1P')
       ! matrix field
       call xh5f%save_block_field(xdmf_field_name = 'matrix',                                        &
                                  nd              = [12_HSIZE_T,nijk(1),nijk(2),nijk(3)],            &
@@ -513,12 +606,30 @@ contains
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                     &
                                  field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,           &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'matrix-R4P')
+      call xh5f%save_block_field(xdmf_field_name = 'matrix-I8P',                                              &
+                                 nd              = [12_HSIZE_T,nijk(1),nijk(2),nijk(3)],                      &
+                                 field           = domain%field_I8P(nvs+19:,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                     &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,           &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'matrix-I8P')
       call xh5f%save_block_field(xdmf_field_name = 'matrix-I4P',                                              &
                                  nd              = [12_HSIZE_T,nijk(1),nijk(2),nijk(3)],                      &
                                  field           = domain%field_I4P(nvs+19:,1:nijk(1),1:nijk(2),1:nijk(3),b), &
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                     &
                                  field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,           &
                                  hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'matrix-I4P')
+      call xh5f%save_block_field(xdmf_field_name = 'matrix-I2P',                                              &
+                                 nd              = [12_HSIZE_T,nijk(1),nijk(2),nijk(3)],                      &
+                                 field           = domain%field_I2P(nvs+19:,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                     &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,           &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'matrix-I2P')
+      call xh5f%save_block_field(xdmf_field_name = 'matrix-I1P',                                              &
+                                 nd              = [12_HSIZE_T,nijk(1),nijk(2),nijk(3)],                      &
+                                 field           = domain%field_I1P(nvs+19:,1:nijk(1),1:nijk(2),1:nijk(3),b), &
+                                 field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_CELL,                     &
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF,           &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-'//'matrix-I1P')
       call xh5f%close_block
    enddo
    call xh5f%close_grid

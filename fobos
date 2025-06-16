@@ -65,7 +65,9 @@ log             = True
 jobs            = 4
 cflags_heritage = True
 preproc  = -D_ASCII_SUPPORTED -D_UCS4_SUPPORTED -D_R16P
-libs     = lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5_fortran.a lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5_f90cstub.a lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5.a
+libs     = lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5_fortran.a
+           lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5_f90cstub.a
+           lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5.a
 ext_libs = z
 lib_dir  = lib/hdf5/1.14.6/gnu/14.2.0/lib
 include  = lib/hdf5/1.14.6/gnu/14.2.0/include
