@@ -1,6 +1,6 @@
-!< MOTIOn, Modular (HPC) Optimized Toolkit (for) IO (in fortra)n
+!< MOTIOn, Modular (HPC) Optimized Toolkit (for) IO (in fortra)n.
 module motion
-!< MOTIOn, Modular (HPC) Optimized Toolkit (for) IO (in fortra)n
+!< MOTIOn, Modular (HPC) Optimized Toolkit (for) IO (in fortra)n.
 
 use motion_hdf5_file_object
 use motion_xdmf_file_object
