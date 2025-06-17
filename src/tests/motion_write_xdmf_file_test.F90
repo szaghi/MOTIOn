@@ -249,7 +249,7 @@ type(domain_object) :: domain_cartesian_uniform !< Cartesian uniform domain.
 type(domain_object) :: domain_cartesian         !< Cartesian domain.
 type(domain_object) :: domain_curvilinear       !< Curvilinear domain.
 integer(I4P)        :: error                    !< Error status.
-logical             :: test_passed(1)           !< List of passed tests.
+logical             :: test_passed(3)           !< List of passed tests.
 
 call domain_cartesian_uniform%initialize(topology=XH5F_PARAMETERS%XH5F_BLOCK_CARTESIAN_UNIFORM,  &
                                          nb=6_I4P,                                               &
@@ -320,11 +320,35 @@ call domain_curvilinear%initialize(topology=XH5F_PARAMETERS%XH5F_BLOCK_CURVILINE
                                    dz=[0.1_R8P, 0.2_R8P, 0.3_R8P, 0.4_R8P, 0.5_R8P])
 call write_xh5f(basename='motion_write_xdmf_file_test-curvilinear-xh5f', domain=domain_curvilinear)
 
-call MPI_FINALIZE(error)
+call check_file(basename='motion_write_xdmf_file_test-curvilinear-xh5f', domain=domain_curvilinear)
 
-! test_passed = xdmf%error == 0
-! print "(A,L1)", new_line('a')//'Are all tests passed? ', all(test_passed)
+if (domain_curvilinear%myrank==0_I4P) print "(A,L1)", new_line('a')//'Are all tests passed? ', all(test_passed)
+
+call MPI_FINALIZE(error)
 contains
+   subroutine check_file(basename, domain)
+   !< Check the presence of output file and check the saved time value.
+   character(*),        intent(in) :: basename      !< Basename of HDF5/XDMF file names.
+   type(domain_object), intent(in) :: domain        !< Domain to be saved.
+   character(:), allocatable       :: filename_hdf5 !< File name of HDF5 file.
+   type(hdf5_file_object)          :: hdf5          !< HDF5 file handler.
+   real(R8P)                       :: time          !< Grid time.
+   integer(HSIZE_T), allocatable   :: nd(:)         !< Dataspace datasets dimensions.
+
+   associate(myrank=>domain%myrank)
+      if (myrank==0_I4P) then
+         filename_hdf5 = trim(adjustl(basename))//'-mpi_'//trim(strz(myrank,2))//'.h5'
+         call hdf5%open_file(filename=filename_hdf5, act=FILE_PARAMETERS%FILE_ACTION_READONLY)
+         call hdf5%load_dataset(dset_name='block_01-time', dset=time)
+         call hdf5%get_dataset_dims(dset_name='block_01-density', nd=nd)
+         test_passed(1) = time == domain%time
+         test_passed(2) = hdf5%does_dataset_exist(dset_name='block_01-velocity')
+         test_passed(3) = all(nd == domain%nijk)
+         call hdf5%close_file
+      endif
+   endassociate
+   endsubroutine check_file
+
    subroutine write_hdf5_xdmf(basename, domain)
    !< Write HDF5/XDMF files separately without XH5F file handler.
    character(*),        intent(in) :: basename      !< Basename of HDF5/XDMF file names.
@@ -339,7 +363,7 @@ contains
              emin=>domain%emin, dxyz=>domain%dxyz)
    filename_hdf5 = trim(adjustl(basename))//'-mpi_'//trim(strz(myrank,2))//'.h5'
    filename_xdmf = trim(adjustl(basename))//'-mpi_procs_'//trim(strz(domain%procs_number,2))//'.xdmf'
-   call hdf5%open_file(filename=filename_hdf5)
+   call hdf5%open_file(filename=filename_hdf5, act=FILE_PARAMETERS%FILE_ACTION_OVERWRITE)
    call xdmf%open_file(filename=filename_xdmf)
    call xdmf%open_domain_tag
    call xdmf%open_grid_tag(grid_name='blocks', grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
@@ -408,7 +432,7 @@ contains
    associate(nvs=>domain%nvscalar, mynb=>domain%mynb, nijk=>domain%nijk, field=>domain%field, field_name=>domain%field_name)
    filename_hdf5 = trim(adjustl(basename))//'-mpi_'//trim(strz(domain%myrank,2))//'.h5'
    filename_xdmf = trim(adjustl(basename))//'-mpi_procs_'//trim(strz(domain%procs_number,2))//'.xdmf'
-   call xh5f%open_file(filename_hdf5=filename_hdf5, filename_xdmf=filename_xdmf)
+   call xh5f%open_file(filename_hdf5=filename_hdf5, filename_xdmf=filename_xdmf, act=FILE_PARAMETERS%FILE_ACTION_OVERWRITE)
    call xh5f%open_grid(grid_name='blocks', grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
    call xh5f%open_grid(grid_name='mpi_'//trim(strz(domain%myrank,2)), grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION)
    do b=1, domain%nb_proc
@@ -438,7 +462,8 @@ contains
       call xh5f%save_block_field(xdmf_field_name = 'Time',                                &
                                  field           = domain%time,                           &
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_GRID, &
-                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
+                                 field_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF, &
+                                 hdf5_field_name = 'block_'//trim(strz(mynb(1)-1+b,2))//'-time')
       call xh5f%save_block_field(xdmf_field_name = 'Time-R4P',                            &
                                  field           = real(domain%time,R4P),                 &
                                  field_center    = XDMF_PARAMETERS%XDMF_ATTR_CENTER_GRID, &

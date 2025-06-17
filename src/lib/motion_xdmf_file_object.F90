@@ -2,6 +2,8 @@
 module motion_xdmf_file_object
 !< MOTIOn, XDMF file object class.
 
+use motion_file_abst_object
+use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use foxy
 use penf
 use stringifor
@@ -107,17 +109,13 @@ type :: xdmf_parameters_object
 endtype xdmf_parameters_object
 type(xdmf_parameters_object), parameter :: XDMF_PARAMETERS=xdmf_parameters_object() !< List of XDMF named constants.
 
-type :: xdmf_file_object
+type, extends(file_base_object) :: xdmf_file_object
    !< XDMF file object class.
-   type(string)  :: filename           !< File name.
-   integer(I4P)  :: indent=0_I4P       !< Indent count.
-   integer(I4P)  :: xml=0_I4P          !< XML Logical unit.
-   integer(I4P)  :: error=0_I4P        !< Error status.
-   type(xml_tag) :: tag                !< XML tags handler.
-   integer(I4P)  :: procs_number=1_I4P !< Number of MPI processes.
-   integer(I4P)  :: myrank=0_I4P       !< MPI ID process.
-   logical       :: is_async=.false.   !< Asyncronous saving.
-   type(string)  :: async_tags         !< Asyncronous tags data.
+   integer(I4P)  :: indent=0_I4P     !< Indent count.
+   integer(I4P)  :: xml=0_I4P        !< XML Logical unit.
+   type(xml_tag) :: tag              !< XML tags handler.
+   logical       :: is_async=.false. !< Asyncronous saving.
+   type(string)  :: async_tags       !< Asyncronous tags data.
    contains
       ! public methods
       ! file methods
@@ -170,32 +168,59 @@ contains
    endif
    endsubroutine close_file
 
-   subroutine open_file(self, filename)
+   subroutine open_file(self, filename, act)
    !< Open XDMF file.
-   class(xdmf_file_object), intent(inout) :: self               !< File handler.
-   character(*),            intent(in)    :: filename           !< File name.
-   logical                                :: is_mpi_initialized !< MPI env status.
+   class(xdmf_file_object), intent(inout)        :: self     !< File handler.
+   character(*),            intent(in)           :: filename !< File name.
+   character(*),            intent(in), optional :: act      !< File action ['readonly, overwrite'...].
+   character(:), allocatable                     :: act_     !< File action, local var.
 
+   act_ = FILE_PARAMETERS%FILE_ACTION_READONLY ; if (present(act)) act_ = trim(adjustl(act))
    ! reset file handler
    select type(self)
    type is(xdmf_file_object)
       self = xdmf_file_object()
    endselect
-   self%is_async = .false. ;
+   call self%file_base_object%initialize
    self%async_tags = ''
    self%filename = trim(adjustl(filename))
-   call MPI_INITIALIZED(is_mpi_initialized, self%error)
-   if (.not.is_mpi_initialized) call MPI_INIT(self%error)
-   call MPI_COMM_SIZE(MPI_COMM_WORLD, self%procs_number, self%error)
-   call MPI_COMM_RANK(MPI_COMM_WORLD, self%myrank, self%error)
    if (self%myrank/=0_I4P) self%is_async = .true.
-   if (.not.self%is_async) open(newunit=self%xml,           &
-                                file=self%filename%chars(), &
-                                form='UNFORMATTED',         &
-                                access='STREAM',            &
-                                action='WRITE',             &
-                                status='REPLACE',           &
-                                iostat=self%error)
+   if (.not.self%is_async) then
+      ! open file
+      select case(act_)
+      case(FILE_PARAMETERS%FILE_ACTION_READONLY)
+         ! open file in readonly, exit fail if it does not exist
+         open(newunit=self%xml,           &
+              file=self%filename%chars(), &
+              form='UNFORMATTED',         &
+              access='STREAM',            &
+              action='READ',              &
+              status='OLD',               &
+              iostat=self%error)
+      case(FILE_PARAMETERS%FILE_ACTION_OVERWRITE)
+         ! create new file, overwrite if already exist
+         open(newunit=self%xml,           &
+              file=self%filename%chars(), &
+              form='UNFORMATTED',         &
+              access='STREAM',            &
+              action='WRITE',             &
+              status='REPLACE',           &
+              iostat=self%error)
+      case(FILE_PARAMETERS%FILE_ACTION_NEWFILE)
+         ! create new file, exit fail if already exist
+         open(newunit=self%xml,           &
+              file=self%filename%chars(), &
+              form='UNFORMATTED',         &
+              access='STREAM',            &
+              action='WRITE',             &
+              status='NEW',               &
+              iostat=self%error)
+      case default
+         write(stderr, '(A)') 'error: file action "'//act_//'" is unknown'
+         call MPI_FINALIZE(self%error)
+         stop
+      endselect
+   endif
    call self%write_header_tag
    endsubroutine open_file
 

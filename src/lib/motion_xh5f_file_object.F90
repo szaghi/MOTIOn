@@ -2,6 +2,7 @@
 module motion_xh5f_file_object
 !< MOTIOn, XDMF/HDF5 file object class.
 
+use motion_file_abst_object
 use motion_hdf5_file_object
 use motion_xdmf_file_object
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
@@ -23,13 +24,10 @@ type :: xh5f_parameters_object
 endtype xh5f_parameters_object
 type(xh5f_parameters_object), parameter :: XH5F_PARAMETERS=xh5f_parameters_object() !< List of XH5F named constants.
 
-type :: xh5f_file_object
+type, extends(file_base_object) :: xh5f_file_object
    !< XDMF/HDF5 file object class.
-   type(hdf5_file_object) :: hdf5               !< HDF5 file handler.
-   type(xdmf_file_object) :: xdmf               !< XDMF file handler.
-   integer(I4P)           :: procs_number=1_I4P !< Number of MPI processes.
-   integer(I4P)           :: myrank=0_I4P       !< MPI ID process.
-   integer(I4P)           :: error=0_I4P        !< Error status.
+   type(hdf5_file_object) :: hdf5 !< HDF5 file handler.
+   type(xdmf_file_object) :: xdmf !< XDMF file handler.
    contains
       ! file methods
       procedure, pass(self) :: close_file !< Close XH5F file.
@@ -91,25 +89,22 @@ contains
    call self%xdmf%close_file
    endsubroutine close_file
 
-   subroutine open_file(self, filename_hdf5, filename_xdmf)
+   subroutine open_file(self, filename_hdf5, filename_xdmf, act)
    !< Open XH5F file.
    !< @NOTE MPI init must be invoked before this routine.
-   class(xh5f_file_object), intent(inout) :: self               !< File handler.
-   character(*),            intent(in)    :: filename_hdf5      !< File name of HDF5 file.
-   character(*),            intent(in)    :: filename_xdmf      !< File name of XDMF file.
-   character(:), allocatable              :: blocks_group_name_ !< Name of blocks group, local var.
-   logical                                :: is_mpi_initialized !< MPI env status.
+   class(xh5f_file_object), intent(inout)        :: self               !< File handler.
+   character(*),            intent(in)           :: filename_hdf5      !< File name of HDF5 file.
+   character(*),            intent(in)           :: filename_xdmf      !< File name of XDMF file.
+   character(*),            intent(in), optional :: act                !< File action ['readonly, overwrite'...].
+   character(:), allocatable                     :: blocks_group_name_ !< Name of blocks group, local var.
 
    ! reset file handler
    select type(self)
    type is(xh5f_file_object)
       self = xh5f_file_object()
    endselect
-   call MPI_INITIALIZED(is_mpi_initialized, self%error)
-   if (.not.is_mpi_initialized) call MPI_INIT(self%error)
-   call MPI_COMM_SIZE(MPI_COMM_WORLD, self%procs_number, self%error)
-   call MPI_COMM_RANK(MPI_COMM_WORLD, self%myrank, self%error)
-   call self%hdf5%open_file(filename=filename_hdf5)
+   call self%file_base_object%initialize
+   call self%hdf5%open_file(filename=filename_hdf5, act=act)
    call self%xdmf%open_file(filename=filename_xdmf)
    call self%xdmf%open_domain_tag
    endsubroutine open_file

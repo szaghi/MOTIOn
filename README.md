@@ -80,7 +80,13 @@ MOTIOn has the following features:
             + [ ] Other;
 + [ ] **low level API HDF5/XDMF**:
    + [ ] Input:
-      * missing all;
+      + [ ] HDF5:
+         + [ ] dataspace simple:
+            + [x] load dataset (any rank/kind);
+            + [x] inquire dataset (exist, dimensions,...);
+         + [ ] dataspace hyperslab:
+      + [ ] XDMF:
+         * missing all;
    + [ ] Output:
       + [ ] Grid:
          + [x] Uniform;
