@@ -331,22 +331,24 @@ contains
    character(*),        intent(in) :: basename      !< Basename of HDF5/XDMF file names.
    type(domain_object), intent(in) :: domain        !< Domain to be saved.
    character(:), allocatable       :: filename_hdf5 !< File name of HDF5 file.
+   character(:), allocatable       :: filename_xdmf !< File name of XDMF file.
    type(hdf5_file_object)          :: hdf5          !< HDF5 file handler.
+   type(xdmf_file_object)          :: xdmf          !< HDF5 file handler.
    real(R8P)                       :: time          !< Grid time.
    integer(HSIZE_T), allocatable   :: nd(:)         !< Dataspace datasets dimensions.
 
-   associate(myrank=>domain%myrank)
-      if (myrank==0_I4P) then
-         filename_hdf5 = trim(adjustl(basename))//'-mpi_'//trim(strz(myrank,2))//'.h5'
-         call hdf5%open_file(filename=filename_hdf5, act=FILE_PARAMETERS%FILE_ACTION_READONLY)
-         call hdf5%load_dataset(dset_name='block_01-time', dset=time)
-         call hdf5%get_dataset_dims(dset_name='block_01-density', nd=nd)
-         test_passed(1) = time == domain%time
-         test_passed(2) = hdf5%does_dataset_exist(dset_name='block_01-velocity')
-         test_passed(3) = all(nd == domain%nijk)
-         call hdf5%close_file
-      endif
-   endassociate
+   if (domain%myrank==0_I4P) then
+      filename_hdf5 = trim(adjustl(basename))//'-mpi_'//trim(strz(domain%myrank,2))//'.h5'
+      filename_xdmf = trim(adjustl(basename))//'-mpi_procs_'//trim(strz(domain%procs_number,2))//'.xdmf'
+      call xdmf%open_file(filename=filename_xdmf, act=FILE_PARAMETERS%FILE_ACTION_READONLY)
+      call hdf5%open_file(filename=filename_hdf5, act=FILE_PARAMETERS%FILE_ACTION_READONLY)
+      call hdf5%load_dataset(dset_name='block_01-time', dset=time)
+      call hdf5%get_dataset_dims(dset_name='block_01-density', nd=nd)
+      test_passed(1) = time == domain%time
+      test_passed(2) = hdf5%does_dataset_exist(dset_name='block_01-velocity')
+      test_passed(3) = all(nd == domain%nijk)
+      call hdf5%close_file
+   endif
    endsubroutine check_file
 
    subroutine write_hdf5_xdmf(basename, domain)
@@ -364,7 +366,7 @@ contains
    filename_hdf5 = trim(adjustl(basename))//'-mpi_'//trim(strz(myrank,2))//'.h5'
    filename_xdmf = trim(adjustl(basename))//'-mpi_procs_'//trim(strz(domain%procs_number,2))//'.xdmf'
    call hdf5%open_file(filename=filename_hdf5, act=FILE_PARAMETERS%FILE_ACTION_OVERWRITE)
-   call xdmf%open_file(filename=filename_xdmf)
+   call xdmf%open_file(filename=filename_xdmf, act=FILE_PARAMETERS%FILE_ACTION_OVERWRITE)
    call xdmf%open_domain_tag
    call xdmf%open_grid_tag(grid_name='blocks', grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION_ASYNC)
    call xdmf%open_grid_tag(grid_name='mpi_'//trim(strz(myrank,2)), grid_type=XDMF_PARAMETERS%XDMF_GRID_TYPE_COLLECTION)

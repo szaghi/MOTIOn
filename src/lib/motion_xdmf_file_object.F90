@@ -109,18 +109,28 @@ type :: xdmf_parameters_object
 endtype xdmf_parameters_object
 type(xdmf_parameters_object), parameter :: XDMF_PARAMETERS=xdmf_parameters_object() !< List of XDMF named constants.
 
+type :: xdmf_object
+   !< XDMF class, (recursive) parsed XML.
+   type(xml_tag)                  :: tag                   !< XDMF data.
+   integer(I4P)                   :: level=0_I4P           !< Level of tag.
+   integer(I4P)                   :: children_number=0_I4P !< Number of children tags.
+   type(xdmf_object), allocatable :: children(:)           !< Children tags, in tag content.
+endtype xdmf_object
+
 type, extends(file_base_object) :: xdmf_file_object
    !< XDMF file object class.
-   integer(I4P)  :: indent=0_I4P     !< Indent count.
-   integer(I4P)  :: xml=0_I4P        !< XML Logical unit.
-   type(xml_tag) :: tag              !< XML tags handler.
-   logical       :: is_async=.false. !< Asyncronous saving.
-   type(string)  :: async_tags       !< Asyncronous tags data.
+   integer(I4P)      :: indent=0_I4P     !< Indent count.
+   integer(I4P)      :: xml=0_I4P        !< XML Logical unit.
+   type(xml_tag)     :: tag              !< XML tags handler.
+   logical           :: is_async=.false. !< Asyncronous saving.
+   type(string)      :: async_tags       !< Asyncronous tags data.
+   type(xdmf_object) :: parsed           !< Parsed XDMF file.
    contains
       ! public methods
       ! file methods
       procedure, pass(self) :: close_file !< Close XDMF file.
       procedure, pass(self) :: open_file  !< Open XDMF file.
+      procedure, pass(self) :: parse_file !< Parse XDMF file.
       ! XDMF tag methods
       ! attribute tag
       procedure, pass(self) :: close_attribute_tag !< Close `Attribute` tag.
@@ -190,6 +200,7 @@ contains
       select case(act_)
       case(FILE_PARAMETERS%FILE_ACTION_READONLY)
          ! open file in readonly, exit fail if it does not exist
+         call self%parse_file(filename=self%filename%chars())
          open(newunit=self%xml,           &
               file=self%filename%chars(), &
               form='UNFORMATTED',         &
@@ -223,6 +234,18 @@ contains
    endif
    call self%write_header_tag
    endsubroutine open_file
+
+   subroutine parse_file(self, filename)
+   !< Parse XDMF file.
+   class(xdmf_file_object), intent(inout) :: self     !< File handler.
+   character(*),            intent(in)    :: filename !< File name.
+   ! type(xml_file)                         :: xml      !< XML file handler.
+   ! character(:), allocatable              :: raw      !< Raw XDMF content.
+   ! integer(I4P)                           :: t        !< Counter.
+
+   ! call xml%parse(filename=filename)
+   ! print*, 'cazzo '//xml%stringify(linearize=.true.)
+   endsubroutine parse_file
 
    ! XDMF tag methods
    ! attribute tag

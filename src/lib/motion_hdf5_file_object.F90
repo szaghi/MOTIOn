@@ -343,6 +343,7 @@ contains
 
    subroutine open_dspace(self, dataspace_type, nd)
    !< Open HDF5 dataspace.
+   !< @NOTE Currently only simple dataspace is supported.
    class(hdf5_file_object), intent(inout)        :: self           !< File handler.
    character(*),            intent(in)           :: dataspace_type !< Dataspace type.
    integer(HSIZE_T),        intent(in), optional :: nd(:)          !< Dataspace datasets dimensions.

@@ -1,6 +1,7 @@
 [modes]
 modes = shared-gnu static-gnu tests-gnu
         shared-gnu-debug static-gnu-debug tests-gnu-debug
+        tests-nvf-debug
 
 [common-variables]
 $CSHARED_GNU = -c -fPIC -frealloc-lhs
@@ -10,9 +11,11 @@ $LSHARED     = -shared
 $CSTATIC_GNU = -c -frealloc-lhs
 $CSTATIC_INT = -c -assume realloc_lhs
 $CSTATIC_IBM = -c -qxlf2003=autorealloc
-$DEBUG_GNU   = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
+$CSTATIC_NVF = -cpp -c -fast
+$DEBUG_GNU   = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2018 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
 $DEBUG_IBM   = -qcheck=all -qdbg=level=9
+$DEBUG_NVF   = -C -gopt -Mbounds -traceback
 $OPTIMIZE    = -O2
 
 # main modes
@@ -52,6 +55,9 @@ mklib     = static
 template  = template-static-gnu-debug
 build_dir = ./exe/
 
+[tests-nvf-debug]
+template  = template-static-nvf-debug
+build_dir = ./exe/
 
 #templates
 [template-base]
@@ -64,13 +70,13 @@ quiet           = False
 log             = True
 jobs            = 4
 cflags_heritage = True
-preproc  = -D_ASCII_SUPPORTED -D_UCS4_SUPPORTED -D_R16P
-libs     = lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5_fortran.a
-           lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5_f90cstub.a
-           lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5.a
-ext_libs = z
-lib_dir  = lib/hdf5/1.14.6/gnu/14.2.0/lib
-include  = lib/hdf5/1.14.6/gnu/14.2.0/include
+; preproc         = -D_ASCII_SUPPORTED -D_UCS4_SUPPORTED -D_R16P
+libs            = lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5_fortran.a
+                  lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5_f90cstub.a
+                  lib/hdf5/1.14.6/gnu/14.2.0/lib/libhdf5.a
+ext_libs        = z
+lib_dir         = lib/hdf5/1.14.6/gnu/14.2.0/lib
+include         = lib/hdf5/1.14.6/gnu/14.2.0/include
 
 [template-shared-gnu]
 template = template-base
@@ -95,6 +101,12 @@ template = template-base
 compiler = gnu
 cflags   = $CSTATIC_GNU $DEBUG_GNU
 lflags   = $DEBUG_GNU
+
+[template-static-nvf-debug]
+template = template-base
+compiler = nvfortran
+cflags   = $CSTATIC_NVF $DEBUG_NVF
+lflags   = $DEBUG_NVF
 
 [rule-makedoc]
 help   = Build documentation from source files
