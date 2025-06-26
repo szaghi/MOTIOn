@@ -108,7 +108,7 @@ contains
    ! reset file handler
    select type(self)
    type is(xh5f_file_object)
-      self = xh5f_file_object()
+      ! self = xh5f_file_object()
    endselect
    call self%file_base_object%initialize
    self%act = FILE_PARAMETERS%FILE_ACTION_READONLY ; if (present(act)) self%act = trim(adjustl(act))

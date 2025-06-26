@@ -109,14 +109,6 @@ type :: xdmf_parameters_object
 endtype xdmf_parameters_object
 type(xdmf_parameters_object), parameter :: XDMF_PARAMETERS=xdmf_parameters_object() !< List of XDMF named constants.
 
-type :: xdmf_object
-   !< XDMF class, (recursive) parsed XML.
-   type(xml_tag)                  :: tag                   !< XDMF data.
-   integer(I4P)                   :: level=0_I4P           !< Level of tag.
-   integer(I4P)                   :: children_number=0_I4P !< Number of children tags.
-   type(xdmf_object), allocatable :: children(:)           !< Children tags, in tag content.
-endtype xdmf_object
-
 type, extends(file_base_object) :: xdmf_file_object
    !< XDMF file object class.
    integer(I4P)      :: indent=0_I4P     !< Indent count.
@@ -124,7 +116,7 @@ type, extends(file_base_object) :: xdmf_file_object
    type(xml_tag)     :: tag              !< XML tags handler.
    logical           :: is_async=.false. !< Asyncronous saving.
    type(string)      :: async_tags       !< Asyncronous tags data.
-   type(xdmf_object) :: parsed           !< Parsed XDMF file.
+   type(xml_file)    :: dom              !< XMDF file parsed as linearized DOM.
    contains
       ! public methods
       ! file methods
@@ -239,12 +231,12 @@ contains
    !< Parse XDMF file.
    class(xdmf_file_object), intent(inout) :: self     !< File handler.
    character(*),            intent(in)    :: filename !< File name.
-   ! type(xml_file)                         :: xml      !< XML file handler.
+   type(xml_file)                         :: xml      !< XML file handler.
    ! character(:), allocatable              :: raw      !< Raw XDMF content.
    ! integer(I4P)                           :: t        !< Counter.
 
-   ! call xml%parse(filename=filename)
-   ! print*, 'cazzo '//xml%stringify(linearize=.true.)
+   call xml%parse(filename=filename)
+   print*, 'cazzo '//xml%stringify(linearize=.true.)
    endsubroutine parse_file
 
    ! XDMF tag methods

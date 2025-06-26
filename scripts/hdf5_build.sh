@@ -10,6 +10,7 @@ IS_PATHS_ABS=no       # use absolute paths, relative is assumed by default (HERE
 LSRC_PATH=libhdf5_src # path of sources
 HDF5_PATH=libhdf5/    # path of built libraries
 USE_CMAKE=yes         # use CMAKE to build HDF5 (default), if set to no use autotools
+SDK=GNU               # use GNU SDK to build libraries; set NVF to use NVIDIA SDK
 
 print_usage () {
    echo
@@ -30,6 +31,12 @@ print_usage () {
    echo "      `basename $0` --help"
    echo "      print this help message"
    echo "opts:"
+   echo "   -sdk SDK"
+   echo "      specify which SDK use to build libraries"
+   echo "      default SDK=GNU, available SDKs are [GNU,NVF]"
+   echo "       + `basename $0` -build -sdk NVF"
+   echo "         build HDF5 (within szip/zlib) by means of NVDIA SDK"
+   echo
    echo "   -lsrc LSRC_PATH"
    echo "      specify path where sources are placed"
    echo "      default LSRC_PATH=libhdf5_src (relative to where script is run)"
@@ -134,7 +141,12 @@ build_szip () {
    echo "build SZIP"
    mkdir -p $HERE/$HDF5_PATH/szip
    cd $HERE/$LSRC_PATH/szip
-   CC=gcc CXX=g++ FC=gfortran CFLAGS='-O3' CXXFLAGS='-O3' FCFLAGS='-O3' ./configure --prefix=$HERE/$HDF5_PATH/szip
+
+   if [ "$SDK" == "GNU" ] ; then
+      CC=gcc CXX=g++ FC=gfortran CFLAGS='-O3' CXXFLAGS='-O3' FCFLAGS='-O3' ./configure --prefix=$HERE/$HDF5_PATH/szip
+   elif [ "$SDK" == "NVF" ] ; then
+      CC=nvcc CXX=nvc++ FC=nvfortran CFLAGS='-O3' CXXFLAGS='-O3' FCFLAGS='-O3' ./configure --prefix=$HERE/$HDF5_PATH/szip
+   fi
    make
    make check
    make install
@@ -145,7 +157,11 @@ build_zlib () {
    echo "build ZLIB"
    mkdir -p $HERE/$HDF5_PATH/zlib
    cd $HERE/$LSRC_PATH/zlib
-   CC=gcc CFLAGS='-O3 -fPIC' ./configure --prefix=$HERE/$HDF5_PATH/zlib
+   if [ "$SDK" == "GNU" ] ; then
+      CC=gcc CFLAGS='-O3 -fPIC' ./configure --prefix=$HERE/$HDF5_PATH/zlib
+   elif [ "$SDK" == "NVF" ] ; then
+      CC=nvcc CFLAGS='-O3 -fPIC' ./configure --prefix=$HERE/$HDF5_PATH/zlib
+   fi
    make
    make check
    make install
@@ -156,14 +172,14 @@ build_hdf5_by_autot () {
    echo "build HDF5 by autotools"
    mkdir -p $HERE/$HDF5_PATH
    cd $HERE/$LSRC_PATH/hdf5
-   CFLAGS="-fPIC" FCFLAGS="-fPIC" ./configure \
-      --prefix=$HERE/$HDF5_PATH               \
-      --enable-fortran                        \
-      --enable-optimization=high              \
-      --enable-shared=no                      \
-      --enable-static=yes                     \
-      --enable-parallel                       \
-      --with-zlib=$HERE/$HDF5_PATH/zlib       \
+   CFLAGS="-fPIC" FCFLAGS="-fPIC" CC=mpicc FC=mpif90 ./configure \
+      --prefix=$HERE/$HDF5_PATH                                  \
+      --enable-fortran                                           \
+      --enable-optimization=high                                 \
+      --enable-shared=no                                         \
+      --enable-static=yes                                        \
+      --enable-parallel                                          \
+      --with-zlib=$HERE/$HDF5_PATH/zlib                          \
       --with-szip=$HERE/$HDF5_PATH/szip
    make -j 4
    make install
@@ -175,7 +191,7 @@ build_hdf5_by_cmake () {
    mkdir -p $HERE/$HDF5_PATH
    mkdir -p $HERE/$LSRC_PATH/hdf5/build
    cd $HERE/$LSRC_PATH/hdf5/build
-   CFLAGS="-fPIC" FCFLAGS="-fPIC" cmake ../                       \
+   CFLAGS="-fPIC" FCFLAGS="-fPIC" CC=mpicc FC=mpif90 cmake ../    \
       -DCMAKE_INSTALL_PREFIX:PATH=$HERE/$HDF5_PATH                \
       -DCMAKE_BUILD_TYPE:STRING=Release                           \
       -DBUILD_SHARED_LIBS:BOOL=OFF                                \
@@ -209,6 +225,10 @@ while [ $# -gt 0 ]; do
       "-build")
          DO_GET=yes
          DO_BUILD=yes
+         ;;
+      "-sdk")
+         shift
+         SDK=$1
          ;;
       "-hdf5")
          shift
