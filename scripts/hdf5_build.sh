@@ -120,9 +120,13 @@ get_zlib () {
 get_hdf5 () {
    mkdir -p $HERE/$LSRC_PATH
    echo "get HDF5 sources"
-   wget https://github.com/HDFGroup/hdf5/releases/latest/download/hdf5.tar.gz
-   tar xf hdf5.tar.gz
-   rm -f hdf5.tar.gz
+   # wget https://github.com/HDFGroup/hdf5/releases/latest/download/hdf5.tar.gz
+   # tar xf hdf5.tar.gz
+   # rm -f hdf5.tar.gz
+   wget https://github.com/HDFGroup/hdf5/archive/refs/heads/develop.zip
+   unzip develop.zip
+   rm -f develop.zip
+
    mv hdf5-* $HERE/$LSRC_PATH/hdf5
 }
 
@@ -142,13 +146,13 @@ build_szip () {
    mkdir -p $HERE/$HDF5_PATH/szip
    cd $HERE/$LSRC_PATH/szip
 
-   if [ "$SDK" == "GNU" ] ; then
-      CC=gcc CXX=g++ FC=gfortran CFLAGS='-O3' CXXFLAGS='-O3' FCFLAGS='-O3' ./configure --prefix=$HERE/$HDF5_PATH/szip
-   elif [ "$SDK" == "NVF" ] ; then
-      CC=nvcc CXX=nvc++ FC=nvfortran CFLAGS='-O3' CXXFLAGS='-O3' FCFLAGS='-O3' ./configure --prefix=$HERE/$HDF5_PATH/szip
-   fi
-   make
-   make check
+   # if [ "$SDK" == "GNU" ] ; then
+   #    CC=gcc CXX=g++ FC=gfortran CFLAGS='-O3' CXXFLAGS='-O3' FCFLAGS='-O3' ./configure --prefix=$HERE/$HDF5_PATH/szip
+   # elif [ "$SDK" == "NVF" ] ; then
+   #    CC=nvcc CXX=nvc++ FC=nvfortran CFLAGS='-O3' CXXFLAGS='-O3' FCFLAGS='-O3' ./configure --prefix=$HERE/$HDF5_PATH/szip
+   # fi
+   CC=gcc CXX=g++ FC=gfortran CFLAGS='-O3' CXXFLAGS='-O3' FCFLAGS='-O3' ./configure --prefix=$HERE/$HDF5_PATH/szip
+   make -j 1
    make install
    cd -
 }
@@ -157,13 +161,13 @@ build_zlib () {
    echo "build ZLIB"
    mkdir -p $HERE/$HDF5_PATH/zlib
    cd $HERE/$LSRC_PATH/zlib
-   if [ "$SDK" == "GNU" ] ; then
-      CC=gcc CFLAGS='-O3 -fPIC' ./configure --prefix=$HERE/$HDF5_PATH/zlib
-   elif [ "$SDK" == "NVF" ] ; then
-      CC=nvcc CFLAGS='-O3 -fPIC' ./configure --prefix=$HERE/$HDF5_PATH/zlib
-   fi
+   # if [ "$SDK" == "GNU" ] ; then
+   #    CC=gcc CFLAGS='-O3 -fPIC' ./configure --prefix=$HERE/$HDF5_PATH/zlib
+   # elif [ "$SDK" == "NVF" ] ; then
+   #    CC=nvcc CFLAGS='-O3 -fPIC' ./configure --prefix=$HERE/$HDF5_PATH/zlib
+   # fi
+   CC=gcc CFLAGS='-O3 -fPIC' ./configure --prefix=$HERE/$HDF5_PATH/zlib
    make
-   make check
    make install
    cd -
 }
@@ -269,75 +273,10 @@ if [ "$DO_BUILD" == "yes" ] ; then
    build_szip
    build_zlib
   if [ "$USE_CMAKE" == "yes" ] ; then
+     # sleep 2
      build_hdf5_by_cmake
-   else
+  else
+     # sleep 2
      build_hdf5_by_autot
   fi
 fi
-
-# while [ $# -gt 0 ]; do
-#    case "$1" in
-#       "-build")
-#          shift
-#          if [ $# -gt 0 ] ; then
-#             while [ $# -gt 0 ]; do
-#                case "$1" in
-#                   "-hdf5")
-#                      shift
-#                      HDF5_PATH=$1
-#                      ;;
-#                   "-lsrc")
-#                      shift
-#                      LSRC_PATH=$1
-#                      ;;
-#                   *)
-#                      echo; echo "unknown command $1"; print_usage; exit 1
-#                      ;;
-#                esac
-#                shift
-#             done
-#          fi
-#          # get_libaec
-#          get_szip
-#          get_zlib
-#          get_hdf5
-#          # build_libaec
-#          build_szip
-#          build_zlib
-#          # build_hdf5_by_autot
-#          build_hdf5_by_cmake
-#          exit 0
-#          ;;
-#       "-get")
-#          shift
-#          if [ $# -gt 0 ] ; then
-#             while [ $# -gt 0 ]; do
-#                case "$1" in
-#                   "-lsrc")
-#                      shift
-#                      LSRC_PATH=$1
-#                      ;;
-#                   *)
-#                      echo; echo "unknown command $1"; print_usage; exit 1
-#                      ;;
-#                esac
-#                shift
-#             done
-#          fi
-#          get_szip
-#          get_zlib
-#          get_hdf5
-#          exit 0
-#          ;;
-#       "-h")
-#          print_usage; exit 0
-#          ;;
-#       "--help")
-#          print_usage; exit 0
-#          ;;
-#       *)
-#          echo; echo "unknown command $1"; print_usage; exit 1
-#          ;;
-#    esac
-#    shift
-# done

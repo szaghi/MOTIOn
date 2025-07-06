@@ -48,203 +48,213 @@ type, extends(file_base_object) :: hdf5_file_object
       procedure, pass(self) :: get_dataset_dims   !< Get dataset dimensions.
       ! load/save dataset
       generic               :: load_dataset =>      &
-                               load_dataset_7D_R8P, &
-                               load_dataset_6D_R8P, &
-                               load_dataset_5D_R8P, &
-                               load_dataset_4D_R8P, &
-                               load_dataset_3D_R8P, &
-                               load_dataset_2D_R8P, &
-                               load_dataset_1D_R8P, &
-                               load_dataset_0D_R8P, &
-                               load_dataset_7D_R4P, &
-                               load_dataset_6D_R4P, &
-                               load_dataset_5D_R4P, &
-                               load_dataset_4D_R4P, &
-                               load_dataset_3D_R4P, &
-                               load_dataset_2D_R4P, &
-                               load_dataset_1D_R4P, &
-                               load_dataset_0D_R4P, &
-                               load_dataset_7D_I8P, &
-                               load_dataset_6D_I8P, &
-                               load_dataset_5D_I8P, &
-                               load_dataset_4D_I8P, &
-                               load_dataset_3D_I8P, &
-                               load_dataset_2D_I8P, &
-                               load_dataset_1D_I8P, &
-                               load_dataset_0D_I8P, &
-                               load_dataset_7D_I4P, &
-                               load_dataset_6D_I4P, &
-                               load_dataset_5D_I4P, &
-                               load_dataset_4D_I4P, &
-                               load_dataset_3D_I4P, &
-                               load_dataset_2D_I4P, &
-                               load_dataset_1D_I4P, &
-                               load_dataset_0D_I4P, &
-                               load_dataset_7D_I2P, &
-                               load_dataset_6D_I2P, &
-                               load_dataset_5D_I2P, &
-                               load_dataset_4D_I2P, &
-                               load_dataset_3D_I2P, &
-                               load_dataset_2D_I2P, &
-                               load_dataset_1D_I2P, &
-                               load_dataset_0D_I2P, &
-                               load_dataset_7D_I1P, &
-                               load_dataset_6D_I1P, &
-                               load_dataset_5D_I1P, &
-                               load_dataset_4D_I1P, &
-                               load_dataset_3D_I1P, &
-                               load_dataset_2D_I1P, &
-                               load_dataset_1D_I1P, &
-                               load_dataset_0D_I1P !< Load dataset in dataspace.
+                               load_dataset_R8P_7D, &
+                               load_dataset_R8P_6D, &
+                               load_dataset_R8P_5D, &
+                               load_dataset_R8P_4D, &
+                               load_dataset_R8P_3D, &
+                               load_dataset_R8P_2D, &
+                               load_dataset_R8P_1D, &
+                               load_dataset_R8P_0D, &
+                               load_dataset_R4P_7D, &
+                               load_dataset_R4P_6D, &
+                               load_dataset_R4P_5D, &
+                               load_dataset_R4P_4D, &
+                               load_dataset_R4P_3D, &
+                               load_dataset_R4P_2D, &
+                               load_dataset_R4P_1D, &
+                               load_dataset_R4P_0D, &
+                               load_dataset_I8P_7D, &
+                               load_dataset_I8P_6D, &
+                               load_dataset_I8P_5D, &
+                               load_dataset_I8P_4D, &
+                               load_dataset_I8P_3D, &
+                               load_dataset_I8P_2D, &
+                               load_dataset_I8P_1D, &
+                               load_dataset_I8P_0D, &
+                               load_dataset_I4P_7D, &
+                               load_dataset_I4P_6D, &
+                               load_dataset_I4P_5D, &
+                               load_dataset_I4P_4D, &
+                               load_dataset_I4P_3D, &
+                               load_dataset_I4P_2D, &
+                               load_dataset_I4P_1D, &
+                               load_dataset_I4P_0D, &
+                               load_dataset_I2P_7D, &
+                               load_dataset_I2P_6D, &
+                               load_dataset_I2P_5D, &
+                               load_dataset_I2P_4D, &
+                               load_dataset_I2P_3D, &
+                               load_dataset_I2P_2D, &
+                               load_dataset_I2P_1D, &
+                               load_dataset_I2P_0D, &
+                               load_dataset_I1P_7D, &
+                               load_dataset_I1P_6D, &
+                               load_dataset_I1P_5D, &
+                               load_dataset_I1P_4D, &
+                               load_dataset_I1P_3D, &
+                               load_dataset_I1P_2D, &
+                               load_dataset_I1P_1D, &
+                               load_dataset_I1P_0D !< Load dataset in dataspace.
       generic               :: save_dataset =>      &
-                               save_dataset_7D_R8P, &
-                               save_dataset_6D_R8P, &
-                               save_dataset_5D_R8P, &
-                               save_dataset_4D_R8P, &
-                               save_dataset_3D_R8P, &
-                               save_dataset_2D_R8P, &
-                               save_dataset_1D_R8P, &
-                               save_dataset_0D_R8P, &
-                               save_dataset_7D_R4P, &
-                               save_dataset_6D_R4P, &
-                               save_dataset_5D_R4P, &
-                               save_dataset_4D_R4P, &
-                               save_dataset_3D_R4P, &
-                               save_dataset_2D_R4P, &
-                               save_dataset_1D_R4P, &
-                               save_dataset_0D_R4P, &
-                               save_dataset_7D_I8P, &
-                               save_dataset_6D_I8P, &
-                               save_dataset_5D_I8P, &
-                               save_dataset_4D_I8P, &
-                               save_dataset_3D_I8P, &
-                               save_dataset_2D_I8P, &
-                               save_dataset_1D_I8P, &
-                               save_dataset_0D_I8P, &
-                               save_dataset_7D_I4P, &
-                               save_dataset_6D_I4P, &
-                               save_dataset_5D_I4P, &
-                               save_dataset_4D_I4P, &
-                               save_dataset_3D_I4P, &
-                               save_dataset_2D_I4P, &
-                               save_dataset_1D_I4P, &
-                               save_dataset_0D_I4P, &
-                               save_dataset_7D_I2P, &
-                               save_dataset_6D_I2P, &
-                               save_dataset_5D_I2P, &
-                               save_dataset_4D_I2P, &
-                               save_dataset_3D_I2P, &
-                               save_dataset_2D_I2P, &
-                               save_dataset_1D_I2P, &
-                               save_dataset_0D_I2P, &
-                               save_dataset_7D_I1P, &
-                               save_dataset_6D_I1P, &
-                               save_dataset_5D_I1P, &
-                               save_dataset_4D_I1P, &
-                               save_dataset_3D_I1P, &
-                               save_dataset_2D_I1P, &
-                               save_dataset_1D_I1P, &
-                               save_dataset_0D_I1P !< Save dataset in dataspace.
+                               save_dataset_R8P_7D, &
+                               save_dataset_R8P_6D, &
+                               save_dataset_R8P_5D, &
+                               save_dataset_R8P_4D, &
+                               save_dataset_R8P_3D, &
+                               save_dataset_R8P_2D, &
+                               save_dataset_R8P_1D, &
+                               save_dataset_R8P_0D, &
+                               save_dataset_R4P_7D, &
+                               save_dataset_R4P_6D, &
+                               save_dataset_R4P_5D, &
+                               save_dataset_R4P_4D, &
+                               save_dataset_R4P_3D, &
+                               save_dataset_R4P_2D, &
+                               save_dataset_R4P_1D, &
+                               save_dataset_R4P_0D, &
+                               save_dataset_I8P_7D, &
+                               save_dataset_I8P_6D, &
+                               save_dataset_I8P_5D, &
+                               save_dataset_I8P_4D, &
+                               save_dataset_I8P_3D, &
+                               save_dataset_I8P_2D, &
+                               save_dataset_I8P_1D, &
+                               save_dataset_I8P_0D, &
+                               save_dataset_I4P_7D, &
+                               save_dataset_I4P_6D, &
+                               save_dataset_I4P_5D, &
+                               save_dataset_I4P_4D, &
+                               save_dataset_I4P_3D, &
+                               save_dataset_I4P_2D, &
+                               save_dataset_I4P_1D, &
+                               save_dataset_I4P_0D, &
+                               save_dataset_I2P_7D, &
+                               save_dataset_I2P_6D, &
+                               save_dataset_I2P_5D, &
+                               save_dataset_I2P_4D, &
+                               save_dataset_I2P_3D, &
+                               save_dataset_I2P_2D, &
+                               save_dataset_I2P_1D, &
+                               save_dataset_I2P_0D, &
+                               save_dataset_I1P_7D, &
+                               save_dataset_I1P_6D, &
+                               save_dataset_I1P_5D, &
+                               save_dataset_I1P_4D, &
+                               save_dataset_I1P_3D, &
+                               save_dataset_I1P_2D, &
+                               save_dataset_I1P_1D, &
+                               save_dataset_I1P_0D !< Save dataset in dataspace.
       ! private methods
-      procedure, pass(self), private :: load_dataset_7D_R8P !< Load dataset in dataspace, kind R8P, rank 7D.
-      procedure, pass(self), private :: load_dataset_6D_R8P !< Load dataset in dataspace, kind R8P, rank 6D.
-      procedure, pass(self), private :: load_dataset_5D_R8P !< Load dataset in dataspace, kind R8P, rank 5D.
-      procedure, pass(self), private :: load_dataset_4D_R8P !< Load dataset in dataspace, kind R8P, rank 4D.
-      procedure, pass(self), private :: load_dataset_3D_R8P !< Load dataset in dataspace, kind R8P, rank 3D.
-      procedure, pass(self), private :: load_dataset_2D_R8P !< Load dataset in dataspace, kind R8P, rank 2D.
-      procedure, pass(self), private :: load_dataset_1D_R8P !< Load dataset in dataspace, kind R8P, rank 1D.
-      procedure, pass(self), private :: load_dataset_0D_R8P !< Load dataset in dataspace, kind R8P, rank 0D.
-      procedure, pass(self), private :: load_dataset_7D_R4P !< Load dataset in dataspace, kind R4P, rank 7D.
-      procedure, pass(self), private :: load_dataset_6D_R4P !< Load dataset in dataspace, kind R4P, rank 6D.
-      procedure, pass(self), private :: load_dataset_5D_R4P !< Load dataset in dataspace, kind R4P, rank 5D.
-      procedure, pass(self), private :: load_dataset_4D_R4P !< Load dataset in dataspace, kind R4P, rank 4D.
-      procedure, pass(self), private :: load_dataset_3D_R4P !< Load dataset in dataspace, kind R4P, rank 3D.
-      procedure, pass(self), private :: load_dataset_2D_R4P !< Load dataset in dataspace, kind R4P, rank 2D.
-      procedure, pass(self), private :: load_dataset_1D_R4P !< Load dataset in dataspace, kind R4P, rank 1D.
-      procedure, pass(self), private :: load_dataset_0D_R4P !< Load dataset in dataspace, kind R4P, rank 0D.
-      procedure, pass(self), private :: load_dataset_7D_I8P !< Load dataset in dataspace, kind I8P, rank 7D.
-      procedure, pass(self), private :: load_dataset_6D_I8P !< Load dataset in dataspace, kind I8P, rank 6D.
-      procedure, pass(self), private :: load_dataset_5D_I8P !< Load dataset in dataspace, kind I8P, rank 5D.
-      procedure, pass(self), private :: load_dataset_4D_I8P !< Load dataset in dataspace, kind I8P, rank 4D.
-      procedure, pass(self), private :: load_dataset_3D_I8P !< Load dataset in dataspace, kind I8P, rank 3D.
-      procedure, pass(self), private :: load_dataset_2D_I8P !< Load dataset in dataspace, kind I8P, rank 2D.
-      procedure, pass(self), private :: load_dataset_1D_I8P !< Load dataset in dataspace, kind I8P, rank 1D.
-      procedure, pass(self), private :: load_dataset_0D_I8P !< Load dataset in dataspace, kind I8P, rank 0D.
-      procedure, pass(self), private :: load_dataset_7D_I4P !< Load dataset in dataspace, kind I4P, rank 7D.
-      procedure, pass(self), private :: load_dataset_6D_I4P !< Load dataset in dataspace, kind I4P, rank 6D.
-      procedure, pass(self), private :: load_dataset_5D_I4P !< Load dataset in dataspace, kind I4P, rank 5D.
-      procedure, pass(self), private :: load_dataset_4D_I4P !< Load dataset in dataspace, kind I4P, rank 4D.
-      procedure, pass(self), private :: load_dataset_3D_I4P !< Load dataset in dataspace, kind I4P, rank 3D.
-      procedure, pass(self), private :: load_dataset_2D_I4P !< Load dataset in dataspace, kind I4P, rank 2D.
-      procedure, pass(self), private :: load_dataset_1D_I4P !< Load dataset in dataspace, kind I4P, rank 1D.
-      procedure, pass(self), private :: load_dataset_0D_I4P !< Load dataset in dataspace, kind I4P, rank 0D.
-      procedure, pass(self), private :: load_dataset_7D_I2P !< Load dataset in dataspace, kind I2P, rank 7D.
-      procedure, pass(self), private :: load_dataset_6D_I2P !< Load dataset in dataspace, kind I2P, rank 6D.
-      procedure, pass(self), private :: load_dataset_5D_I2P !< Load dataset in dataspace, kind I2P, rank 5D.
-      procedure, pass(self), private :: load_dataset_4D_I2P !< Load dataset in dataspace, kind I2P, rank 4D.
-      procedure, pass(self), private :: load_dataset_3D_I2P !< Load dataset in dataspace, kind I2P, rank 3D.
-      procedure, pass(self), private :: load_dataset_2D_I2P !< Load dataset in dataspace, kind I2P, rank 2D.
-      procedure, pass(self), private :: load_dataset_1D_I2P !< Load dataset in dataspace, kind I2P, rank 1D.
-      procedure, pass(self), private :: load_dataset_0D_I2P !< Load dataset in dataspace, kind I2P, rank 0D.
-      procedure, pass(self), private :: load_dataset_7D_I1P !< Load dataset in dataspace, kind I1P, rank 7D.
-      procedure, pass(self), private :: load_dataset_6D_I1P !< Load dataset in dataspace, kind I1P, rank 6D.
-      procedure, pass(self), private :: load_dataset_5D_I1P !< Load dataset in dataspace, kind I1P, rank 5D.
-      procedure, pass(self), private :: load_dataset_4D_I1P !< Load dataset in dataspace, kind I1P, rank 4D.
-      procedure, pass(self), private :: load_dataset_3D_I1P !< Load dataset in dataspace, kind I1P, rank 3D.
-      procedure, pass(self), private :: load_dataset_2D_I1P !< Load dataset in dataspace, kind I1P, rank 2D.
-      procedure, pass(self), private :: load_dataset_1D_I1P !< Load dataset in dataspace, kind I1P, rank 1D.
-      procedure, pass(self), private :: load_dataset_0D_I1P !< Load dataset in dataspace, kind I1P, rank 0D.
-      procedure, pass(self), private :: save_dataset_7D_R8P !< Save dataset in dataspace, kind R8P, rank 7D.
-      procedure, pass(self), private :: save_dataset_6D_R8P !< Save dataset in dataspace, kind R8P, rank 6D.
-      procedure, pass(self), private :: save_dataset_5D_R8P !< Save dataset in dataspace, kind R8P, rank 5D.
-      procedure, pass(self), private :: save_dataset_4D_R8P !< Save dataset in dataspace, kind R8P, rank 4D.
-      procedure, pass(self), private :: save_dataset_3D_R8P !< Save dataset in dataspace, kind R8P, rank 3D.
-      procedure, pass(self), private :: save_dataset_2D_R8P !< Save dataset in dataspace, kind R8P, rank 2D.
-      procedure, pass(self), private :: save_dataset_1D_R8P !< Save dataset in dataspace, kind R8P, rank 1D.
-      procedure, pass(self), private :: save_dataset_0D_R8P !< Save dataset in dataspace, kind R8P, rank 0D.
-      procedure, pass(self), private :: save_dataset_7D_R4P !< Save dataset in dataspace, kind R4P, rank 7D.
-      procedure, pass(self), private :: save_dataset_6D_R4P !< Save dataset in dataspace, kind R4P, rank 6D.
-      procedure, pass(self), private :: save_dataset_5D_R4P !< Save dataset in dataspace, kind R4P, rank 5D.
-      procedure, pass(self), private :: save_dataset_4D_R4P !< Save dataset in dataspace, kind R4P, rank 4D.
-      procedure, pass(self), private :: save_dataset_3D_R4P !< Save dataset in dataspace, kind R4P, rank 3D.
-      procedure, pass(self), private :: save_dataset_2D_R4P !< Save dataset in dataspace, kind R4P, rank 2D.
-      procedure, pass(self), private :: save_dataset_1D_R4P !< Save dataset in dataspace, kind R4P, rank 1D.
-      procedure, pass(self), private :: save_dataset_0D_R4P !< Save dataset in dataspace, kind R4P, rank 0D.
-      procedure, pass(self), private :: save_dataset_7D_I8P !< Save dataset in dataspace, kind I8P, rank 7D.
-      procedure, pass(self), private :: save_dataset_6D_I8P !< Save dataset in dataspace, kind I8P, rank 6D.
-      procedure, pass(self), private :: save_dataset_5D_I8P !< Save dataset in dataspace, kind I8P, rank 5D.
-      procedure, pass(self), private :: save_dataset_4D_I8P !< Save dataset in dataspace, kind I8P, rank 4D.
-      procedure, pass(self), private :: save_dataset_3D_I8P !< Save dataset in dataspace, kind I8P, rank 3D.
-      procedure, pass(self), private :: save_dataset_2D_I8P !< Save dataset in dataspace, kind I8P, rank 2D.
-      procedure, pass(self), private :: save_dataset_1D_I8P !< Save dataset in dataspace, kind I8P, rank 1D.
-      procedure, pass(self), private :: save_dataset_0D_I8P !< Save dataset in dataspace, kind I8P, rank 0D.
-      procedure, pass(self), private :: save_dataset_7D_I4P !< Save dataset in dataspace, kind I4P, rank 7D.
-      procedure, pass(self), private :: save_dataset_6D_I4P !< Save dataset in dataspace, kind I4P, rank 6D.
-      procedure, pass(self), private :: save_dataset_5D_I4P !< Save dataset in dataspace, kind I4P, rank 5D.
-      procedure, pass(self), private :: save_dataset_4D_I4P !< Save dataset in dataspace, kind I4P, rank 4D.
-      procedure, pass(self), private :: save_dataset_3D_I4P !< Save dataset in dataspace, kind I4P, rank 3D.
-      procedure, pass(self), private :: save_dataset_2D_I4P !< Save dataset in dataspace, kind I4P, rank 2D.
-      procedure, pass(self), private :: save_dataset_1D_I4P !< Save dataset in dataspace, kind I4P, rank 1D.
-      procedure, pass(self), private :: save_dataset_0D_I4P !< Save dataset in dataspace, kind I4P, rank 0D.
-      procedure, pass(self), private :: save_dataset_7D_I2P !< Save dataset in dataspace, kind I2P, rank 7D.
-      procedure, pass(self), private :: save_dataset_6D_I2P !< Save dataset in dataspace, kind I2P, rank 6D.
-      procedure, pass(self), private :: save_dataset_5D_I2P !< Save dataset in dataspace, kind I2P, rank 5D.
-      procedure, pass(self), private :: save_dataset_4D_I2P !< Save dataset in dataspace, kind I2P, rank 4D.
-      procedure, pass(self), private :: save_dataset_3D_I2P !< Save dataset in dataspace, kind I2P, rank 3D.
-      procedure, pass(self), private :: save_dataset_2D_I2P !< Save dataset in dataspace, kind I2P, rank 2D.
-      procedure, pass(self), private :: save_dataset_1D_I2P !< Save dataset in dataspace, kind I2P, rank 1D.
-      procedure, pass(self), private :: save_dataset_0D_I2P !< Save dataset in dataspace, kind I2P, rank 0D.
-      procedure, pass(self), private :: save_dataset_7D_I1P !< Save dataset in dataspace, kind I1P, rank 7D.
-      procedure, pass(self), private :: save_dataset_6D_I1P !< Save dataset in dataspace, kind I1P, rank 6D.
-      procedure, pass(self), private :: save_dataset_5D_I1P !< Save dataset in dataspace, kind I1P, rank 5D.
-      procedure, pass(self), private :: save_dataset_4D_I1P !< Save dataset in dataspace, kind I1P, rank 4D.
-      procedure, pass(self), private :: save_dataset_3D_I1P !< Save dataset in dataspace, kind I1P, rank 3D.
-      procedure, pass(self), private :: save_dataset_2D_I1P !< Save dataset in dataspace, kind I1P, rank 2D.
-      procedure, pass(self), private :: save_dataset_1D_I1P !< Save dataset in dataspace, kind I1P, rank 1D.
-      procedure, pass(self), private :: save_dataset_0D_I1P !< Save dataset in dataspace, kind I1P, rank 0D.
+      procedure, pass(self), private :: load_dataset_R8P_7D !< Load dataset in dataspace, kind R8P, rank 7D.
+      procedure, pass(self), private :: load_dataset_R8P_6D !< Load dataset in dataspace, kind R8P, rank 6D.
+      procedure, pass(self), private :: load_dataset_R8P_5D !< Load dataset in dataspace, kind R8P, rank 5D.
+      procedure, pass(self), private :: load_dataset_R8P_4D !< Load dataset in dataspace, kind R8P, rank 4D.
+      procedure, pass(self), private :: load_dataset_R8P_3D !< Load dataset in dataspace, kind R8P, rank 3D.
+      procedure, pass(self), private :: load_dataset_R8P_2D !< Load dataset in dataspace, kind R8P, rank 2D.
+      procedure, pass(self), private :: load_dataset_R8P_1D !< Load dataset in dataspace, kind R8P, rank 1D.
+      procedure, pass(self), private :: load_dataset_R8P_0D !< Load dataset in dataspace, kind R8P, rank 0D.
+      procedure, pass(self), private :: load_dataset_R4P_7D !< Load dataset in dataspace, kind R4P, rank 7D.
+      procedure, pass(self), private :: load_dataset_R4P_6D !< Load dataset in dataspace, kind R4P, rank 6D.
+      procedure, pass(self), private :: load_dataset_R4P_5D !< Load dataset in dataspace, kind R4P, rank 5D.
+      procedure, pass(self), private :: load_dataset_R4P_4D !< Load dataset in dataspace, kind R4P, rank 4D.
+      procedure, pass(self), private :: load_dataset_R4P_3D !< Load dataset in dataspace, kind R4P, rank 3D.
+      procedure, pass(self), private :: load_dataset_R4P_2D !< Load dataset in dataspace, kind R4P, rank 2D.
+      procedure, pass(self), private :: load_dataset_R4P_1D !< Load dataset in dataspace, kind R4P, rank 1D.
+      procedure, pass(self), private :: load_dataset_R4P_0D !< Load dataset in dataspace, kind R4P, rank 0D.
+      procedure, pass(self), private :: load_dataset_I8P_7D !< Load dataset in dataspace, kind I8P, rank 7D.
+      procedure, pass(self), private :: load_dataset_I8P_6D !< Load dataset in dataspace, kind I8P, rank 6D.
+      procedure, pass(self), private :: load_dataset_I8P_5D !< Load dataset in dataspace, kind I8P, rank 5D.
+      procedure, pass(self), private :: load_dataset_I8P_4D !< Load dataset in dataspace, kind I8P, rank 4D.
+      procedure, pass(self), private :: load_dataset_I8P_3D !< Load dataset in dataspace, kind I8P, rank 3D.
+      procedure, pass(self), private :: load_dataset_I8P_2D !< Load dataset in dataspace, kind I8P, rank 2D.
+      procedure, pass(self), private :: load_dataset_I8P_1D !< Load dataset in dataspace, kind I8P, rank 1D.
+      procedure, pass(self), private :: load_dataset_I8P_0D !< Load dataset in dataspace, kind I8P, rank 0D.
+      procedure, pass(self), private :: load_dataset_I4P_7D !< Load dataset in dataspace, kind I4P, rank 7D.
+      procedure, pass(self), private :: load_dataset_I4P_6D !< Load dataset in dataspace, kind I4P, rank 6D.
+      procedure, pass(self), private :: load_dataset_I4P_5D !< Load dataset in dataspace, kind I4P, rank 5D.
+      procedure, pass(self), private :: load_dataset_I4P_4D !< Load dataset in dataspace, kind I4P, rank 4D.
+      procedure, pass(self), private :: load_dataset_I4P_3D !< Load dataset in dataspace, kind I4P, rank 3D.
+      procedure, pass(self), private :: load_dataset_I4P_2D !< Load dataset in dataspace, kind I4P, rank 2D.
+      procedure, pass(self), private :: load_dataset_I4P_1D !< Load dataset in dataspace, kind I4P, rank 1D.
+      procedure, pass(self), private :: load_dataset_I4P_0D !< Load dataset in dataspace, kind I4P, rank 0D.
+      procedure, pass(self), private :: load_dataset_I2P_7D !< Load dataset in dataspace, kind I2P, rank 7D.
+      procedure, pass(self), private :: load_dataset_I2P_6D !< Load dataset in dataspace, kind I2P, rank 6D.
+      procedure, pass(self), private :: load_dataset_I2P_5D !< Load dataset in dataspace, kind I2P, rank 5D.
+      procedure, pass(self), private :: load_dataset_I2P_4D !< Load dataset in dataspace, kind I2P, rank 4D.
+      procedure, pass(self), private :: load_dataset_I2P_3D !< Load dataset in dataspace, kind I2P, rank 3D.
+      procedure, pass(self), private :: load_dataset_I2P_2D !< Load dataset in dataspace, kind I2P, rank 2D.
+      procedure, pass(self), private :: load_dataset_I2P_1D !< Load dataset in dataspace, kind I2P, rank 1D.
+      procedure, pass(self), private :: load_dataset_I2P_0D !< Load dataset in dataspace, kind I2P, rank 0D.
+      procedure, pass(self), private :: load_dataset_I1P_7D !< Load dataset in dataspace, kind I1P, rank 7D.
+      procedure, pass(self), private :: load_dataset_I1P_6D !< Load dataset in dataspace, kind I1P, rank 6D.
+      procedure, pass(self), private :: load_dataset_I1P_5D !< Load dataset in dataspace, kind I1P, rank 5D.
+      procedure, pass(self), private :: load_dataset_I1P_4D !< Load dataset in dataspace, kind I1P, rank 4D.
+      procedure, pass(self), private :: load_dataset_I1P_3D !< Load dataset in dataspace, kind I1P, rank 3D.
+      procedure, pass(self), private :: load_dataset_I1P_2D !< Load dataset in dataspace, kind I1P, rank 2D.
+      procedure, pass(self), private :: load_dataset_I1P_1D !< Load dataset in dataspace, kind I1P, rank 1D.
+      procedure, pass(self), private :: load_dataset_I1P_0D !< Load dataset in dataspace, kind I1P, rank 0D.
+      procedure, pass(self), private :: save_dataset_R8P_7D !< Save dataset in dataspace, kind R8P, rank 7D.
+      procedure, pass(self), private :: save_dataset_R8P_6D !< Save dataset in dataspace, kind R8P, rank 6D.
+      procedure, pass(self), private :: save_dataset_R8P_5D !< Save dataset in dataspace, kind R8P, rank 5D.
+      procedure, pass(self), private :: save_dataset_R8P_4D !< Save dataset in dataspace, kind R8P, rank 4D.
+      procedure, pass(self), private :: save_dataset_R8P_3D !< Save dataset in dataspace, kind R8P, rank 3D.
+      procedure, pass(self), private :: save_dataset_R8P_2D !< Save dataset in dataspace, kind R8P, rank 2D.
+      procedure, pass(self), private :: save_dataset_R8P_1D !< Save dataset in dataspace, kind R8P, rank 1D.
+      procedure, pass(self), private :: save_dataset_R8P_0D !< Save dataset in dataspace, kind R8P, rank 0D.
+      procedure, pass(self), private :: save_dataset_R4P_7D !< Save dataset in dataspace, kind R4P, rank 7D.
+      procedure, pass(self), private :: save_dataset_R4P_6D !< Save dataset in dataspace, kind R4P, rank 6D.
+      procedure, pass(self), private :: save_dataset_R4P_5D !< Save dataset in dataspace, kind R4P, rank 5D.
+      procedure, pass(self), private :: save_dataset_R4P_4D !< Save dataset in dataspace, kind R4P, rank 4D.
+      procedure, pass(self), private :: save_dataset_R4P_3D !< Save dataset in dataspace, kind R4P, rank 3D.
+      procedure, pass(self), private :: save_dataset_R4P_2D !< Save dataset in dataspace, kind R4P, rank 2D.
+      procedure, pass(self), private :: save_dataset_R4P_1D !< Save dataset in dataspace, kind R4P, rank 1D.
+      procedure, pass(self), private :: save_dataset_R4P_0D !< Save dataset in dataspace, kind R4P, rank 0D.
+      procedure, pass(self), private :: save_dataset_I8P_7D !< Save dataset in dataspace, kind I8P, rank 7D.
+      procedure, pass(self), private :: save_dataset_I8P_6D !< Save dataset in dataspace, kind I8P, rank 6D.
+      procedure, pass(self), private :: save_dataset_I8P_5D !< Save dataset in dataspace, kind I8P, rank 5D.
+      procedure, pass(self), private :: save_dataset_I8P_4D !< Save dataset in dataspace, kind I8P, rank 4D.
+      procedure, pass(self), private :: save_dataset_I8P_3D !< Save dataset in dataspace, kind I8P, rank 3D.
+      procedure, pass(self), private :: save_dataset_I8P_2D !< Save dataset in dataspace, kind I8P, rank 2D.
+      procedure, pass(self), private :: save_dataset_I8P_1D !< Save dataset in dataspace, kind I8P, rank 1D.
+      procedure, pass(self), private :: save_dataset_I8P_0D !< Save dataset in dataspace, kind I8P, rank 0D.
+      procedure, pass(self), private :: save_dataset_I4P_7D !< Save dataset in dataspace, kind I4P, rank 7D.
+      procedure, pass(self), private :: save_dataset_I4P_6D !< Save dataset in dataspace, kind I4P, rank 6D.
+      procedure, pass(self), private :: save_dataset_I4P_5D !< Save dataset in dataspace, kind I4P, rank 5D.
+      procedure, pass(self), private :: save_dataset_I4P_4D !< Save dataset in dataspace, kind I4P, rank 4D.
+      procedure, pass(self), private :: save_dataset_I4P_3D !< Save dataset in dataspace, kind I4P, rank 3D.
+      procedure, pass(self), private :: save_dataset_I4P_2D !< Save dataset in dataspace, kind I4P, rank 2D.
+      procedure, pass(self), private :: save_dataset_I4P_1D !< Save dataset in dataspace, kind I4P, rank 1D.
+      procedure, pass(self), private :: save_dataset_I4P_0D !< Save dataset in dataspace, kind I4P, rank 0D.
+      procedure, pass(self), private :: save_dataset_I2P_7D !< Save dataset in dataspace, kind I2P, rank 7D.
+      procedure, pass(self), private :: save_dataset_I2P_6D !< Save dataset in dataspace, kind I2P, rank 6D.
+      procedure, pass(self), private :: save_dataset_I2P_5D !< Save dataset in dataspace, kind I2P, rank 5D.
+      procedure, pass(self), private :: save_dataset_I2P_4D !< Save dataset in dataspace, kind I2P, rank 4D.
+      procedure, pass(self), private :: save_dataset_I2P_3D !< Save dataset in dataspace, kind I2P, rank 3D.
+      procedure, pass(self), private :: save_dataset_I2P_2D !< Save dataset in dataspace, kind I2P, rank 2D.
+      procedure, pass(self), private :: save_dataset_I2P_1D !< Save dataset in dataspace, kind I2P, rank 1D.
+      procedure, pass(self), private :: save_dataset_I2P_0D !< Save dataset in dataspace, kind I2P, rank 0D.
+      procedure, pass(self), private :: save_dataset_I1P_7D !< Save dataset in dataspace, kind I1P, rank 7D.
+      procedure, pass(self), private :: save_dataset_I1P_6D !< Save dataset in dataspace, kind I1P, rank 6D.
+      procedure, pass(self), private :: save_dataset_I1P_5D !< Save dataset in dataspace, kind I1P, rank 5D.
+      procedure, pass(self), private :: save_dataset_I1P_4D !< Save dataset in dataspace, kind I1P, rank 4D.
+      procedure, pass(self), private :: save_dataset_I1P_3D !< Save dataset in dataspace, kind I1P, rank 3D.
+      procedure, pass(self), private :: save_dataset_I1P_2D !< Save dataset in dataspace, kind I1P, rank 2D.
+      procedure, pass(self), private :: save_dataset_I1P_1D !< Save dataset in dataspace, kind I1P, rank 1D.
+      procedure, pass(self), private :: save_dataset_I1P_0D !< Save dataset in dataspace, kind I1P, rank 0D.
 endtype hdf5_file_object
 
+interface hdf5_file_object
+   !< Overload class name with initializer function.
+   module procedure new
+endinterface hdf5_file_object
 contains
+   ! operators
+   function new() result(hdf5)
+   !< Return a new initialized class instance, overload class name.
+   type(hdf5_file_object) :: hdf5 !< HDF5 file handler new instance.
+   endfunction new
+
    ! public methods
    subroutine h5f_initialize(self, verbose, prefix)
    !< Initialize HDF5 fortran interface.
@@ -389,1266 +399,130 @@ contains
    endif
    endsubroutine get_dataset_dims
 
-   ! load dataset
-   ! R8P
-   subroutine load_dataset_7D_R8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R8P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   real(R8P),               intent(inout) :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_7D_R8P
-
-   subroutine load_dataset_6D_R8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R8P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   real(R8P),               intent(inout) :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_6D_R8P
-
-   subroutine load_dataset_5D_R8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R8P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   real(R8P),               intent(inout) :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_5D_R8P
-
-   subroutine load_dataset_4D_R8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R8P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   real(R8P),               intent(inout) :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_4D_R8P
-
-   subroutine load_dataset_3D_R8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R8P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   real(R8P),               intent(inout) :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_3D_R8P
-
-   subroutine load_dataset_2D_R8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R8P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   real(R8P),               intent(inout) :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_2D_R8P
-
-   subroutine load_dataset_1D_R8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R8P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   real(R8P),               intent(inout) :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_1D_R8P
-
-   subroutine load_dataset_0D_R8P(self, dset_name, dset)
-   !< Load dataset in dataspace, kind R8P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   real(R8P),               intent(inout) :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-   real(R8P)                              :: dset_(1)  !< Dataset, local var.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R8P, dset_, [1_HSIZE_T], self%error)
-   dset = dset_(1)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_0D_R8P
-
-   ! R4P
-   subroutine load_dataset_7D_R4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R4P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   real(R4P),               intent(inout) :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_7D_R4P
-
-   subroutine load_dataset_6D_R4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R4P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   real(R4P),               intent(inout) :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_6D_R4P
-
-   subroutine load_dataset_5D_R4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R4P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   real(R4P),               intent(inout) :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_5D_R4P
-
-   subroutine load_dataset_4D_R4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R4P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   real(R4P),               intent(inout) :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_4D_R4P
-
-   subroutine load_dataset_3D_R4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R4P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   real(R4P),               intent(inout) :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_3D_R4P
-
-   subroutine load_dataset_2D_R4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R4P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   real(R4P),               intent(inout) :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_2D_R4P
-
-   subroutine load_dataset_1D_R4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind R4P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   real(R4P),               intent(inout) :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_1D_R4P
-
-   subroutine load_dataset_0D_R4P(self, dset_name, dset)
-   !< Load dataset in dataspace, kind R4P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   real(R4P),               intent(inout) :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-   real(R4P)                              :: dset_(1)  !< Dataset, local var.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_R4P, dset_, [1_HSIZE_T], self%error)
-   dset = dset_(1)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_0D_R4P
-
-   ! I8P
-   subroutine load_dataset_7D_I8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I8P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   integer(I8P),            intent(inout) :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_7D_I8P
-
-   subroutine load_dataset_6D_I8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I8P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   integer(I8P),            intent(inout) :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_6D_I8P
-
-   subroutine load_dataset_5D_I8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I8P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   integer(I8P),            intent(inout) :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_5D_I8P
-
-   subroutine load_dataset_4D_I8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I8P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   integer(I8P),            intent(inout) :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_4D_I8P
-
-   subroutine load_dataset_3D_I8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I8P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   integer(I8P),            intent(inout) :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_3D_I8P
-
-   subroutine load_dataset_2D_I8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I8P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I8P),            intent(inout) :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_2D_I8P
-
-   subroutine load_dataset_1D_I8P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I8P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I8P),            intent(inout) :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_1D_I8P
-
-   subroutine load_dataset_0D_I8P(self, dset_name, dset)
-   !< Load dataset in dataspace, kind I8P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(I8P),            intent(inout) :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-   integer(I8P)                           :: dset_(1)  !< Dataset, local var.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I8P, dset_, [1_HSIZE_T], self%error)
-   dset = dset_(1)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_0D_I8P
-
-   ! I4P
-   subroutine load_dataset_7D_I4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I4P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   integer(I4P),            intent(inout) :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_7D_I4P
-
-   subroutine load_dataset_6D_I4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I4P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   integer(I4P),            intent(inout) :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_6D_I4P
-
-   subroutine load_dataset_5D_I4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I4P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   integer(I4P),            intent(inout) :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_5D_I4P
-
-   subroutine load_dataset_4D_I4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I4P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   integer(I4P),            intent(inout) :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_4D_I4P
-
-   subroutine load_dataset_3D_I4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I4P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   integer(I4P),            intent(inout) :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_3D_I4P
-
-   subroutine load_dataset_2D_I4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I4P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I4P),            intent(inout) :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_2D_I4P
-
-   subroutine load_dataset_1D_I4P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I4P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I4P),            intent(inout) :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_1D_I4P
-
-   subroutine load_dataset_0D_I4P(self, dset_name, dset)
-   !< Load dataset in dataspace, kind I4P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(I4P),            intent(inout) :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-   integer(I4P)                           :: dset_(1)  !< Dataset, local var.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I4P, dset_, [1_HSIZE_T], self%error)
-   dset = dset_(1)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_0D_I4P
-
-   ! I2P
-   subroutine load_dataset_7D_I2P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I2P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   integer(I2P),            intent(inout) :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_7D_I2P
-
-   subroutine load_dataset_6D_I2P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I2P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   integer(I2P),            intent(inout) :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_6D_I2P
-
-   subroutine load_dataset_5D_I2P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I2P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   integer(I2P),            intent(inout) :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_5D_I2P
-
-   subroutine load_dataset_4D_I2P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I2P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   integer(I2P),            intent(inout) :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_4D_I2P
-
-   subroutine load_dataset_3D_I2P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I2P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   integer(I2P),            intent(inout) :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_3D_I2P
-
-   subroutine load_dataset_2D_I2P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I2P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I2P),            intent(inout) :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_2D_I2P
-
-   subroutine load_dataset_1D_I2P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I2P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I2P),            intent(inout) :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_1D_I2P
-
-   subroutine load_dataset_0D_I2P(self, dset_name, dset)
-   !< Load dataset in dataspace, kind I2P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(I2P),            intent(inout) :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-   integer(I2P)                           :: dset_(1)  !< Dataset, local var.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I2P, dset_, [1_HSIZE_T], self%error)
-   dset = dset_(1)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_0D_I2P
-
-   ! I1P
-   subroutine load_dataset_7D_I1P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I1P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   integer(I1P),            intent(inout) :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_7D_I1P
-
-   subroutine load_dataset_6D_I1P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I1P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   integer(I1P),            intent(inout) :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_6D_I1P
-
-   subroutine load_dataset_5D_I1P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I1P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   integer(I1P),            intent(inout) :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_5D_I1P
-
-   subroutine load_dataset_4D_I1P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I1P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   integer(I1P),            intent(inout) :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_4D_I1P
-
-   subroutine load_dataset_3D_I1P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I1P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   integer(I1P),            intent(inout) :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_3D_I1P
-
-   subroutine load_dataset_2D_I1P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I1P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I1P),            intent(inout) :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_2D_I1P
-
-   subroutine load_dataset_1D_I1P(self, dset_name, nd, dset)
-   !< Load dataset in dataspace, kind I1P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I1P),            intent(inout) :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_1D_I1P
-
-   subroutine load_dataset_0D_I1P(self, dset_name, dset)
-   !< Load dataset in dataspace, kind I1P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(I1P),            intent(inout) :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-   integer(I1P)                           :: dset_(1)  !< Dataset, local var.
-
-   call h5dopen_f(self%hdf5, trim(adjustl(dset_name)), dset_id, self%error)
-   call h5dread_f( dset_id, H5T_I1P, dset_, [1_HSIZE_T], self%error)
-   dset = dset_(1)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine load_dataset_0D_I1P
-
-   ! save dataset
-   ! R8P
-   subroutine save_dataset_7D_R8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R8P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)    :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_7D_R8P
-
-   subroutine save_dataset_6D_R8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R8P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)    :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_6D_R8P
-
-   subroutine save_dataset_5D_R8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R8P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)    :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_5D_R8P
-
-   subroutine save_dataset_4D_R8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R8P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)    :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_4D_R8P
-
-   subroutine save_dataset_3D_R8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R8P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)    :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_3D_R8P
-
-   subroutine save_dataset_2D_R8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R8P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)    :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_2D_R8P
-
-   subroutine save_dataset_1D_R8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R8P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd        !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)    :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R8P, dset, [nd], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_1D_R8P
-
-   subroutine save_dataset_0D_R8P(self, dset_name, dset)
-   !< Save dataset in dataspace, kind R8P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   real(R8P),               intent(in)    :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R8P, [dset], [1_HSIZE_T], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_0D_R8P
-
-   ! R4P
-   subroutine save_dataset_7D_R4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R4P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)    :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_7D_R4P
-
-   subroutine save_dataset_6D_R4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R4P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)    :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_6D_R4P
-
-   subroutine save_dataset_5D_R4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R4P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)    :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_5D_R4P
-
-   subroutine save_dataset_4D_R4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R4P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)    :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_4D_R4P
-
-   subroutine save_dataset_3D_R4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R4P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)    :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_3D_R4P
-
-   subroutine save_dataset_2D_R4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R4P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)    :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_2D_R4P
-
-   subroutine save_dataset_1D_R4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind R4P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd        !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)    :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R4P, dset, [nd], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_1D_R4P
-
-   subroutine save_dataset_0D_R4P(self, dset_name, dset)
-   !< Save dataset in dataspace, kind R4P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   real(R4P),               intent(in)    :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_R4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_R4P, [dset], [1_HSIZE_T], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_0D_R4P
-
-   ! I8P
-   subroutine save_dataset_7D_I8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I8P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)    :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_7D_I8P
-
-   subroutine save_dataset_6D_I8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I8P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)    :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_6D_I8P
-
-   subroutine save_dataset_5D_I8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I8P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)    :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_5D_I8P
-
-   subroutine save_dataset_4D_I8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I8P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)    :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_4D_I8P
-
-   subroutine save_dataset_3D_I8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I8P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)    :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_3D_I8P
-
-   subroutine save_dataset_2D_I8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I8P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)    :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I8P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_2D_I8P
-
-   subroutine save_dataset_1D_I8P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I8P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd        !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)    :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I8P, dset, [nd], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_1D_I8P
-
-   subroutine save_dataset_0D_I8P(self, dset_name, dset)
-   !< Save dataset in dataspace, kind I8P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(I8P),            intent(in)    :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I8P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I8P, [dset], [1_HSIZE_T], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_0D_I8P
-
-   ! I4P
-   subroutine save_dataset_7D_I4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I4P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)    :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_7D_I4P
-
-   subroutine save_dataset_6D_I4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I4P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)    :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_6D_I4P
-
-   subroutine save_dataset_5D_I4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I4P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)    :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_5D_I4P
-
-   subroutine save_dataset_4D_I4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I4P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)    :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_4D_I4P
-
-   subroutine save_dataset_3D_I4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I4P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)    :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_3D_I4P
-
-   subroutine save_dataset_2D_I4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I4P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)    :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I4P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_2D_I4P
-
-   subroutine save_dataset_1D_I4P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I4P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd        !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)    :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I4P, dset, [nd], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_1D_I4P
-
-   subroutine save_dataset_0D_I4P(self, dset_name, dset)
-   !< Save dataset in dataspace, kind I4P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(I4P),            intent(in)    :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I4P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I4P, [dset], [1_HSIZE_T], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_0D_I4P
-
-   ! I2P
-   subroutine save_dataset_7D_I2P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I2P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)    :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I2P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_7D_I2P
-
-   subroutine save_dataset_6D_I2P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I2P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)    :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I2P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_6D_I2P
-
-   subroutine save_dataset_5D_I2P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I2P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)    :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I2P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_5D_I2P
-
-   subroutine save_dataset_4D_I2P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I2P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)    :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I2P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_4D_I2P
-
-   subroutine save_dataset_3D_I2P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I2P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)    :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I2P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_3D_I2P
-
-   subroutine save_dataset_2D_I2P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I2P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)    :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I2P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I2P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_2D_I2P
-
-   subroutine save_dataset_1D_I2P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I2P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd        !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)    :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I2P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I2P, dset, [nd], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_1D_I2P
-
-   subroutine save_dataset_0D_I2P(self, dset_name, dset)
-   !< Save dataset in dataspace, kind I2P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(I2P),            intent(in)    :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I2P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I2P, [dset], [1_HSIZE_T], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_0D_I2P
-
-   ! I1P
-   subroutine save_dataset_7D_I1P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I1P, rank 7D.
-   class(hdf5_file_object), intent(inout) :: self                !< File handler.
-   character(*),            intent(in)    :: dset_name           !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)               !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)    :: dset(:,:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id             !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I1P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_7D_I1P
-
-   subroutine save_dataset_6D_I1P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I1P, rank 6D.
-   class(hdf5_file_object), intent(inout) :: self              !< File handler.
-   character(*),            intent(in)    :: dset_name         !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)             !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)    :: dset(:,:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id           !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I1P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_6D_I1P
-
-   subroutine save_dataset_5D_I1P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I1P, rank 5D.
-   class(hdf5_file_object), intent(inout) :: self            !< File handler.
-   character(*),            intent(in)    :: dset_name       !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)           !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)    :: dset(:,:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id         !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I1P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_5D_I1P
-
-   subroutine save_dataset_4D_I1P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I1P, rank 4D.
-   class(hdf5_file_object), intent(inout) :: self          !< File handler.
-   character(*),            intent(in)    :: dset_name     !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)         !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)    :: dset(:,:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id       !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I1P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_4D_I1P
-
-   subroutine save_dataset_3D_I1P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I1P, rank 3D.
-   class(hdf5_file_object), intent(inout) :: self        !< File handler.
-   character(*),            intent(in)    :: dset_name   !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)       !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)    :: dset(:,:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id     !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I1P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_3D_I1P
-
-   subroutine save_dataset_2D_I1P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I1P, rank 2D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd(:)     !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)    :: dset(:,:) !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I1P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I1P, dset, nd, self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_2D_I1P
-
-   subroutine save_dataset_1D_I1P(self, dset_name, nd, dset)
-   !< Save dataset in dataspace, kind I1P, rank 1D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(HSIZE_T),        intent(in)    :: nd        !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)    :: dset(:)   !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I1P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I1P, dset, [nd], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_1D_I1P
-
-   subroutine save_dataset_0D_I1P(self, dset_name, dset)
-   !< Save dataset in dataspace, kind I1P, rank 0D.
-   class(hdf5_file_object), intent(inout) :: self      !< File handler.
-   character(*),            intent(in)    :: dset_name !< Dataset name.
-   integer(I1P),            intent(in)    :: dset      !< Dataset.
-   integer(HID_T)                         :: dset_id   !< Dataset identifier.
-
-   call h5dcreate_f(self%hdf5, trim(adjustl(dset_name)), H5T_I1P, self%dspace_id, dset_id, self%error)
-   call h5dwrite_f(dset_id, H5T_I1P, [dset], [1_HSIZE_T], self%error)
-   call h5dclose_f(dset_id, self%error)
-   endsubroutine save_dataset_0D_I1P
-
+   ! load/save dataset
+#define KKP R8P
+#define H5T_KKP H5T_R8P
+#define VARTYPE real
+#define LOAD_DATASET_KKP_0D load_dataset_R8P_0D
+#define LOAD_DATASET_KKP_1D load_dataset_R8P_1D
+#define LOAD_DATASET_KKP_2D load_dataset_R8P_2D
+#define LOAD_DATASET_KKP_3D load_dataset_R8P_3D
+#define LOAD_DATASET_KKP_4D load_dataset_R8P_4D
+#define LOAD_DATASET_KKP_5D load_dataset_R8P_5D
+#define LOAD_DATASET_KKP_6D load_dataset_R8P_6D
+#define LOAD_DATASET_KKP_7D load_dataset_R8P_7D
+#define SAVE_DATASET_KKP_0D save_dataset_R8P_0D
+#define SAVE_DATASET_KKP_1D save_dataset_R8P_1D
+#define SAVE_DATASET_KKP_2D save_dataset_R8P_2D
+#define SAVE_DATASET_KKP_3D save_dataset_R8P_3D
+#define SAVE_DATASET_KKP_4D save_dataset_R8P_4D
+#define SAVE_DATASET_KKP_5D save_dataset_R8P_5D
+#define SAVE_DATASET_KKP_6D save_dataset_R8P_6D
+#define SAVE_DATASET_KKP_7D save_dataset_R8P_7D
+#include "motion_hdf5_load_save_dataset_agnostic.INC"
+
+#define KKP R4P
+#define H5T_KKP H5T_R4P
+#define VARTYPE real
+#define LOAD_DATASET_KKP_0D load_dataset_R4P_0D
+#define LOAD_DATASET_KKP_1D load_dataset_R4P_1D
+#define LOAD_DATASET_KKP_2D load_dataset_R4P_2D
+#define LOAD_DATASET_KKP_3D load_dataset_R4P_3D
+#define LOAD_DATASET_KKP_4D load_dataset_R4P_4D
+#define LOAD_DATASET_KKP_5D load_dataset_R4P_5D
+#define LOAD_DATASET_KKP_6D load_dataset_R4P_6D
+#define LOAD_DATASET_KKP_7D load_dataset_R4P_7D
+#define SAVE_DATASET_KKP_0D save_dataset_R4P_0D
+#define SAVE_DATASET_KKP_1D save_dataset_R4P_1D
+#define SAVE_DATASET_KKP_2D save_dataset_R4P_2D
+#define SAVE_DATASET_KKP_3D save_dataset_R4P_3D
+#define SAVE_DATASET_KKP_4D save_dataset_R4P_4D
+#define SAVE_DATASET_KKP_5D save_dataset_R4P_5D
+#define SAVE_DATASET_KKP_6D save_dataset_R4P_6D
+#define SAVE_DATASET_KKP_7D save_dataset_R4P_7D
+#include "motion_hdf5_load_save_dataset_agnostic.INC"
+
+#define KKP I8P
+#define H5T_KKP H5T_I8P
+#define VARTYPE integer
+#define LOAD_DATASET_KKP_0D load_dataset_I8P_0D
+#define LOAD_DATASET_KKP_1D load_dataset_I8P_1D
+#define LOAD_DATASET_KKP_2D load_dataset_I8P_2D
+#define LOAD_DATASET_KKP_3D load_dataset_I8P_3D
+#define LOAD_DATASET_KKP_4D load_dataset_I8P_4D
+#define LOAD_DATASET_KKP_5D load_dataset_I8P_5D
+#define LOAD_DATASET_KKP_6D load_dataset_I8P_6D
+#define LOAD_DATASET_KKP_7D load_dataset_I8P_7D
+#define SAVE_DATASET_KKP_0D save_dataset_I8P_0D
+#define SAVE_DATASET_KKP_1D save_dataset_I8P_1D
+#define SAVE_DATASET_KKP_2D save_dataset_I8P_2D
+#define SAVE_DATASET_KKP_3D save_dataset_I8P_3D
+#define SAVE_DATASET_KKP_4D save_dataset_I8P_4D
+#define SAVE_DATASET_KKP_5D save_dataset_I8P_5D
+#define SAVE_DATASET_KKP_6D save_dataset_I8P_6D
+#define SAVE_DATASET_KKP_7D save_dataset_I8P_7D
+#include "motion_hdf5_load_save_dataset_agnostic.INC"
+
+#define KKP I4P
+#define H5T_KKP H5T_I4P
+#define VARTYPE integer
+#define LOAD_DATASET_KKP_0D load_dataset_I4P_0D
+#define LOAD_DATASET_KKP_1D load_dataset_I4P_1D
+#define LOAD_DATASET_KKP_2D load_dataset_I4P_2D
+#define LOAD_DATASET_KKP_3D load_dataset_I4P_3D
+#define LOAD_DATASET_KKP_4D load_dataset_I4P_4D
+#define LOAD_DATASET_KKP_5D load_dataset_I4P_5D
+#define LOAD_DATASET_KKP_6D load_dataset_I4P_6D
+#define LOAD_DATASET_KKP_7D load_dataset_I4P_7D
+#define SAVE_DATASET_KKP_0D save_dataset_I4P_0D
+#define SAVE_DATASET_KKP_1D save_dataset_I4P_1D
+#define SAVE_DATASET_KKP_2D save_dataset_I4P_2D
+#define SAVE_DATASET_KKP_3D save_dataset_I4P_3D
+#define SAVE_DATASET_KKP_4D save_dataset_I4P_4D
+#define SAVE_DATASET_KKP_5D save_dataset_I4P_5D
+#define SAVE_DATASET_KKP_6D save_dataset_I4P_6D
+#define SAVE_DATASET_KKP_7D save_dataset_I4P_7D
+#include "motion_hdf5_load_save_dataset_agnostic.INC"
+
+#define KKP I2P
+#define H5T_KKP H5T_I2P
+#define VARTYPE integer
+#define LOAD_DATASET_KKP_0D load_dataset_I2P_0D
+#define LOAD_DATASET_KKP_1D load_dataset_I2P_1D
+#define LOAD_DATASET_KKP_2D load_dataset_I2P_2D
+#define LOAD_DATASET_KKP_3D load_dataset_I2P_3D
+#define LOAD_DATASET_KKP_4D load_dataset_I2P_4D
+#define LOAD_DATASET_KKP_5D load_dataset_I2P_5D
+#define LOAD_DATASET_KKP_6D load_dataset_I2P_6D
+#define LOAD_DATASET_KKP_7D load_dataset_I2P_7D
+#define SAVE_DATASET_KKP_0D save_dataset_I2P_0D
+#define SAVE_DATASET_KKP_1D save_dataset_I2P_1D
+#define SAVE_DATASET_KKP_2D save_dataset_I2P_2D
+#define SAVE_DATASET_KKP_3D save_dataset_I2P_3D
+#define SAVE_DATASET_KKP_4D save_dataset_I2P_4D
+#define SAVE_DATASET_KKP_5D save_dataset_I2P_5D
+#define SAVE_DATASET_KKP_6D save_dataset_I2P_6D
+#define SAVE_DATASET_KKP_7D save_dataset_I2P_7D
+#include "motion_hdf5_load_save_dataset_agnostic.INC"
+
+#define KKP I1P
+#define H5T_KKP H5T_I1P
+#define VARTYPE integer
+#define LOAD_DATASET_KKP_0D load_dataset_I1P_0D
+#define LOAD_DATASET_KKP_1D load_dataset_I1P_1D
+#define LOAD_DATASET_KKP_2D load_dataset_I1P_2D
+#define LOAD_DATASET_KKP_3D load_dataset_I1P_3D
+#define LOAD_DATASET_KKP_4D load_dataset_I1P_4D
+#define LOAD_DATASET_KKP_5D load_dataset_I1P_5D
+#define LOAD_DATASET_KKP_6D load_dataset_I1P_6D
+#define LOAD_DATASET_KKP_7D load_dataset_I1P_7D
+#define SAVE_DATASET_KKP_0D save_dataset_I1P_0D
+#define SAVE_DATASET_KKP_1D save_dataset_I1P_1D
+#define SAVE_DATASET_KKP_2D save_dataset_I1P_2D
+#define SAVE_DATASET_KKP_3D save_dataset_I1P_3D
+#define SAVE_DATASET_KKP_4D save_dataset_I1P_4D
+#define SAVE_DATASET_KKP_5D save_dataset_I1P_5D
+#define SAVE_DATASET_KKP_6D save_dataset_I1P_6D
+#define SAVE_DATASET_KKP_7D save_dataset_I1P_7D
+#include "motion_hdf5_load_save_dataset_agnostic.INC"
 endmodule motion_hdf5_file_object

@@ -111,12 +111,12 @@ type(xdmf_parameters_object), parameter :: XDMF_PARAMETERS=xdmf_parameters_objec
 
 type, extends(file_base_object) :: xdmf_file_object
    !< XDMF file object class.
-   integer(I4P)      :: indent=0_I4P     !< Indent count.
-   integer(I4P)      :: xml=0_I4P        !< XML Logical unit.
-   type(xml_tag)     :: tag              !< XML tags handler.
-   logical           :: is_async=.false. !< Asyncronous saving.
-   type(string)      :: async_tags       !< Asyncronous tags data.
-   type(xml_file)    :: dom              !< XMDF file parsed as linearized DOM.
+   integer(I4P)   :: indent=0_I4P     !< Indent count.
+   integer(I4P)   :: xml=0_I4P        !< XML Logical unit.
+   type(xml_tag)  :: tag              !< XML tags handler.
+   logical        :: is_async=.false. !< Asyncronous saving.
+   type(string)   :: async_tags       !< Asyncronous tags data.
+   type(xml_file) :: dom              !< XMDF file parsed as linearized DOM.
    contains
       ! public methods
       ! file methods
@@ -158,7 +158,17 @@ type, extends(file_base_object) :: xdmf_file_object
       procedure, pass(self) :: gather_async_tags !< Gather async tags.
 endtype xdmf_file_object
 
+interface xdmf_file_object
+   !< Overload class name with initializer function.
+   module procedure new
+endinterface xdmf_file_object
 contains
+   ! operators
+   function new() result(xdmf)
+   !< Return a new initialized class instance, overload class name.
+   type(xdmf_file_object) :: xdmf !< XDMF file handler new instance.
+   endfunction new
+
    ! files methods
    subroutine close_file(self)
    !< Close XDMF file.

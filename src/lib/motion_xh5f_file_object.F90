@@ -26,10 +26,9 @@ type(xh5f_parameters_object), parameter :: XH5F_PARAMETERS=xh5f_parameters_objec
 
 type, extends(file_base_object) :: xh5f_file_object
    !< XDMF/HDF5 file object class.
-   type(hdf5_file_object)    :: hdf5             !< HDF5 file handler.
-   type(xdmf_file_object)    :: xdmf             !< XDMF file handler.
-   character(:), allocatable :: act              !< Action on files (readonly, overwrite, new...).
-   logical                   :: with_xdmf=.true. !< Sentinel to exclude XDMF file.
+   type(hdf5_file_object) :: hdf5             !< HDF5 file handler.
+   type(xdmf_file_object) :: xdmf             !< XDMF file handler.
+   logical                :: with_xdmf=.true. !< Sentinel to exclude XDMF file.
    contains
       ! file methods
       procedure, pass(self) :: close_file !< Close XH5F file.
@@ -41,49 +40,103 @@ type, extends(file_base_object) :: xh5f_file_object
       procedure, pass(self) :: open_block                 !< Open block.
       procedure, pass(self) :: save_block_field_xdmf_tags !< Save field in block, only XDMF tags.
       generic               :: load_block_field =>      &
-                               load_block_field_4D_R8P    !< Load field in block.
+                               load_block_field_R8P_0D, &
+                               load_block_field_R8P_3D, &
+                               load_block_field_R8P_4D, &
+                               load_block_field_R4P_0D, &
+                               load_block_field_R4P_3D, &
+                               load_block_field_R4P_4D, &
+                               load_block_field_I8P_0D, &
+                               load_block_field_I8P_3D, &
+                               load_block_field_I8P_4D, &
+                               load_block_field_I4P_0D, &
+                               load_block_field_I4P_3D, &
+                               load_block_field_I4P_4D, &
+                               load_block_field_I2P_0D, &
+                               load_block_field_I2P_3D, &
+                               load_block_field_I2P_4D, &
+                               load_block_field_I1P_0D, &
+                               load_block_field_I1P_3D, &
+                               load_block_field_I1P_4D    !< Load field in block.
       generic               :: save_block_field =>      &
-                               save_block_field_4D_R8P, &
-                               save_block_field_3D_R8P, &
-                               save_block_field_0D_R8P, &
-                               save_block_field_4D_R4P, &
-                               save_block_field_3D_R4P, &
-                               save_block_field_0D_R4P, &
-                               save_block_field_4D_I8P, &
-                               save_block_field_3D_I8P, &
-                               save_block_field_0D_I8P, &
-                               save_block_field_4D_I4P, &
-                               save_block_field_3D_I4P, &
-                               save_block_field_0D_I4P, &
-                               save_block_field_4D_I2P, &
-                               save_block_field_3D_I2P, &
-                               save_block_field_0D_I2P, &
-                               save_block_field_4D_I1P, &
-                               save_block_field_3D_I1P, &
-                               save_block_field_0D_I1P    !< Save field in block.
+                               save_block_field_R8P_0D, &
+                               save_block_field_R8P_3D, &
+                               save_block_field_R8P_4D, &
+                               save_block_field_R4P_0D, &
+                               save_block_field_R4P_3D, &
+                               save_block_field_R4P_4D, &
+                               save_block_field_I8P_0D, &
+                               save_block_field_I8P_3D, &
+                               save_block_field_I8P_4D, &
+                               save_block_field_I4P_0D, &
+                               save_block_field_I4P_3D, &
+                               save_block_field_I4P_4D, &
+                               save_block_field_I2P_0D, &
+                               save_block_field_I2P_3D, &
+                               save_block_field_I2P_4D, &
+                               save_block_field_I1P_0D, &
+                               save_block_field_I1P_3D, &
+                               save_block_field_I1P_4D    !< Save field in block.
       ! private methods
-      procedure, pass(self), private :: load_block_field_4D_R8P !< Load field in block, kind R8P, rank 4D.
-      procedure, pass(self), private :: save_block_field_4D_R8P !< Save field in block, kind R8P, rank 4D.
-      procedure, pass(self), private :: save_block_field_3D_R8P !< Save field in block, kind R8P, rank 3D.
-      procedure, pass(self), private :: save_block_field_0D_R8P !< Save field in block, kind R8P, rank 0D.
-      procedure, pass(self), private :: save_block_field_4D_R4P !< Save field in block, kind R4P, rank 4D.
-      procedure, pass(self), private :: save_block_field_3D_R4P !< Save field in block, kind R4P, rank 3D.
-      procedure, pass(self), private :: save_block_field_0D_R4P !< Save field in block, kind R4P, rank 0D.
-      procedure, pass(self), private :: save_block_field_4D_I8P !< Save field in block, kind I8P, rank 4D.
-      procedure, pass(self), private :: save_block_field_3D_I8P !< Save field in block, kind I8P, rank 3D.
-      procedure, pass(self), private :: save_block_field_0D_I8P !< Save field in block, kind I8P, rank 0D.
-      procedure, pass(self), private :: save_block_field_4D_I4P !< Save field in block, kind I4P, rank 4D.
-      procedure, pass(self), private :: save_block_field_3D_I4P !< Save field in block, kind I4P, rank 3D.
-      procedure, pass(self), private :: save_block_field_0D_I4P !< Save field in block, kind I4P, rank 0D.
-      procedure, pass(self), private :: save_block_field_4D_I2P !< Save field in block, kind I2P, rank 4D.
-      procedure, pass(self), private :: save_block_field_3D_I2P !< Save field in block, kind I2P, rank 3D.
-      procedure, pass(self), private :: save_block_field_0D_I2P !< Save field in block, kind I2P, rank 0D.
-      procedure, pass(self), private :: save_block_field_4D_I1P !< Save field in block, kind I1P, rank 4D.
-      procedure, pass(self), private :: save_block_field_3D_I1P !< Save field in block, kind I1P, rank 3D.
-      procedure, pass(self), private :: save_block_field_0D_I1P !< Save field in block, kind I1P, rank 0D.
+      procedure, pass(self), private :: load_block_field_R8P_0D !< Load field in block, kind R8P, rank 0D.
+      procedure, pass(self), private :: load_block_field_R8P_3D !< Load field in block, kind R8P, rank 3D.
+      procedure, pass(self), private :: load_block_field_R8P_4D !< Load field in block, kind R8P, rank 4D.
+      procedure, pass(self), private :: load_block_field_R4P_0D !< Load field in block, kind R4P, rank 0D.
+      procedure, pass(self), private :: load_block_field_R4P_3D !< Load field in block, kind R4P, rank 3D.
+      procedure, pass(self), private :: load_block_field_R4P_4D !< Load field in block, kind R4P, rank 4D.
+      procedure, pass(self), private :: load_block_field_I8P_0D !< Load field in block, kind I8P, rank 0D.
+      procedure, pass(self), private :: load_block_field_I8P_3D !< Load field in block, kind I8P, rank 3D.
+      procedure, pass(self), private :: load_block_field_I8P_4D !< Load field in block, kind I8P, rank 4D.
+      procedure, pass(self), private :: load_block_field_I4P_0D !< Load field in block, kind I4P, rank 0D.
+      procedure, pass(self), private :: load_block_field_I4P_3D !< Load field in block, kind I4P, rank 3D.
+      procedure, pass(self), private :: load_block_field_I4P_4D !< Load field in block, kind I4P, rank 4D.
+      procedure, pass(self), private :: load_block_field_I2P_0D !< Load field in block, kind I2P, rank 0D.
+      procedure, pass(self), private :: load_block_field_I2P_3D !< Load field in block, kind I2P, rank 3D.
+      procedure, pass(self), private :: load_block_field_I2P_4D !< Load field in block, kind I2P, rank 4D.
+      procedure, pass(self), private :: load_block_field_I1P_0D !< Load field in block, kind I1P, rank 0D.
+      procedure, pass(self), private :: load_block_field_I1P_3D !< Load field in block, kind I1P, rank 3D.
+      procedure, pass(self), private :: load_block_field_I1P_4D !< Load field in block, kind I1P, rank 4D.
+      procedure, pass(self), private :: save_block_field_R8P_0D !< Save field in block, kind R8P, rank 0D.
+      procedure, pass(self), private :: save_block_field_R8P_3D !< Save field in block, kind R8P, rank 3D.
+      procedure, pass(self), private :: save_block_field_R8P_4D !< Save field in block, kind R8P, rank 4D.
+      procedure, pass(self), private :: save_block_field_R4P_0D !< Save field in block, kind R4P, rank 0D.
+      procedure, pass(self), private :: save_block_field_R4P_3D !< Save field in block, kind R4P, rank 3D.
+      procedure, pass(self), private :: save_block_field_R4P_4D !< Save field in block, kind R4P, rank 4D.
+      procedure, pass(self), private :: save_block_field_I8P_0D !< Save field in block, kind I8P, rank 0D.
+      procedure, pass(self), private :: save_block_field_I8P_3D !< Save field in block, kind I8P, rank 3D.
+      procedure, pass(self), private :: save_block_field_I8P_4D !< Save field in block, kind I8P, rank 4D.
+      procedure, pass(self), private :: save_block_field_I4P_0D !< Save field in block, kind I4P, rank 0D.
+      procedure, pass(self), private :: save_block_field_I4P_3D !< Save field in block, kind I4P, rank 3D.
+      procedure, pass(self), private :: save_block_field_I4P_4D !< Save field in block, kind I4P, rank 4D.
+      procedure, pass(self), private :: save_block_field_I2P_0D !< Save field in block, kind I2P, rank 0D.
+      procedure, pass(self), private :: save_block_field_I2P_3D !< Save field in block, kind I2P, rank 3D.
+      procedure, pass(self), private :: save_block_field_I2P_4D !< Save field in block, kind I2P, rank 4D.
+      procedure, pass(self), private :: save_block_field_I1P_0D !< Save field in block, kind I1P, rank 0D.
+      procedure, pass(self), private :: save_block_field_I1P_3D !< Save field in block, kind I1P, rank 3D.
+      procedure, pass(self), private :: save_block_field_I1P_4D !< Save field in block, kind I1P, rank 4D.
 endtype xh5f_file_object
 
+interface xh5f_file_object
+   !< Overload class name with initializer function.
+   module procedure new
+endinterface xh5f_file_object
 contains
+   ! operators
+   function new(hdf5,xdmf) result(xh5f)
+   !< Return a new initialized class instance, overload class name.
+   type(hdf5_file_object), intent(in), optional :: hdf5 !< HDF5 file handler.
+   type(xdmf_file_object), intent(in), optional :: xdmf !< XDMF file handler.
+   type(xh5f_file_object)                       :: xh5f !< XH5F file handler new instance.
+
+   if (present(hdf5)) xh5f%hdf5 = hdf5
+   if (present(xdmf)) then
+      xh5f%xdmf = xdmf
+      xh5f%with_xdmf = .true.
+   else
+      xh5f%with_xdmf = .false.
+   endif
+   endfunction new
+
    ! files methods
    subroutine close_file(self)
    !< Close XH5F file.
@@ -99,23 +152,23 @@ contains
    subroutine open_file(self, filename_hdf5, filename_xdmf, act)
    !< Open XH5F file.
    !< @NOTE MPI init must be invoked before this routine.
-   class(xh5f_file_object), intent(inout)        :: self               !< File handler.
-   character(*),            intent(in)           :: filename_hdf5      !< File name of HDF5 file.
-   character(*),            intent(in), optional :: filename_xdmf      !< File name of XDMF file.
-   character(*),            intent(in), optional :: act                !< File action ['readonly, overwrite'...].
-   character(:), allocatable                     :: blocks_group_name_ !< Name of blocks group, local var.
+   class(xh5f_file_object), intent(inout)        :: self          !< File handler.
+   character(*),            intent(in)           :: filename_hdf5 !< File name of HDF5 file.
+   character(*),            intent(in), optional :: filename_xdmf !< File name of XDMF file.
+   character(*),            intent(in), optional :: act           !< File action ['readonly, overwrite'...].
+   character(:), allocatable                     :: act_          !< File action ['readonly, overwrite'...], local var.
 
+   act_ = FILE_PARAMETERS%FILE_ACTION_READONLY ; if (present(act)) act_ = trim(adjustl(act))
    ! reset file handler
    select type(self)
    type is(xh5f_file_object)
-      ! self = xh5f_file_object()
+      self = xh5f_file_object()
    endselect
    call self%file_base_object%initialize
-   self%act = FILE_PARAMETERS%FILE_ACTION_READONLY ; if (present(act)) self%act = trim(adjustl(act))
-   call self%hdf5%open_file(filename=filename_hdf5, act=act)
+   call self%hdf5%open_file(filename=filename_hdf5, act=act_)
    if (present(filename_xdmf)) then
       self%with_xdmf = .true.
-      call self%xdmf%open_file(filename=filename_xdmf, act=act)
+      call self%xdmf%open_file(filename=filename_xdmf, act=act_)
       call self%xdmf%open_domain_tag
    else
       self%with_xdmf = .false.
@@ -267,31 +320,7 @@ contains
    endselect
    endsubroutine open_block
 
-   ! private methods
-   ! load block field
-   ! R8P
-   subroutine load_block_field_4D_R8P(self, nd, field, xdmf_field_name, hdf5_field_name)
-   !< Load field in block, kind R8P, rank 4D.
-   class(xh5f_file_object), intent(inout)        :: self            !< File handler.
-   integer(HSIZE_T),        intent(in)           :: nd(:)           !< Dataspace datasets dimensions.
-   real(R8P),               intent(inout)        :: field(:,:,:,:)  !< Field.
-   character(*),            intent(in), optional :: xdmf_field_name !< Field name in XDMF file.
-   character(*),            intent(in), optional :: hdf5_field_name !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format    !< Field format, local var.
-   character(:), allocatable                     :: field_name      !< Field name.
-
-   select case(field_format)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%load_dataset(dset_name=field_name, nd=nd, dset=field)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-   case default
-      write(stderr, '(A)') 'error: load block field error, field_format "'//field_format//'" unknown'
-      call MPI_FINALIZE(self%error)
-      stop
-   endselect
-   endsubroutine load_block_field_4D_R8P
-
-   ! save block field
+   ! load/save block field
    subroutine save_block_field_xdmf_tags(self,number_type,number_precision,dataitem_content, &
                                          xdmf_field_name,field_format,nd,field_center)
    !< Save field in block, only XDMF tags.
@@ -337,628 +366,63 @@ contains
       call self%xdmf%close_attribute_tag
    endif
    endsubroutine save_block_field_xdmf_tags
+#define KKP R8P
+#define VARTYPE real
+#define LOAD_BLOCK_FIELD_KKP_0D load_block_field_R8P_0D
+#define LOAD_BLOCK_FIELD_KKP_3D load_block_field_R8P_3D
+#define LOAD_BLOCK_FIELD_KKP_4D load_block_field_R8P_4D
+#define SAVE_BLOCK_FIELD_KKP_0D save_block_field_R8P_0D
+#define SAVE_BLOCK_FIELD_KKP_3D save_block_field_R8P_3D
+#define SAVE_BLOCK_FIELD_KKP_4D save_block_field_R8P_4D
+#include "motion_xh5f_load_save_block_field_agnostic.INC"
 
-   ! R8P
-   subroutine save_block_field_4D_R8P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind R8P, rank 4D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)           :: field(:,:,:,:)   !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
+#define KKP R4P
+#define VARTYPE real
+#define LOAD_BLOCK_FIELD_KKP_0D load_block_field_R4P_0D
+#define LOAD_BLOCK_FIELD_KKP_3D load_block_field_R4P_3D
+#define LOAD_BLOCK_FIELD_KKP_4D load_block_field_R4P_4D
+#define SAVE_BLOCK_FIELD_KKP_0D save_block_field_R4P_0D
+#define SAVE_BLOCK_FIELD_KKP_3D save_block_field_R4P_3D
+#define SAVE_BLOCK_FIELD_KKP_4D save_block_field_R4P_4D
+#include "motion_xh5f_load_save_block_field_agnostic.INC"
 
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_4D_R8P
+#define KKP I8P
+#define VARTYPE integer
+#define LOAD_BLOCK_FIELD_KKP_0D load_block_field_I8P_0D
+#define LOAD_BLOCK_FIELD_KKP_3D load_block_field_I8P_3D
+#define LOAD_BLOCK_FIELD_KKP_4D load_block_field_I8P_4D
+#define SAVE_BLOCK_FIELD_KKP_0D save_block_field_I8P_0D
+#define SAVE_BLOCK_FIELD_KKP_3D save_block_field_I8P_3D
+#define SAVE_BLOCK_FIELD_KKP_4D save_block_field_I8P_4D
+#include "motion_xh5f_load_save_block_field_agnostic.INC"
 
-   subroutine save_block_field_3D_R8P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind R8P, rank 3D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   real(R8P),               intent(in)           :: field(:,:,:)     !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
+#define KKP I4P
+#define VARTYPE integer
+#define LOAD_BLOCK_FIELD_KKP_0D load_block_field_I4P_0D
+#define LOAD_BLOCK_FIELD_KKP_3D load_block_field_I4P_3D
+#define LOAD_BLOCK_FIELD_KKP_4D load_block_field_I4P_4D
+#define SAVE_BLOCK_FIELD_KKP_0D save_block_field_I4P_0D
+#define SAVE_BLOCK_FIELD_KKP_3D save_block_field_I4P_3D
+#define SAVE_BLOCK_FIELD_KKP_4D save_block_field_I4P_4D
+#include "motion_xh5f_load_save_block_field_agnostic.INC"
 
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_3D_R8P
+#define KKP I2P
+#define VARTYPE integer
+#define LOAD_BLOCK_FIELD_KKP_0D load_block_field_I2P_0D
+#define LOAD_BLOCK_FIELD_KKP_3D load_block_field_I2P_3D
+#define LOAD_BLOCK_FIELD_KKP_4D load_block_field_I2P_4D
+#define SAVE_BLOCK_FIELD_KKP_0D save_block_field_I2P_0D
+#define SAVE_BLOCK_FIELD_KKP_3D save_block_field_I2P_3D
+#define SAVE_BLOCK_FIELD_KKP_4D save_block_field_I2P_4D
+#include "motion_xh5f_load_save_block_field_agnostic.INC"
 
-   subroutine save_block_field_0D_R8P(self, xdmf_field_name, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind R8P, rank 0D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   real(R8P),               intent(in)           :: field            !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[1_HSIZE_T])
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(field))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_0D_R8P
-
-   ! R4P
-   subroutine save_block_field_4D_R4P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind R4P, rank 4D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)           :: field(:,:,:,:)   !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_4, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_4D_R4P
-
-   subroutine save_block_field_3D_R4P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind R4P, rank 3D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   real(R4P),               intent(in)           :: field(:,:,:)     !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_4, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_3D_R4P
-
-   subroutine save_block_field_0D_R4P(self, xdmf_field_name, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind R4P, rank 0D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   real(R4P),               intent(in)           :: field            !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[1_HSIZE_T])
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(field))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_4, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_0D_R4P
-
-   ! I8P
-   subroutine save_block_field_4D_I8P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I8P, rank 4D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)           :: field(:,:,:,:)   !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_4D_I8P
-
-   subroutine save_block_field_3D_I8P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I8P, rank 3D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   integer(I8P),            intent(in)           :: field(:,:,:)     !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_3D_I8P
-
-   subroutine save_block_field_0D_I8P(self, xdmf_field_name, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I8P, rank 0D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(I8P),            intent(in)           :: field            !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[1_HSIZE_T])
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(field))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_0D_I8P
-
-   ! I4P
-   subroutine save_block_field_4D_I4P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I4P, rank 4D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)           :: field(:,:,:,:)   !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_4, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_4D_I4P
-
-   subroutine save_block_field_3D_I4P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I4P, rank 3D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   integer(I4P),            intent(in)           :: field(:,:,:)     !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_4, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_3D_I4P
-
-   subroutine save_block_field_0D_I4P(self, xdmf_field_name, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I4P, rank 0D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(I4P),            intent(in)           :: field            !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[1_HSIZE_T])
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(field))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_4, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_0D_I4P
-
-   ! I2P
-   subroutine save_block_field_4D_I2P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I2P, rank 4D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)           :: field(:,:,:,:)   !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_2, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_4D_I2P
-
-   subroutine save_block_field_3D_I2P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I2P, rank 3D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   integer(I2P),            intent(in)           :: field(:,:,:)     !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_2, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_3D_I2P
-
-   subroutine save_block_field_0D_I2P(self, xdmf_field_name, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I2P, rank 0D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(I2P),            intent(in)           :: field            !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[1_HSIZE_T])
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(field))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_2, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_0D_I2P
-
-   ! I1P
-   subroutine save_block_field_4D_I1P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I1P, rank 4D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)           :: field(:,:,:,:)   !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_1, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_4D_I1P
-
-   subroutine save_block_field_3D_I1P(self, xdmf_field_name, nd, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I1P, rank 3D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(HSIZE_T),        intent(in)           :: nd(:)            !< Dataspace datasets dimensions.
-   integer(I1P),            intent(in)           :: field(:,:,:)     !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=nd)
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, nd=nd, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_1, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_3D_I1P
-
-   subroutine save_block_field_0D_I1P(self, xdmf_field_name, field, field_center, field_format, hdf5_field_name)
-   !< Save field in block, kind I1P, rank 0D.
-   class(xh5f_file_object), intent(inout)        :: self             !< File handler.
-   character(*),            intent(in)           :: xdmf_field_name  !< Field name in XDMF file.
-   integer(I1P),            intent(in)           :: field            !< Field.
-   character(*),            intent(in), optional :: field_center     !< Field center (Cell, Node, Grid...).
-   character(*),            intent(in), optional :: field_format     !< Field format, HDF, XML, Binary.
-   character(*),            intent(in), optional :: hdf5_field_name  !< Field name in HDF5 file.
-   character(:), allocatable                     :: field_format_    !< Field format, local var.
-   character(:), allocatable                     :: hdf5_field_name_ !< Field name in HDF5 file, local var.
-   character(:), allocatable                     :: dataitem_content !< Field content.
-
-   field_format_ = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF
-   if (present(field_format)) field_format_ = trim(adjustl(field_format))
-   hdf5_field_name_ = trim(adjustl(xdmf_field_name))
-   if (present(hdf5_field_name)) hdf5_field_name_ = trim(adjustl(hdf5_field_name))
-   select case(field_format_)
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
-      call self%hdf5%open_dspace(dataspace_type=HDF5_PARAMETERS%HDF5_DATASPACE_TYPE_SIMPLE, nd=[1_HSIZE_T])
-      call self%hdf5%save_dataset(dset_name=hdf5_field_name_, dset=field)
-      call self%hdf5%close_dspace
-      dataitem_content = self%hdf5%filename//':'//hdf5_field_name_
-   case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
-      dataitem_content = trim(str(field))
-   endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_INT,    &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_1, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        field_center     = field_center)
-   endsubroutine save_block_field_0D_I1P
+#define KKP I1P
+#define VARTYPE integer
+#define LOAD_BLOCK_FIELD_KKP_0D load_block_field_I1P_0D
+#define LOAD_BLOCK_FIELD_KKP_3D load_block_field_I1P_3D
+#define LOAD_BLOCK_FIELD_KKP_4D load_block_field_I1P_4D
+#define SAVE_BLOCK_FIELD_KKP_0D save_block_field_I1P_0D
+#define SAVE_BLOCK_FIELD_KKP_3D save_block_field_I1P_3D
+#define SAVE_BLOCK_FIELD_KKP_4D save_block_field_I1P_4D
+#include "motion_xh5f_load_save_block_field_agnostic.INC"
 endmodule motion_xh5f_file_object

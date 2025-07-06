@@ -21,10 +21,10 @@ type(file_parameters_object), parameter :: FILE_PARAMETERS=file_parameters_objec
 
 type :: file_base_object
    !< Abstract file object class.
-   type(string)   :: filename           !< File name.
-   integer(I4P)   :: procs_number=1_I4P !< Number of MPI processes.
-   integer(I4P)   :: myrank=0_I4P       !< MPI ID process.
-   integer(I4P)   :: error=0_I4P        !< IO Error status.
+   type(string) :: filename           !< File name.
+   integer(I4P) :: procs_number=1_I4P !< Number of MPI processes.
+   integer(I4P) :: myrank=0_I4P       !< MPI ID process.
+   integer(I4P) :: error=0_I4P        !< IO Error status.
    contains
       ! public methods
       procedure, pass(self) :: initialize !< Initialize file class.
