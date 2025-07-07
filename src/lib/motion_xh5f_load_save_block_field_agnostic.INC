@@ -86,11 +86,11 @@
    case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
       dataitem_content = trim(str(field))
    endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
+   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_VARTYPE,  &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_KKP, &
+                                        dataitem_content = dataitem_content,                                   &
+                                        xdmf_field_name  = xdmf_field_name,                                    &
+                                        field_format     = field_format,                                       &
                                         field_center     = field_center)
    endsubroutine SAVE_BLOCK_FIELD_KKP_0D
  
@@ -120,12 +120,12 @@
    case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
       dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
    endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
+   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_VARTYPE,  &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_KKP, &
+                                        dataitem_content = dataitem_content,                                   &
+                                        xdmf_field_name  = xdmf_field_name,                                    &
+                                        field_format     = field_format,                                       &
+                                        nd               = nd,                                                 &
                                         field_center     = field_center)
    endsubroutine SAVE_BLOCK_FIELD_KKP_3D
  
@@ -155,11 +155,11 @@
    case(XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_XML)
       dataitem_content = trim(str(reshape(field,[product(nd)]),separator=' '))
    endselect
-   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_FLOAT,  &
-                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_8, &
-                                        dataitem_content = dataitem_content,                                 &
-                                        xdmf_field_name  = xdmf_field_name,                                  &
-                                        field_format     = field_format,                                     &
-                                        nd               = nd,                                               &
+   call self%save_block_field_xdmf_tags(number_type      = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_TYPE_VARTYPE,  &
+                                        number_precision = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_PRECISION_KKP, &
+                                        dataitem_content = dataitem_content,                                   &
+                                        xdmf_field_name  = xdmf_field_name,                                    &
+                                        field_format     = field_format,                                       &
+                                        nd               = nd,                                                 &
                                         field_center     = field_center)
    endsubroutine SAVE_BLOCK_FIELD_KKP_4D
