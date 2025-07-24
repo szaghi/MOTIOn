@@ -287,7 +287,7 @@ contains
                                            number_format    = XDMF_PARAMETERS%XDMF_DATAITEM_NUMBER_FORMAT_HDF)
          call self%xdmf%close_geometry_tag
          call self%xdmf%write_topology_tag(topology_type=XDMF_PARAMETERS%XDMF_TOPOLOGY_TYPE_3DCORECTMESH, &
-                                           topology_dimensions=trim(str([nijk(3),nijk(2),nijk(1)],separator=' ')))
+                                           topology_dimensions=trim(str([nijk(3)+1,nijk(2)+1,nijk(1)+1],separator=' ')))
       endif
    case(XH5F_PARAMETERS%XH5F_BLOCK_CURVILINEAR)
       if ((.not.present(nijk)).or.(.not.present(nodes))) then
