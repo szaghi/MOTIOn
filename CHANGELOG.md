@@ -1,4 +1,9 @@
 # Changelog
+## [v0.0.4](https://github.com/szaghi/FLAP/tree/v0.0.4) (2026-02-22)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.3...v0.0.4)
+### Miscellaneous
+- Track pre-built hdf5 1.14.6 libraries in git ([`cfa56a3`](https://github.com/szaghi/FLAP/commit/cfa56a335ce080efe7ce08899dbf8f1315279f8d))
+
 ## [v0.0.3](https://github.com/szaghi/FLAP/tree/v0.0.3) (2026-02-22)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.2...v0.0.3)
 ### Bug fixes
