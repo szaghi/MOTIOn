@@ -1,4 +1,9 @@
 # Changelog
+## [v0.0.5](https://github.com/szaghi/FLAP/tree/v0.0.5) (2026-02-22)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.4...v0.0.5)
+### Bug fixes
+- Replace dead relative link with absolute github url ([`4c713e6`](https://github.com/szaghi/FLAP/commit/4c713e6616e4de7e44a495b7acfd79807c54c5f1))
+
 ## [v0.0.4](https://github.com/szaghi/FLAP/tree/v0.0.4) (2026-02-22)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.3...v0.0.4)
 ### Miscellaneous
