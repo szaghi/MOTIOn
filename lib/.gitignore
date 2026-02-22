@@ -1,0 +1,6 @@
+# Pre-built libraries in this tree must be versioned.
+# Override the root .gitignore patterns that would otherwise exclude them.
+!*.a
+!*.la
+!*.mod
+!*.so
