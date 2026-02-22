@@ -1,7 +1,13 @@
 # Changelog
+## [v0.0.2](https://github.com/szaghi/FLAP/tree/v0.0.2) (2026-02-22)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.1...v0.0.2)
+### Bug fixes
+- Add openmpi to setup-build-env action ([`d5eaad9`](https://github.com/szaghi/FLAP/commit/d5eaad9cd18339aea24203ef98d866f960245a52))
+
 ## [v0.0.1](https://github.com/szaghi/FLAP/tree/v0.0.1) (2026-02-22)
 ### Bug fixes
 - Fix bug on dataitem number type/precision ([`b268a29`](https://github.com/szaghi/FLAP/commit/b268a29d3daa85ff4e9aa6e01e51a1109523a2f4))
+- Fix bug in dimensions of uniform cartesian grid ([`b5af7d2`](https://github.com/szaghi/FLAP/commit/b5af7d2dd2e44e3abe3184ba157dc1cb78732473))
 
 ### Miscellaneous
 - Init ([`777ccbd`](https://github.com/szaghi/FLAP/commit/777ccbdce64ae2ca00f708cb0d6101d97cc16d5f))
@@ -16,6 +22,6 @@
 - Minor clean ([`d606853`](https://github.com/szaghi/FLAP/commit/d606853d882d71458a803bc7902cc011b55e3d54))
 - Add update submodules script ([`c4b335a`](https://github.com/szaghi/FLAP/commit/c4b335a7efc95543138b1544daf7ddb83dfd6d6d))
 - Add pre-built hdf5 with NVF sdk and agnostic implementation ([`3742397`](https://github.com/szaghi/FLAP/commit/37423973a71f04d1fd9f6b54b840a60e659a407c))
-- Bootstrap project infrastructure and documentation site ([`0b60c07`](https://github.com/szaghi/FLAP/commit/0b60c0771c58067deef4320ab9fc78e154aba36b))
+- Bootstrap project infrastructure and documentation site ([`4ec96ec`](https://github.com/szaghi/FLAP/commit/4ec96ec28da2962ed38ba8ecf1232ef0877d3ba5))
 
 
