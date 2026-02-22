@@ -1,4 +1,9 @@
 # Changelog
+## [v0.0.6](https://github.com/szaghi/FLAP/tree/v0.0.6) (2026-02-22)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.5...v0.0.6)
+### Documentation
+- Overhaul README, add landing page icons, fix release workflow ([`2c1da51`](https://github.com/szaghi/FLAP/commit/2c1da5122ddea952031b261dc155d26bdb8f59a6))
+
 ## [v0.0.5](https://github.com/szaghi/FLAP/tree/v0.0.5) (2026-02-22)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.4...v0.0.5)
 ### Bug fixes
