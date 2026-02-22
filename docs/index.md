@@ -71,7 +71,7 @@ call xh5f%close_file
 ```
 
 In the above (incomplete) example (see the full source
-[here](src/tests/motion_write_xdmf_file_test.F90)) a set of HDF5 files are
+[here](https://github.com/szaghi/MOTIOn/blob/main/src/tests/motion_write_xdmf_file_test.F90)) a set of HDF5 files are
 created, one for each MPI processes used, as well as one XDMF file describing
 the data contained into all HDF5 files. Each MPI process generates its own HDF5
 file (in parallel and asyncronously) containing the data of the grids/fields
