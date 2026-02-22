@@ -40,6 +40,7 @@ jobs:
 
     - name: Download coverage analysis report
       uses: actions/download-artifact@v4
+      continue-on-error: true  # artifact absent when coverage job failed; fall back to committed file
       with:
         name: coverage-analysis-report
         path: docs/guide/
