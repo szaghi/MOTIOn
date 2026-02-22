@@ -17,17 +17,21 @@ hero:
       link: https://github.com/szaghi/MOTIOn
 
 features:
-  - title: High-level XH5F API
+  - icon: 🚀
+    title: High-level XH5F API
     details: Single unified object that coordinates HDF5 data files and XDMF metadata in one call. MPI master/worker branching is handled transparently — no explicit rank checks in your code.
-  - title: Three grid topologies
+  - icon: 🗺️
+    title: Three grid topologies
     details: Cartesian uniform (origin + spacing), Cartesian (per-axis node arrays), and Curvilinear (full 3-D node coordinate arrays) out of the box.
-  - title: All Fortran kinds
+  - icon: 🔢
+    title: All Fortran kinds
     details: save_block_field and load_block_field are overloaded for R8P, R4P, I8P, I4P, I2P, and I1P — scalars, 3-D fields, vectors, tensors, tensor6, and matrix shapes.
-  - title: Low-level HDF5 and XDMF APIs
+  - icon: 🔧
+    title: Low-level HDF5 and XDMF APIs
     details: hdf5_file_object and xdmf_file_object give fine-grained control over dataspaces, attributes, geometries, and topologies when the high-level API is not enough.
   - icon: 🧪
     title: OOP / TDD Designed
-    details: Three clean types — file_stl_object, surface_stl_object, facet_object — each tested individually.
+    details: Three clean layers — file_base_object, format-specific objects (hdf5_file_object, xdmf_file_object), and the high-level xh5f_file_object — each tested individually.
   - icon: 🆓
     title: Free & Open Source
     details: Multi-licensed — GPLv3 for FOSS projects, BSD 2/3-Clause or MIT for commercial use. Fortran 2003+ standard compliant.
