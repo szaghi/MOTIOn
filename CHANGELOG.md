@@ -1,4 +1,9 @@
 # Changelog
+## [v0.0.3](https://github.com/szaghi/FLAP/tree/v0.0.3) (2026-02-22)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.2...v0.0.3)
+### Bug fixes
+- Skip artifact download when coverage job fails ([`64e4b93`](https://github.com/szaghi/FLAP/commit/64e4b93b7cad206a053a938d83a3f508be20b4ee))
+
 ## [v0.0.2](https://github.com/szaghi/FLAP/tree/v0.0.2) (2026-02-22)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.1...v0.0.2)
 ### Bug fixes
