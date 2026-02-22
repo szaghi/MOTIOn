@@ -19,6 +19,11 @@ $DEBUG_NVF     = -C -gopt -Mbounds -traceback
 $OPTIMIZE      = -O2
 $HDF5_NVF_25_3 = lib/hdf5/1.14.6/nvf/25.3
 $HDF5_GNU_14_2 = lib/hdf5/1.14.6/gnu/14.2.0
+$EXDIRS        = BeFoR64/src/tests/ BeFoR64/src/third_party/
+                 FACE/src/tests/ FACE/src/third_party/
+                 FoXy/src/tests/ FoXy/src/third_party/
+                 PENF/src/tests/ PENF/src/third_party/
+                 StringiFor/src/tests/ StringiFor/src/third_party/
 
 # main modes
 [shared-gnu]
@@ -67,15 +72,15 @@ build_dir = ./exe/
 
 #templates
 [template-base]
-mpi               = True
-mod_dir           = ./mod/
-obj_dir           = ./obj/
-src               = ./src/
-colors            = True
-quiet             = False
-log               = True
-jobs              = 4
-cflags_heritage   = True
+mpi          = True
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+exclude_dirs = $EXDIRS
+colors       = True
+quiet        = False
+log          = True
+jobs         = 4
 
 [template-shared-gnu]
 template = template-base
@@ -144,15 +149,13 @@ lib_dir  = $HDF5_NVF_25_3/lib
 include  = $HDF5_NVF_25_3/include
 
 [rule-makedoc]
-help   = Build documentation from source files
-rule_1 = rm -rf doc/html/*
-rule_2 = ford doc/main_page.md --debug
-rule_3 = cp -r doc/html/publish/* doc/html/
-rule_4 = rm -rf doc/html/publish
+help   = Build documentation with formal + VitePress
+rule_1 = formal generate --mirror-sources --diagrams --project docs/ford.md --output docs/api
+rule_2 = cd docs && npm ci && npm run docs:build
 
 [rule-deldoc]
-help = Delete documentation
-rule = rm -rf doc/html/*
+help = Delete documentation build artifacts
+rule = rm -rf docs/.vitepress/dist/ docs/.vitepress/cache/ docs/api/
 
 [rule-delexe]
 help = Delete exes
@@ -170,11 +173,14 @@ rule = tar --xform="s%^%MOTIOn/%" -czf MOTIOn.tar.gz *
 
 [rule-makecoverage]
 help   = Perform coverage analysis
-rule_1 = FoBiS.py doctests -mode tests-gnu-debug -keep_volatile_doctests -coverage -profile
-rule_2 = gcov -o exe/obj/*gcda
+rule_1 = FoBiS.py clean -mode tests-gnu-debug
+rule_2 = FoBiS.py build -mode tests-gnu-debug -coverage
+rule_3 = NP=1 ./scripts/run_tests.sh
+rule_4 = rm -f exe/obj/befor64* exe/obj/face* exe/obj/foxy* exe/obj/penf* exe/obj/stringifor*
+rule_5 = gcov -o exe/obj/ src/lib/motion*.F90
 
 [rule-makecoverage-analysis]
 help   = Perform coverage analysis and saving reports in markdown
 rule_1 = FoBiS.py rule -ex makecoverage
-rule_2 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis -verbose
+rule_2 = FoBiS.py rule -gcov_analyzer docs/guide/ coverage-analysis
 rule_3 = rm -f *.gcov

@@ -32,3 +32,8 @@ get_automatic_changelog.sh
 
 # mac
 .DS_Store
+
+# VitePress
+docs/node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/

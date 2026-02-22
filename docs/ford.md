@@ -1,3 +1,4 @@
+---
 project: MOTIOn
 src_dir: ../src
 output_dir: html/publish/
@@ -15,7 +16,5 @@ display: public
          private
 source: true
 warn: true
-graph: true
 extra_mods: iso_fortran_env:https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html
-
-{!../README.md!}
+---
