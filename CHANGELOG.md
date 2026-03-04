@@ -1,4 +1,12 @@
 # Changelog
+## [v0.0.7](https://github.com/szaghi/FLAP/tree/v0.0.7) (2026-03-04)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.6...v0.0.7)
+### Build system
+- Migrate from git submodules to FoBiS.py fetch ([`f50f229`](https://github.com/szaghi/FLAP/commit/f50f229b49d3bee5da82d01b3f990358e98252d0))
+
+### Documentation
+- Overhaul README to match FOSSIL style conventions ([`577983f`](https://github.com/szaghi/FLAP/commit/577983fbcaf35ad745dfa1602f6a44d6a80fa146))
+
 ## [v0.0.6](https://github.com/szaghi/FLAP/tree/v0.0.6) (2026-02-22)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.5...v0.0.6)
 ### Documentation
