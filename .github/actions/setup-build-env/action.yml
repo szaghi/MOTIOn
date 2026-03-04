@@ -27,13 +27,6 @@ runs:
           --slave   /usr/bin/gfortran gfortran /usr/bin/gfortran-${{ inputs.gcc-version }} \
           --slave   /usr/bin/gcov     gcov     /usr/bin/gcov-${{ inputs.gcc-version }}
 
-    - name: Install OpenMPI
-      shell: bash
-      run: |
-        sudo apt install -y \
-          libopenmpi-dev \
-          openmpi-bin
-
     - name: Install Python tools
       shell: bash
       run: |
@@ -48,8 +41,6 @@ runs:
       run: |
         gfortran --version
         gcov --version
-        mpif90 --version
-        mpirun --version
         python --version
         FoBiS.py --version
         ford --version

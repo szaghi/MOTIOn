@@ -93,6 +93,37 @@ pie showData
 ```
 
 
+#### [[motion_write_xdmf_file_test.F90.gcov]]
+
+|Lines| | |
+| --- | --- | --- |
+|Executable lines            |109| |
+|Executed lines              |98|90%|
+|Unexecuted lines            |11|10%|
+|Average hits / executed     |60535.295918367345| |
+
+```mermaid
+pie showData
+    title Lines (90% covered)
+    "Executed" : 98
+    "Unexecuted" : 11
+```
+
+|Procedures| | |
+| --- | --- | --- |
+|Total procedures            |1| |
+|Executed procedures         |1|100%|
+|Unexecuted procedures       |0|0%|
+|Average hits / executed     |3.0| |
+
+```mermaid
+pie showData
+    title Procedures (100% covered)
+    "Executed" : 1
+    "Unexecuted" : 0
+```
+
+
 #### [[motion_xdmf_file_object.F90.gcov]]
 
 |Lines| | |

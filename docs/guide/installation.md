@@ -17,24 +17,27 @@ Pre-built HDF5 1.14.6 libraries are included in the repository under `lib/hdf5/1
 
 ## Download
 
-MOTIOn uses git submodules for its third-party dependencies. Clone recursively:
+Clone the repository, then fetch the third-party dependencies via FoBiS.py:
 
 ```bash
-git clone https://github.com/szaghi/MOTIOn --recursive
+git clone https://github.com/szaghi/MOTIOn
 cd MOTIOn
+FoBiS.py fetch
 ```
 
-If you already have a non-recursive clone:
+`FoBiS.py fetch` reads `src/third_party/.deps_config.ini` and downloads the required libraries into `src/third_party/`.
+
+Alternatively, use the provided convenience script (supports both `git` and `wget` workflows):
 
 ```bash
-./scripts/update_submodules.sh
-# or equivalently:
-git submodule update --init --recursive
+./scripts/install.sh --download git --build fobis
 ```
+
+Run `./scripts/install.sh --help` for all options.
 
 ### Third-party dependencies
 
-The submodules live under `src/third_party/`:
+The dependencies are placed under `src/third_party/`:
 
 | Library | Purpose |
 |---------|---------|
@@ -88,9 +91,11 @@ FoBiS.py build -mode tests-gnu-debug
 # Build tests (NVIDIA Fortran, release)
 FoBiS.py build -mode tests-nvf
 
-# Run all tests
-./scripts/run_tests.sh          # uses 2 MPI ranks by default
-NP=4 ./scripts/run_tests.sh    # override rank count
+# Run all tests (serial)
+./scripts/run_tests.sh
+
+# Run all tests via MPI with N ranks
+./scripts/run_tests.sh --np 2
 ```
 
 Compiled test executables are placed in `./exe/`.

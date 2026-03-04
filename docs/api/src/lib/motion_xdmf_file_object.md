@@ -220,7 +220,7 @@ classDiagram
 
 Overload class name with initializer function.
 
-**Module procedures**: [`new`](/api/src/lib/motion_hdf5_file_object#new)
+**Module procedures**: [`new`](/api/src/lib/motion_xdmf_file_object#new)
 
 ## Subroutines
 
