@@ -1,4 +1,9 @@
 # Changelog
+## [v0.0.10](https://github.com/szaghi/FLAP/tree/v0.0.10) (2026-03-04)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.9...v0.0.10)
+### Bug fixes
+- Sparse-checkout action files so local action resolves without full clone ([`4d9b7e6`](https://github.com/szaghi/FLAP/commit/4d9b7e6464ac2a136dfabb772459d8a1fef3c37b))
+
 ## [v0.0.9](https://github.com/szaghi/FLAP/tree/v0.0.9) (2026-03-04)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.8...v0.0.9)
 ### CI/CD
