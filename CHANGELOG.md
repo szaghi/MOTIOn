@@ -1,4 +1,9 @@
 # Changelog
+## [v0.0.9](https://github.com/szaghi/FLAP/tree/v0.0.9) (2026-03-04)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.8...v0.0.9)
+### CI/CD
+- Use setup-build-env action instead of bare pip install ([`3d4f234`](https://github.com/szaghi/FLAP/commit/3d4f23410e06238b5ec61d87898fb6d0cf63870b))
+
 ## [v0.0.8](https://github.com/szaghi/FLAP/tree/v0.0.8) (2026-03-04)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.7...v0.0.8)
 ### CI/CD
