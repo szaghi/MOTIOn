@@ -16,8 +16,8 @@ jobs:
       TAG: ${{ github.event.workflow_run.head_branch }}
 
     steps:
-    - name: Install FoBiS.py
-      run: pip install FoBiS.py
+    - name: Setup build environment
+      uses: ./.github/actions/setup-build-env
 
     - name: INSTALL SCRIPT + fobis
       run: |
