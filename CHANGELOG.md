@@ -1,4 +1,9 @@
 # Changelog
+## [v0.0.8](https://github.com/szaghi/FLAP/tree/v0.0.8) (2026-03-04)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.7...v0.0.8)
+### CI/CD
+- Restore openmpi install and version checks ([`ee631be`](https://github.com/szaghi/FLAP/commit/ee631be00b12e8aa6e9aed4b5c2bdb89bd2cd4ba))
+
 ## [v0.0.7](https://github.com/szaghi/FLAP/tree/v0.0.7) (2026-03-04)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.6...v0.0.7)
 ### Build system
