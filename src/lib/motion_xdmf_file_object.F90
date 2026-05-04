@@ -692,10 +692,8 @@ contains
 
    ! gather all async tags lengths
    my_async_tags_len = self%async_tags%len()
-   if (self%myrank == 0_I4P) then
-      allocate(recvcounts(self%procs_number))
-      allocate(offset(self%procs_number))
-   endif
+   allocate(recvcounts(self%procs_number))
+   allocate(offset(self%procs_number))
    call MPI_GATHER(my_async_tags_len, 1_I4P, MPI_INTEGER, recvcounts, 1_I4P, MPI_INTEGER, 0_I4P, MPI_COMM_WORLD, self%error)
    ! compute offset and total lenght of receive buffer
    if (self%myrank == 0_I4P) then
@@ -706,6 +704,8 @@ contains
          all_async_tags_len = all_async_tags_len + recvcounts(i)
       enddo
       allocate(character(len=all_async_tags_len) :: recvbuf)
+   else
+      allocate(character(len=1) :: recvbuf)
    endif
    ! gather async tags
    call MPI_GATHERV(self%async_tags%chars(), my_async_tags_len, MPI_CHARACTER, &
