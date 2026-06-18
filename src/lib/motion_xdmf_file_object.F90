@@ -115,7 +115,7 @@ type, extends(file_base_object) :: xdmf_file_object
    integer(I4P)   :: xml=0_I4P        !< XML Logical unit.
    type(xml_tag)  :: tag              !< XML tags handler.
    logical        :: is_async=.false. !< Asyncronous saving.
-   type(string)   :: async_tags       !< Asyncronous tags data.
+   type(string)   :: async_tags=string() !< Asyncronous tags data.
    type(xml_file) :: dom              !< XMDF file parsed as linearized DOM.
    contains
       ! public methods
