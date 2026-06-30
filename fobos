@@ -201,3 +201,6 @@ help   = Perform coverage analysis and saving reports in markdown
 rule_1 = FoBiS.py rule -ex makecoverage
 rule_2 = FoBiS.py rule --gcov-analyzer docs/guide/ --gcov-analyzer coverage-analysis
 rule_3 = rm -f *.gcov
+
+[scaffold]
+apt_packages = libopenmpi-dev openmpi-bin

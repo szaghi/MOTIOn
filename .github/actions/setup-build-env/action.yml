@@ -21,18 +21,13 @@ runs:
         sudo apt install -y \
           gcc-${{ inputs.gcc-version }} \
           gfortran-${{ inputs.gcc-version }} \
-          g++-${{ inputs.gcc-version }}
+          g++-${{ inputs.gcc-version }} \
+          libopenmpi-dev \
+          openmpi-bin
         sudo update-alternatives \
           --install /usr/bin/gcc     gcc     /usr/bin/gcc-${{ inputs.gcc-version }}     100 \
           --slave   /usr/bin/gfortran gfortran /usr/bin/gfortran-${{ inputs.gcc-version }} \
           --slave   /usr/bin/gcov     gcov     /usr/bin/gcov-${{ inputs.gcc-version }}
-
-    - name: Install OpenMPI
-      shell: bash
-      run: |
-        sudo apt install -y \
-          libopenmpi-dev \
-          openmpi-bin
 
     - name: Install Python tools
       shell: bash
@@ -48,8 +43,6 @@ runs:
       run: |
         gfortran --version
         gcov --version
-        mpif90 --version
-        mpirun --version
         python --version
         FoBiS.py --version
         ford --version
