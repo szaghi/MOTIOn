@@ -38,7 +38,7 @@ $HDF5_NVF_25_3 = lib/hdf5/1.14.6/nvf/25.3
 $HDF5_GNU_14_2 = lib/hdf5/1.14.6/gnu/14.2.0
 $EXDIRS        = BeFoR64/src/tests/ BeFoR64/src/third_party/ BeFoR64/docs/
                  FACE/src/tests/ FACE/src/third_party/ FACE/docs/
-                 FoXy/src/tests/ FoXy/src/third_party/ FoXy/docs/
+                 FoXy/src/tests/ FoXy/src/third_party/ FoXy/docs/ FoXy/benchmarks/
                  PENF/src/tests/ PENF/src/third_party/ PENF/docs/
                  StringiFor/src/tests/ StringiFor/src/third_party/ StringiFor/docs/
 
