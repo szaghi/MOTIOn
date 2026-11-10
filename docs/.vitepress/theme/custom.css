@@ -1,0 +1,114 @@
+/* MOTIOn · Mitsudomoe in Kujaku 孔雀 — Sumi family tokens for VitePress.
+   Paper is :root, night is .dark. Every text pair is at least 4.5:1 on its ground. */
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --vp-font-family-base: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --motion-font-display: 'Shippori Mincho', 'Hiragino Mincho ProN', serif;
+  /* ground */
+  --vp-c-bg: #eff6f4;
+  --vp-c-bg-alt: #e6efec;
+  --vp-c-bg-elv: #f8fcfb;
+  --vp-c-bg-soft: #e6efec;
+  --vp-c-divider: #d2e3df;
+  --vp-c-gutter: #d2e3df;
+  --vp-c-border: #73908a;
+  /* ink */
+  --vp-c-text-1: #0c1c1a;
+  --vp-c-text-2: #46605b;
+  --vp-c-text-3: #46605b;
+  /* teal: links, active nav, primary button */
+  --vp-c-brand-1: #00796b;
+  --vp-c-brand-2: #005f54;
+  --vp-c-brand-3: #00796b;
+  --vp-c-brand-soft: rgba(0, 137, 123, 0.14);
+  --vp-button-brand-bg: #00796b;
+  --vp-button-brand-border: #00796b;
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-hover-bg: #005f54;
+  --vp-button-brand-hover-border: #005f54;
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-active-bg: #005f54;
+  --vp-button-brand-active-border: #005f54;
+  --vp-button-brand-active-text: #ffffff;
+  --vp-button-alt-border: #73908a;
+  /* violet: the seal, fills only, never text */
+  --motion-seal: #7b3fd1;
+  --motion-comma: #00897b;
+  --motion-focus: #0c1c1a;
+  --vp-home-hero-name-color: #0c1c1a;
+  --vp-code-block-bg: #e6efec;
+  /* no glow behind the mark: the ink carries it */
+  --vp-home-hero-image-background-image: none;
+  --vp-home-hero-image-filter: none;
+}
+
+.dark {
+  /* ground */
+  --vp-c-bg: #041210;
+  --vp-c-bg-alt: #020c0b;
+  --vp-c-bg-elv: #0a1d1a;
+  --vp-c-bg-soft: #020c0b;
+  --vp-c-divider: #163330;
+  --vp-c-gutter: #163330;
+  --vp-c-border: #5f9089;
+  /* ink */
+  --vp-c-text-1: #e3f7f3;
+  --vp-c-text-2: #9cc2bb;
+  --vp-c-text-3: #9cc2bb;
+  /* teal: links, active nav, primary button */
+  --vp-c-brand-1: #3ff0d4;
+  --vp-c-brand-2: #00b39a;
+  --vp-c-brand-3: #00e0c0;
+  --vp-c-brand-soft: rgba(0, 224, 192, 0.14);
+  --vp-button-brand-bg: #00e0c0;
+  --vp-button-brand-border: #00e0c0;
+  --vp-button-brand-text: #041210;
+  --vp-button-brand-hover-bg: #00b39a;
+  --vp-button-brand-hover-border: #00b39a;
+  --vp-button-brand-hover-text: #041210;
+  --vp-button-brand-active-bg: #00b39a;
+  --vp-button-brand-active-border: #00b39a;
+  --vp-button-brand-active-text: #041210;
+  --vp-button-alt-border: #5f9089;
+  /* violet: the seal, fills only, never text */
+  --motion-seal: #b98aff;
+  --motion-comma: #00e0c0;
+  --motion-focus: #b98aff;
+  --vp-home-hero-name-color: #e3f7f3;
+  --vp-code-block-bg: #020c0b;
+}
+
+/* names in the display face, tracked wide */
+.VPNavBarTitle .title,
+.VPHero .name,
+.VPHero .name .clip {
+  font-family: var(--motion-font-display);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.VPHero .name .clip {
+  background: none;
+  -webkit-text-fill-color: var(--vp-home-hero-name-color);
+  color: var(--vp-home-hero-name-color);
+}
+
+/* the mark in the hero: square, no shadow */
+.VPHero .image-src {
+  max-width: 320px;
+  max-height: 320px;
+}
+
+/* feature icons are drawn at 24 units: show them at 44 px, no tile */
+.VPFeature .icon {
+  width: 52px;
+  height: 52px;
+  background-color: transparent;
+}
+
+/* keyboard focus: solid 2px ring with 2px of ground */
+:focus-visible {
+  outline: 2px solid var(--motion-focus);
+  outline-offset: 2px;
+}

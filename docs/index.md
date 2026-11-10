@@ -5,6 +5,10 @@ hero:
   name: MOTIOn
   text: Modular HPC IO for Fortran
   tagline: A pure Fortran 2003+ library providing a simple, agnostic API for parallel HDF5/XDMF IO in MPI-based HPC applications.
+  image:
+    light: /logo.svg
+    dark: /logo-dark.svg
+    alt: MOTIOn, three commas turning round one centre
   actions:
     - theme: brand
       text: Guide
@@ -17,22 +21,46 @@ hero:
       link: https://github.com/szaghi/MOTIOn
 
 features:
-  - icon: 🚀
+  - icon:
+      light: /icons/xh5f.svg
+      dark: /icons/xh5f-dark.svg
+      width: 44
+      height: 44
     title: High-level XH5F API
     details: Single unified object that coordinates HDF5 data files and XDMF metadata in one call. MPI master/worker branching is handled transparently — no explicit rank checks in your code.
-  - icon: 🗺️
+  - icon:
+      light: /icons/grids.svg
+      dark: /icons/grids-dark.svg
+      width: 44
+      height: 44
     title: Three grid topologies
     details: Cartesian uniform (origin + spacing), Cartesian (per-axis node arrays), and Curvilinear (full 3-D node coordinate arrays) out of the box.
-  - icon: 🔢
+  - icon:
+      light: /icons/kinds.svg
+      dark: /icons/kinds-dark.svg
+      width: 44
+      height: 44
     title: All Fortran kinds
     details: save_block_field and load_block_field are overloaded for R8P, R4P, I8P, I4P, I2P, and I1P — scalars, 3-D fields, vectors, tensors, tensor6, and matrix shapes.
-  - icon: 🔧
+  - icon:
+      light: /icons/lowlevel.svg
+      dark: /icons/lowlevel-dark.svg
+      width: 44
+      height: 44
     title: Low-level HDF5 and XDMF APIs
     details: hdf5_file_object and xdmf_file_object give fine-grained control over dataspaces, attributes, geometries, and topologies when the high-level API is not enough.
-  - icon: 🧪
+  - icon:
+      light: /icons/layers.svg
+      dark: /icons/layers-dark.svg
+      width: 44
+      height: 44
     title: OOP / TDD Designed
     details: Three clean layers — file_base_object, format-specific objects (hdf5_file_object, xdmf_file_object), and the high-level xh5f_file_object — each tested individually.
-  - icon: 🆓
+  - icon:
+      light: /icons/foss.svg
+      dark: /icons/foss-dark.svg
+      width: 44
+      height: 44
     title: Free & Open Source
     details: Multi-licensed — GPLv3 for FOSS projects, BSD 2/3-Clause or MIT for commercial use. Fortran 2003+ standard compliant.
 ---
@@ -105,7 +133,7 @@ Contributions are welcome — see the [Contributing](/guide/contributing) page.
 
 ## Copyrights
 
-FOSSIL is distributed under a multi-licensing system:
+MOTIOn is distributed under a multi-licensing system:
 
 | Use case | License |
 |----------|---------|
@@ -114,4 +142,4 @@ FOSSIL is distributed under a multi-licensing system:
 | Closed source / commercial | [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause) |
 | Closed source / commercial | [MIT](http://opensource.org/licenses/MIT) |
 
-> Anyone interested in using, developing, or contributing to FOSSIL is welcome — pick the license that best fits your needs.
+> Anyone interested in using, developing, or contributing to MOTIOn is welcome — pick the license that best fits your needs.

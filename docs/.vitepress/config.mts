@@ -4,6 +4,15 @@ import apiSidebar from '../api/_sidebar.json'
 export default withMermaid({
   title: 'MOTIOn Documentation',
   base: '/MOTIOn/',
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/MOTIOn/favicon.svg', media: '(prefers-color-scheme: light)' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/MOTIOn/favicon-dark.svg', media: '(prefers-color-scheme: dark)' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/MOTIOn/favicon-32.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/MOTIOn/favicon-16.png' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/MOTIOn/apple-touch-icon.png' }],
+    ['meta', { name: 'theme-color', content: '#eff6f4', media: '(prefers-color-scheme: light)' }],
+    ['meta', { name: 'theme-color', content: '#041210', media: '(prefers-color-scheme: dark)' }],
+  ],
   markdown: {
     math: true,
     languages: ['fortran-free-form', 'fortran-fixed-form'],
@@ -17,6 +26,8 @@ export default withMermaid({
     },
   },
   themeConfig: {
+    logo: { light: '/logo-nav.svg', dark: '/logo-nav-dark.svg', alt: 'MOTIOn' },
+    siteTitle: 'MOTIOn',
     nav: [
       { text: 'Home', link: '/' },
       {
