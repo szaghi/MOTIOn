@@ -68,12 +68,44 @@
         "link": "/api/src/third_party/FoXy/src/lib/foxy"
       },
       {
+        "text": "foxy_xml_entities",
+        "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_entities"
+      },
+      {
+        "text": "foxy_xml_events",
+        "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_events"
+      },
+      {
         "text": "foxy_xml_file",
         "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_file"
       },
       {
+        "text": "foxy_xml_index",
+        "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_index"
+      },
+      {
+        "text": "foxy_xml_source",
+        "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_source"
+      },
+      {
         "text": "foxy_xml_tag",
         "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_tag"
+      },
+      {
+        "text": "foxy_xml_tokenizer",
+        "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_tokenizer"
+      },
+      {
+        "text": "foxy_xml_tree",
+        "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_tree"
+      },
+      {
+        "text": "foxy_xml_values",
+        "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_values"
+      },
+      {
+        "text": "foxy_xml_writer",
+        "link": "/api/src/third_party/FoXy/src/lib/foxy_xml_writer"
       }
     ]
   },
@@ -112,8 +144,32 @@
         "link": "/api/src/third_party/StringiFor/src/lib/stringifor"
       },
       {
+        "text": "stringifor_encodings",
+        "link": "/api/src/third_party/StringiFor/src/lib/stringifor_encodings"
+      },
+      {
+        "text": "stringifor_number_tables",
+        "link": "/api/src/third_party/StringiFor/src/lib/stringifor_number_tables"
+      },
+      {
+        "text": "stringifor_numbers",
+        "link": "/api/src/third_party/StringiFor/src/lib/stringifor_numbers"
+      },
+      {
+        "text": "stringifor_regex",
+        "link": "/api/src/third_party/StringiFor/src/lib/stringifor_regex"
+      },
+      {
         "text": "stringifor_string_t",
         "link": "/api/src/third_party/StringiFor/src/lib/stringifor_string_t"
+      },
+      {
+        "text": "stringifor_unicode_tables",
+        "link": "/api/src/third_party/StringiFor/src/lib/stringifor_unicode_tables"
+      },
+      {
+        "text": "stringifor_utf8",
+        "link": "/api/src/third_party/StringiFor/src/lib/stringifor_utf8"
       }
     ]
   }

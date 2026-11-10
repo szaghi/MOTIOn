@@ -13,6 +13,8 @@ title: stringifor
 ```mermaid
 graph LR
   stringifor["stringifor"] --> penf["penf"]
+  stringifor["stringifor"] --> stringifor_encodings["stringifor_encodings"]
+  stringifor["stringifor"] --> stringifor_regex["stringifor_regex"]
   stringifor["stringifor"] --> stringifor_string_t["stringifor_string_t"]
 ```
 
@@ -72,7 +74,7 @@ Read a file as a single string stream.
 ```
 
 ```fortran
-subroutine read_file(file, lines, form, iostat, iomsg)
+subroutine read_file(file, lines, form, iostat, iomsg, skip_bom)
 ```
 
 **Arguments**
@@ -84,6 +86,7 @@ subroutine read_file(file, lines, form, iostat, iomsg)
 | `form` | character(len=*) | in | optional | Format of unit. |
 | `iostat` | integer | out | optional | IO status code. |
 | `iomsg` | character(len=*) | inout | optional | IO status message. |
+| `skip_bom` | logical | in | optional | Drop a leading UTF-8 byte order mark from the first line. |
 
 **Call graph**
 
@@ -107,10 +110,10 @@ Read lines (records) from a connected-formatted unit.
 
  @note For unformatted read only `access='stream'` is supported with new_line as line terminator.
 
- @note There is no doctests, this being tested by means of [read_file](/api/src/third_party/StringiFor/src/lib/stringifor#read-file) doctests.
+ @note There is no doctests, this being tested by means of [read_file](/api/src/third_party/StringiFor/src/lib/stringifor_string_t#read-file) doctests.
 
 ```fortran
-subroutine read_lines(unit, lines, form, iostat, iomsg)
+subroutine read_lines(unit, lines, form, iostat, iomsg, skip_bom)
 ```
 
 **Arguments**
@@ -122,6 +125,7 @@ subroutine read_lines(unit, lines, form, iostat, iomsg)
 | `form` | character(len=*) | in | optional | Format of unit. |
 | `iostat` | integer | out | optional | IO status code. |
 | `iomsg` | character(len=*) | inout | optional | IO status message. |
+| `skip_bom` | logical | in | optional | Drop a leading UTF-8 byte order mark from the first line. |
 
 **Call graph**
 
@@ -130,6 +134,7 @@ flowchart TD
   read_file["read_file"] --> read_lines["read_lines"]
   read_file["read_file"] --> read_lines["read_lines"]
   read_lines["read_lines"] --> chars["chars"]
+  read_lines["read_lines"] --> has_bom["has_bom"]
   read_lines["read_lines"] --> read_line["read_line"]
   read_lines["read_lines"] --> upper["upper"]
   style read_lines fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -150,7 +155,7 @@ Write a single string stream into file.
  character(len=99)         :: iomsg
  integer                   :: scratch
  integer                   :: l
- logical                   :: test_passed(8)
+ logical                   :: test_passed(10)
  line(1) = ' Hello World!   '
  line(2) = 'How are you?  '
  line(3) = '   All say: "Fine thanks"'
@@ -169,13 +174,18 @@ Write a single string stream into file.
  do l=1, size(strings, dim=1)
    test_passed(l+5) = (strings(l)==line(l))
  enddo
+ call write_file(file='write_file_test.tmp', lines=line, bom=.true.)
+ call read_file(file='write_file_test.tmp', lines=strings)
+ test_passed(9) = strings(1)%has_bom()
+ call read_file(file='write_file_test.tmp', lines=strings, skip_bom=.true.)
+ test_passed(10) = strings(1)==line(1).and.size(strings, dim=1)==3
  open(newunit=scratch, file='write_file_test.tmp')
  close(scratch, status='DELETE')
  print '(L1)', all(test_passed)
 ```
 
 ```fortran
-subroutine write_file(file, lines, form, iostat, iomsg)
+subroutine write_file(file, lines, form, iostat, iomsg, bom)
 ```
 
 **Arguments**
@@ -187,12 +197,14 @@ subroutine write_file(file, lines, form, iostat, iomsg)
 | `form` | character(len=*) | in | optional | Format of unit. |
 | `iostat` | integer | out | optional | IO status code. |
 | `iomsg` | character(len=*) | inout | optional | IO status message. |
+| `bom` | logical | in | optional | Start the file with a UTF-8 byte order mark (if lines(1) has none). |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
   write_file["write_file"] --> chars["chars"]
+  write_file["write_file"] --> has_bom["has_bom"]
   write_file["write_file"] --> upper["upper"]
   write_file["write_file"] --> write_lines["write_lines"]
   style write_file fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -202,7 +214,7 @@ flowchart TD
 
 Write lines (records) to a connected-formatted unit.
 
- @note There is no doctests, this being tested by means of [write_file](/api/src/third_party/StringiFor/src/lib/stringifor#write-file) doctests.
+ @note There is no doctests, this being tested by means of [write_file](/api/src/third_party/StringiFor/src/lib/stringifor_string_t#write-file) doctests.
 
 ```fortran
 subroutine write_lines(unit, lines, form, iostat, iomsg)

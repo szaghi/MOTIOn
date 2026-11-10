@@ -1,6 +1,9 @@
 ---
 project: MOTIOn
 src_dir: ../src
+exclude_dir: ../src/third_party/*/docs
+             ../src/third_party/*/src/tests
+             ../src/third_party/*/src/third_party
 output_dir: html/publish/
 project_github: https://github.com/szaghi/MOTIOn
 summary: MOTIOn, Modular (HPC) Optimized Toolkit (for) IO (in fortra)n

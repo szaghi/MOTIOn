@@ -37,6 +37,7 @@ graph LR
 - [open_geometry_tag](#open-geometry-tag)
 - [close_grid_tag](#close-grid-tag)
 - [open_grid_tag](#open-grid-tag)
+- [append_async_tags](#append-async-tags)
 - [write_async_tags](#write-async-tags)
 - [write_header_tag](#write-header-tag)
 - [write_time_tag](#write-time-tag)
@@ -56,6 +57,8 @@ graph LR
 | Name | Type | Attributes | Description |
 |------|------|------------|-------------|
 | `NL` | character(len=1) | parameter | New line (end record) character. |
+| `ASYNC_TAGS_CHUNK` | integer(kind=[I8P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Minimum asyncronous tags buffer capacity. |
+| `ASYNC_TAGS_MAX` | integer(kind=[I8P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Maximum asyncronous tags buffer capacity. |
 | `XDMF_PARAMETERS` | type([xdmf_parameters_object](/api/src/lib/motion_xdmf_file_object#xdmf-parameters-object)) | parameter | List of XDMF named constants. |
 
 ## Derived Types
@@ -182,7 +185,8 @@ classDiagram
 | `xml` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | XML Logical unit. |
 | `tag` | type([xml_tag](/api/src/third_party/FoXy/src/lib/foxy_xml_tag#xml-tag)) |  | XML tags handler. |
 | `is_async` | logical |  | Asyncronous saving. |
-| `async_tags` | type([string](/api/src/third_party/StringiFor/src/lib/stringifor_string_t#string)) |  | Asyncronous tags data. |
+| `async_tags` | character(len=:) | allocatable | Asyncronous tags data, only `1:async_tags_len` is meaningful. |
+| `async_tags_len` | integer(kind=[I8P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Asyncronous tags data length, bytes used in `async_tags`. |
 | `dom` | type([xml_file](/api/src/third_party/FoXy/src/lib/foxy_xml_file#xml-file)) |  | XMDF file parsed as linearized DOM. |
 
 #### Type-Bound Procedures
@@ -213,6 +217,7 @@ classDiagram
 | `write_start_tag` | pass(self) | Write start tag. |
 | `write_tag` | pass(self) | Write tag. |
 | `gather_async_tags` | pass(self) | Gather async tags. |
+| `append_async_tags` | pass(self) | Append a tag to the async tags buffer. |
 
 ## Interfaces
 
@@ -562,6 +567,40 @@ flowchart TD
   style open_grid_tag fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### append_async_tags
+
+Append a tag to the asyncronous tags buffer, a new line being added after it.
+
+ The buffer capacity grows geometrically and the tag is copied straight into the spare capacity, thus appending costs
+ `O(len(tag_text))` amortised and allocates only when the buffer is actually grown.
+
+ accumulated buffer on **every** call, which is `O(N^2)` in the number of tags and, worse, LLVM Flang (amdflang, and so
+ every ROCm build) places those intermediate character temporaries on the **stack**. The accumulation then dies with
+ SIGSEGV as soon as the tags outgrow `RLIMIT_STACK`, i.e. after only ~4 MB of tags with the usual 8 MB stack limit.
+
+```fortran
+subroutine append_async_tags(self, tag_text)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([xdmf_file_object](/api/src/lib/motion_xdmf_file_object#xdmf-file-object)) | inout |  | File handler. |
+| `tag_text` | character(len=*) | in |  | Tag text to append. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  write_end_tag["write_end_tag"] --> append_async_tags["append_async_tags"]
+  write_self_closing_tag["write_self_closing_tag"] --> append_async_tags["append_async_tags"]
+  write_start_tag["write_start_tag"] --> append_async_tags["append_async_tags"]
+  write_tag["write_tag"] --> append_async_tags["append_async_tags"]
+  append_async_tags["append_async_tags"] --> str["str"]
+  style append_async_tags fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### write_async_tags
 
 Write async tags of other (not mine...) processes.
@@ -575,14 +614,13 @@ subroutine write_async_tags(self, async_tags)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `self` | class([xdmf_file_object](/api/src/lib/motion_xdmf_file_object#xdmf-file-object)) | inout |  | File handler. |
-| `async_tags` | type([string](/api/src/third_party/StringiFor/src/lib/stringifor_string_t#string)) | in |  | Asyncronous tags data. |
+| `async_tags` | character(len=*) | in |  | Asyncronous tags data. |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
   close_grid_tag["close_grid_tag"] --> write_async_tags["write_async_tags"]
-  write_async_tags["write_async_tags"] --> chars["chars"]
   style write_async_tags fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -711,6 +749,7 @@ flowchart TD
   close_geometry_tag["close_geometry_tag"] --> write_end_tag["write_end_tag"]
   close_grid_tag["close_grid_tag"] --> write_end_tag["write_end_tag"]
   write_time_tag["write_time_tag"] --> write_end_tag["write_end_tag"]
+  write_end_tag["write_end_tag"] --> append_async_tags["append_async_tags"]
   write_end_tag["write_end_tag"] --> stringify["stringify"]
   style write_end_tag fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -737,6 +776,7 @@ subroutine write_self_closing_tag(self, name, attributes)
 flowchart TD
   write_time_tag["write_time_tag"] --> write_self_closing_tag["write_self_closing_tag"]
   write_topology_tag["write_topology_tag"] --> write_self_closing_tag["write_self_closing_tag"]
+  write_self_closing_tag["write_self_closing_tag"] --> append_async_tags["append_async_tags"]
   write_self_closing_tag["write_self_closing_tag"] --> stringify["stringify"]
   style write_self_closing_tag fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -766,6 +806,7 @@ flowchart TD
   open_geometry_tag["open_geometry_tag"] --> write_start_tag["write_start_tag"]
   open_grid_tag["open_grid_tag"] --> write_start_tag["write_start_tag"]
   write_time_tag["write_time_tag"] --> write_start_tag["write_start_tag"]
+  write_start_tag["write_start_tag"] --> append_async_tags["append_async_tags"]
   write_start_tag["write_start_tag"] --> stringify["stringify"]
   style write_start_tag fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -792,6 +833,7 @@ subroutine write_tag(self, name, attributes, content)
 ```mermaid
 flowchart TD
   write_dataitem_tag["write_dataitem_tag"] --> write_tag["write_tag"]
+  write_tag["write_tag"] --> append_async_tags["append_async_tags"]
   write_tag["write_tag"] --> stringify["stringify"]
   style write_tag fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -816,7 +858,7 @@ subroutine gather_async_tags(self)
 ```mermaid
 flowchart TD
   close_grid_tag["close_grid_tag"] --> gather_async_tags["gather_async_tags"]
-  gather_async_tags["gather_async_tags"] --> chars["chars"]
+  gather_async_tags["gather_async_tags"] --> str["str"]
   style gather_async_tags fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 

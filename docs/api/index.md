@@ -30,8 +30,16 @@ Auto-generated from Fortran source doc comments using [FORMAL](https://github.co
 ## src/third_party/FoXy/src/lib
 
 - [foxy](/api/src/third_party/FoXy/src/lib/foxy)
+- [foxy_xml_entities](/api/src/third_party/FoXy/src/lib/foxy_xml_entities)
+- [foxy_xml_events](/api/src/third_party/FoXy/src/lib/foxy_xml_events)
 - [foxy_xml_file](/api/src/third_party/FoXy/src/lib/foxy_xml_file)
+- [foxy_xml_index](/api/src/third_party/FoXy/src/lib/foxy_xml_index)
+- [foxy_xml_source](/api/src/third_party/FoXy/src/lib/foxy_xml_source)
 - [foxy_xml_tag](/api/src/third_party/FoXy/src/lib/foxy_xml_tag)
+- [foxy_xml_tokenizer](/api/src/third_party/FoXy/src/lib/foxy_xml_tokenizer)
+- [foxy_xml_tree](/api/src/third_party/FoXy/src/lib/foxy_xml_tree)
+- [foxy_xml_values](/api/src/third_party/FoXy/src/lib/foxy_xml_values)
+- [foxy_xml_writer](/api/src/third_party/FoXy/src/lib/foxy_xml_writer)
 
 ## src/third_party/PENF/src/lib
 
@@ -44,4 +52,10 @@ Auto-generated from Fortran source doc comments using [FORMAL](https://github.co
 ## src/third_party/StringiFor/src/lib
 
 - [stringifor](/api/src/third_party/StringiFor/src/lib/stringifor)
+- [stringifor_encodings](/api/src/third_party/StringiFor/src/lib/stringifor_encodings)
+- [stringifor_number_tables](/api/src/third_party/StringiFor/src/lib/stringifor_number_tables)
+- [stringifor_numbers](/api/src/third_party/StringiFor/src/lib/stringifor_numbers)
+- [stringifor_regex](/api/src/third_party/StringiFor/src/lib/stringifor_regex)
 - [stringifor_string_t](/api/src/third_party/StringiFor/src/lib/stringifor_string_t)
+- [stringifor_unicode_tables](/api/src/third_party/StringiFor/src/lib/stringifor_unicode_tables)
+- [stringifor_utf8](/api/src/third_party/StringiFor/src/lib/stringifor_utf8)

@@ -503,12 +503,19 @@ flowchart TD
 
 Encode scalar number to base64 (R16P).
 
+ @note The kind `R16P` is a quadruple precision real only if the sources are compiled with `PENF_R16P`, otherwise it
+ is the same kind of `R8P`: the code has 16 bytes in the former case, 8 in the latter.
+
 ```fortran
  use befor64
  use penf
  character(len=:), allocatable :: code64
  call b64_encode(n=134.231_R16P, code=code64)
- print "(A)", code64
+ if (R16P==R8P) then
+   print "(L1)", code64=='CKwcWmTHYEA='
+ else
+   print "(L1)", code64=='O99PjZduEoPAyqFFdgwGQA=='
+ endif
 ```
 
 **Attributes**: pure
@@ -775,12 +782,19 @@ flowchart TD
 
 Encode array numbers to base64 (R16P).
 
+ @note The kind `R16P` is a quadruple precision real only if the sources are compiled with `PENF_R16P`, otherwise it
+ is the same kind of `R8P`: the code has 16 bytes in the former case, 8 in the latter.
+
 ```fortran
  use befor64
  use penf
  character(len=:), allocatable :: code64
  call b64_encode(n=[121._R16P,2.32_R16P], code=code64)
- print "(A)", code64
+ if (R16P==R8P) then
+   print "(L1)", code64=='AAAAAABAXkCPwvUoXI8CQA=='
+ else
+   print "(L1)", code64=='AAAAAAAAAAAAAAAAAOQFQI/C9Shcj8L1KFyPwvUoAEA='
+ endif
 ```
 
 **Attributes**: pure
@@ -1047,11 +1061,18 @@ flowchart TD
 
 Decode a base64 code into a scalar number (R16P).
 
+ @note The kind `R16P` is a quadruple precision real only if the sources are compiled with `PENF_R16P`, otherwise it
+ is the same kind of `R8P`: the code has 16 bytes in the former case, 8 in the latter.
+
 ```fortran
  use befor64
  use penf
  real(R16P) :: scalar_R16
- call b64_decode(code='CKwcWmTHYEA=',n=scalar_R16)
+ if (R16P==R8P) then
+   call b64_decode(code='CKwcWmTHYEA=',n=scalar_R16)
+ else
+   call b64_decode(code='O99PjZduEoPAyqFFdgwGQA==',n=scalar_R16)
+ endif
  print "(L1)", scalar_R16==134.231_R16P
 ```
 
@@ -1320,11 +1341,18 @@ flowchart TD
 
 Decode a base64 code into an array numbers (R16P).
 
+ @note The kind `R16P` is a quadruple precision real only if the sources are compiled with `PENF_R16P`, otherwise it
+ is the same kind of `R8P`: the code has 16 bytes in the former case, 8 in the latter.
+
 ```fortran
  use befor64
  use penf
  real(R16P) :: array_R16(1:2)
- call b64_decode(code='AAAAAABAXkCPwvUoXI8CQA==',n=array_R16)
+ if (R16P==R8P) then
+   call b64_decode(code='AAAAAABAXkCPwvUoXI8CQA==',n=array_R16)
+ else
+   call b64_decode(code='AAAAAAAAAAAAAAAAAOQFQI/C9Shcj8L1KFyPwvUoAEA=',n=array_R16)
+ endif
  print "(L1)", str(n=array_R16)==str(n=[121._R16P,2.32_R16P])
 ```
 
