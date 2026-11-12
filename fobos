@@ -40,7 +40,7 @@ $EXDIRS        = BeFoR64/src/tests/ BeFoR64/src/third_party/ BeFoR64/docs/
                  FACE/src/tests/ FACE/src/third_party/ FACE/docs/
                  FoXy/src/tests/ FoXy/src/third_party/ FoXy/docs/ FoXy/benchmarks/
                  PENF/src/tests/ PENF/src/third_party/ PENF/docs/
-                 StringiFor/src/tests/ StringiFor/src/third_party/ StringiFor/docs/
+                 StringiFor/src/tests/ StringiFor/src/third_party/ StringiFor/docs/ StringiFor/scripts/
 
 # main modes
 [shared-gnu]
