@@ -203,4 +203,5 @@ rule_2 = FoBiS.py rule --gcov-analyzer docs/guide/ --gcov-analyzer coverage-anal
 rule_3 = rm -f *.gcov
 
 [scaffold]
-apt_packages = libopenmpi-dev openmpi-bin
+apt_packages    = libopenmpi-dev openmpi-bin
+toolchain_image = ghcr.io/szaghi/fortran-toolchains:gnu-16.2

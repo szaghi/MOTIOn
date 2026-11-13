@@ -44,6 +44,14 @@ mpirun -np 2 ./exe/motion_write_xdmf_file_test
 
 There is no automated test runner — tests are run manually as MPI executables.
 
+## CI
+
+`ci.yml` (`fobis rule --ex makecoverage-analysis`: tests on 1 rank, coverage) and the build job of `docs.yml` run in the
+container `ghcr.io/szaghi/fortran-toolchains:gnu-16.2` (gfortran 16.2, Open MPI 5.0.11, FoBiS, formal), set by
+`[scaffold] toolchain_image` in `fobos`; there `apt_packages` is not installed (Open MPI comes from the image), and the
+modes still link the bundled `lib/hdf5/1.14.6/gnu/14.2.0` (its gfortran 14.2 `.mod` files and static libraries work
+with gfortran 16.2 and Open MPI 5.0.11). `install.yml` and `release.yml` run on the bare runner.
+
 ## Dependencies
 
 **External:** HDF5 1.14.6 with Fortran and parallel I/O support. Pre-built libraries are included:
