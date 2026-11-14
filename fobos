@@ -204,4 +204,4 @@ rule_3 = rm -f *.gcov
 
 [scaffold]
 apt_packages    = libopenmpi-dev openmpi-bin
-toolchain_image = ghcr.io/szaghi/fortran-toolchains:gnu-16.2
+toolchain       = linux-gnu
