@@ -1,0 +1,42 @@
+name = "MOTIOn"
+version = "0.1.2"
+author = "Stefano Zaghi"
+description = "Modular (HPC) Optimized Toolkit (for) IO (in fortra)n"
+homepage = "https://github.com/szaghi/MOTIOn"
+
+[library]
+source-dir = "src/lib"
+
+[build]
+auto-executables = false
+auto-tests = false
+auto-examples = false
+
+[preprocess]
+[preprocess.cpp]
+macros = ["_ASCII_SUPPORTED", "_UCS4_SUPPORTED", "PENF_R16P"]
+
+[dependencies]
+mpi = "*"
+hdf5 = "*"
+BeFoR64 = { git = "https://github.com/szaghi/BeFoR64" }
+FACE = { git = "https://github.com/szaghi/FACE" }
+FoXy = { git = "https://github.com/Fortran-FOSS-Programmers/FoXy" }
+PENF = { git = "https://github.com/szaghi/PENF" }
+StringiFor = { git = "https://github.com/szaghi/StringiFor" }
+
+[[test]]
+name = "motion_use_module_basic_test"
+source-dir = "src/tests"
+main = "motion_use_module_basic.F90"
+
+[[test]]
+name = "motion_write_xdmf_file_test"
+source-dir = "src/tests"
+main = "motion_write_xdmf_file_test.F90"
+
+# the mpi metapackage requires both: fpm's -fimplicit-none and its external-procedure check are relaxed (the sources
+# declare implicit none themselves)
+[fortran]
+implicit-external = true
+implicit-typing = true

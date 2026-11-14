@@ -203,5 +203,6 @@ rule_2 = FoBiS.py rule --gcov-analyzer docs/guide/ --gcov-analyzer coverage-anal
 rule_3 = rm -f *.gcov
 
 [scaffold]
-apt_packages    = libopenmpi-dev openmpi-bin
+apt_packages    = libopenmpi-dev openmpi-bin libhdf5-openmpi-dev
 toolchain       = linux-gnu
+fpm             = true

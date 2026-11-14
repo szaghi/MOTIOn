@@ -27,4 +27,4 @@ jobs:
     uses: szaghi/fortran-toolchains/.github/workflows/install.yml@v1
     with:
       tag: ${{ inputs.tag }}
-      apt-packages: 'libopenmpi-dev openmpi-bin'
+      apt-packages: 'libopenmpi-dev openmpi-bin libhdf5-openmpi-dev'
