@@ -71,8 +71,12 @@ contains
    if (.not.is_mpi_initialized) call MPI_INIT(self%error)
    call MPI_COMM_SIZE(MPI_COMM_WORLD, self%procs_number, self%error)
    call MPI_COMM_RANK(MPI_COMM_WORLD, self%myrank, self%error)
+   ! the blocks shared out as evenly as possible: the first mod(nb, procs) processes take one more; with more processes
+   ! than blocks, the last ones take none
    self%nb_proc  = nb / self%procs_number
-   self%mynb     = [self%nb_proc * self%myrank + 1, self%nb_proc * (self%myrank + 1)]
+   if (self%myrank < mod(nb, self%procs_number)) self%nb_proc = self%nb_proc + 1
+   self%mynb(1)  = self%myrank * (nb / self%procs_number) + min(self%myrank, mod(nb, self%procs_number)) + 1
+   self%mynb(2)  = self%mynb(1) + self%nb_proc - 1
    self%topology = trim(adjustl(topology))
    self%nb       = nb
    self%nv       = nv
@@ -97,7 +101,7 @@ contains
             lx = lx + dx(i)
          enddo
          ! shift in x
-         self%emin(1,1) = lx * self%myrank * self%nb_proc
+         if (self%nb_proc > 0) self%emin(1,1) = lx * (self%mynb(1) - 1)
          do b=2, self%nb_proc
             self%emin(1,b) = self%emin(1,b-1) + lx
          enddo
@@ -125,7 +129,7 @@ contains
       if (present(dxyz)) then
          self%dxyz = dxyz
          ! shift in x
-         self%emin(1,1) = (nijk(1)-1) * dxyz(1) * self%myrank * self%nb_proc
+         if (self%nb_proc > 0) self%emin(1,1) = (nijk(1)-1) * dxyz(1) * (self%mynb(1) - 1)
          do b=2, self%nb_proc
             self%emin(1,b) = self%emin(1,b-1) + (nijk(1)-1)*dxyz(1)
          enddo
@@ -146,7 +150,7 @@ contains
             lx = lx + dx(i)
          enddo
          ! shift in x
-         self%emin(1,1) = lx * self%myrank * self%nb_proc
+         if (self%nb_proc > 0) self%emin(1,1) = lx * (self%mynb(1) - 1)
          do b=2, self%nb_proc
             self%emin(1,b) = self%emin(1,b-1) + lx
          enddo
