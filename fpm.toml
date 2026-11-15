@@ -21,7 +21,7 @@ mpi = "*"
 hdf5 = "*"
 BeFoR64 = { git = "https://github.com/szaghi/BeFoR64" }
 FACE = { git = "https://github.com/szaghi/FACE" }
-FoXy = { git = "https://github.com/Fortran-FOSS-Programmers/FoXy" }
+FoXy = { git = "https://github.com/szaghi/FoXy" }
 PENF = { git = "https://github.com/szaghi/PENF" }
 StringiFor = { git = "https://github.com/szaghi/StringiFor" }
 
