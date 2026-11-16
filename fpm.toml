@@ -25,6 +25,10 @@ FoXy = { git = "https://github.com/szaghi/FoXy" }
 PENF = { git = "https://github.com/szaghi/PENF" }
 StringiFor = { git = "https://github.com/szaghi/StringiFor" }
 
+# fpm install installs the library and its modules (by default it installs executables only)
+[install]
+library = true
+
 [[test]]
 name = "motion_use_module_basic_test"
 source-dir = "src/tests"
