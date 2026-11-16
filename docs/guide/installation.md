@@ -15,6 +15,28 @@ title: Installation
 
 Pre-built HDF5 1.14.6 libraries are included in the repository under `lib/hdf5/1.14.6/`, so no separate HDF5 build is required for the default GNU and NVIDIA toolchains.
 
+## One-line install
+
+```bash
+curl -fsSL https://github.com/szaghi/MOTIOn/releases/latest/download/install.sh | bash
+```
+
+It installs the latest release into `~/.local` with the build system you choose among those MOTIOn ships
+(`--build fobis|fpm`: a menu asks when you do not say), one install per compiler (`lib/motion/<compiler>-<version>/`,
+`include/motion/<compiler>-<version>/`), and makes it usable through pkg-config (`motion`, with
+`PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig`). The release carries the Fortran dependencies (PENF, StringiFor, FoXy,
+BeFoR64, FACE); MPI and a parallel HDF5 with the Fortran API are yours: the fobis build compiles against the HDF5 under
+`lib/hdf5/`, the fpm build against the one pkg-config finds (`hdf5_fortran`). Build your program with the MPI wrapper
+and both packages:
+
+```bash
+mpifort my_program.F90 $(pkg-config --cflags --libs motion hdf5_fortran) -o my_program
+```
+
+Pass options after `bash -s --`, e.g. `... | bash -s -- --build fpm --prefix /opt/motion`; `--help` lists them all,
+`--uninstall` removes the install. The installer is FoBiS's
+([One-line installer](https://szaghi.github.io/FoBiS/cookbook/installer)).
+
 ## Download
 
 Clone the repository, then fetch the third-party dependencies via FoBiS.py:
@@ -26,14 +48,6 @@ FoBiS.py fetch
 ```
 
 `FoBiS.py fetch` reads `src/third_party/.deps_config.ini` and downloads the required libraries into `src/third_party/`.
-
-Alternatively, use the provided convenience script (supports both `git` and `wget` workflows):
-
-```bash
-./scripts/install.sh --download git --build fobis
-```
-
-Run `./scripts/install.sh --help` for all options.
 
 ### Third-party dependencies
 
